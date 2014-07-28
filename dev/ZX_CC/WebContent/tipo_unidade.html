@@ -1,0 +1,31 @@
+<!--
+ZIRIX CONTROL CENTER - FUNÇÕES DE CONTROLE DE MENU
+DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+
+DESENVOLVEDOR: RAPHAEL B. MARQUES
+TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
+-->
+
+<div id="unid_veiculo">
+    <fieldset class="field">
+        <legend>Veículo:</legend>
+        Placa: <input type="text" name="placa" class="size_24">
+        Chassi: <input type="text" name="chassi" class="size_24">
+        Renavan: <input type="text" name="renavan" class="size_24">
+        <br>
+        Ano de Fabricação:<input type="number" name="ano_fab" id="ano_fab" class="size_11" min="1930" >
+        Ano do Modelo:<input type="number" name="ano_mod" id="ano_mod" class="size_11" min="1930" >
+        Marca:<select id="marca_list" class="size_31">
+            <!--Lista com os nomes das marcas carregados do banco que serão inseridos Exemplo de inserção -> <option value="X" name="option_marca_veiculo"> NOME AQUI </option> -->
+        </select>
+        <br>
+        Modelo: <input type="text" name="modelo" class="size_35">
+        Cor: <input type="text" name="cor" class="size_13">
+        Combustível:<select id="combustivel_list" class="size_20">
+            <!--Lista com os tipos de combustiveis carregados do banco que serão inseridos Exemplo de inserção -> <option value="X" name="option_combustivel_veiculo"> NOME AQUI </option> -->
+        </select>
+        Voltagem: <input type="text" name="voltagem" class="size_6" maxlength="2">
+        KM: <input type="text" name="km" class="size_10">
+        Data da Última Vistoria: <input type="date" id="data_vist">
+    </fieldset>
+</div>
