@@ -1,0 +1,28 @@
+package zirix.zxccmock;
+
+public class ZXCCWorkStateTemplate implements ZXCCWorkState{
+
+	private ZXCCWorkState state_ = null;
+	
+	
+	public ZXCCWorkStateTemplate(ZXCCWorkState state) {
+		
+		state_ = state;
+	}
+	
+	@Override
+	public int status() {
+		
+		return 0;
+	}
+
+	@Override
+	public void evolve() {
+		
+		
+	}
+	
+	
+	
+
+}

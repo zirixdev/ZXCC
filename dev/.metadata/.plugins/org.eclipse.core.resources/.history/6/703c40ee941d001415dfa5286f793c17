@@ -1,0 +1,12 @@
+package zirix.zxccmock;
+
+
+import zirix.zxcc.server.dao.*;
+
+public class MockGenericDAO extends GenericDAO {
+
+	
+	
+	
+	
+}

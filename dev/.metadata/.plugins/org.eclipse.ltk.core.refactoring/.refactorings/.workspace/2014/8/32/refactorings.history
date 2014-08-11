@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ZX_OS_MOCK&apos; to &apos;ZX_OS_MOCK_APP&apos;" description="Rename resource &apos;ZX_OS_MOCK&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/ZX_OS_MOCK" name="ZX_OS_MOCK_APP" stamp="1407253404435" updateReferences="true"/>
+</session>

@@ -1,0 +1,9 @@
+package zirix.zxccmock;
+
+
+public interface ZXCCWorkState {
+
+	
+	
+
+}

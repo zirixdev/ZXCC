@@ -1,0 +1,7 @@
+package zirix.zxccmock;
+
+public class ZXCCWorkStateDAO {
+	
+	
+	public final static String TABLENAME = "zxccmock.work_data";
+}

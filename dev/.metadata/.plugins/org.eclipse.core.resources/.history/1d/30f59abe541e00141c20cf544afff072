@@ -1,0 +1,10 @@
+package zirix.zxccmock;
+
+
+public interface ZXCCWorkState {
+
+	
+	// a State might be on several STATUS
+	WorkStatus status();
+
+}

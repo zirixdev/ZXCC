@@ -1,0 +1,34 @@
+package zirix.zxccmock;
+
+import zirix.zxcc.server.dao.GenericDAO;
+
+
+
+public class ZXCCWorkStateDataDAO extends GenericDAO {
+	
+	
+		// a responsible
+		public int respID() {return ;
+		
+		// a status like COMPLETE,INCOMPLETE,ALERT
+		public int statusID();
+		
+		// my URL
+		public String URL();
+		
+		// my work ID
+		public int workID();
+		
+		// next work ID
+		public int nextWorkID();
+		
+		// the timestamp for the work START
+		public long timestamp();
+		
+		// a title for the work state
+		public String title();	
+	
+	
+	
+	public final static String TABLENAME = "zxccmock.work_state_data";
+}
