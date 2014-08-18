@@ -2,4 +2,4 @@ var/db
 dev/.metadata
 build/
 *.class
-var/docs/FRONTEND
+var/docs/ZXCC/FRONTEND
