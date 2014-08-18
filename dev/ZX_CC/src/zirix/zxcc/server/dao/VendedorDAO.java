@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class VendedorDAO extends GenericDAO<VendedorDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public VendedorDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -28,8 +32,9 @@ public class VendedorDAO extends GenericDAO<VendedorDAO> {
     	setAttValueFor("TIPO",res.getInt("TIPO"));
     	setAttValueFor("NOME_FANTASIA",res.getString("NOME_FANTASIA"));
     	setAttValueFor("SITE",res.getString("SITE"));
-    	setAttValueFor("DATA_NASCIMENTO",res.getDate("DATA_NASCIMENTO")); //TODO verificar
-    	setAttValueFor("DATA_INGRESSO",res.getDate("DATA_INGRESSO")); //TODO verificar
+    	setAttValueFor("DATA_NASCIMENTO",res.getDate("DATA_NASCIMENTO"));
+    	setAttValueFor("DATA_INGRESSO",res.getDate("DATA_INGRESSO"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     	
     }
 
@@ -37,5 +42,5 @@ public class VendedorDAO extends GenericDAO<VendedorDAO> {
     	return VendedorDAO.createKey("COD_VENDEDOR", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.VENDEDOR";   
+	public final static String TABLENAME = AMBIENTE_.db_name + "VENDEDOR";   
 }

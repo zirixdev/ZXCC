@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class VeiculoMarcaDAO extends GenericDAO<VeiculoMarcaDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public VeiculoMarcaDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -25,11 +29,12 @@ public class VeiculoMarcaDAO extends GenericDAO<VeiculoMarcaDAO> {
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	
     	setAttValueFor("NOME_MARCA",res.getString("NOME_MARCA"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {
     	return VeiculoMarcaDAO.createKey("COD_MARCA", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.VEICULO_MARCA";
+	public final static String TABLENAME = AMBIENTE_.db_name + "VEICULO_MARCA";
 }

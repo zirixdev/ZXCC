@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class TelaDAO extends GenericDAO<TelaDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public TelaDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -31,7 +35,7 @@ public class TelaDAO extends GenericDAO<TelaDAO> {
     	return TelaDAO.createKey("COD_TELA", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.TELA";
+	public final static String TABLENAME = AMBIENTE_.db_name + "TELA";
    
         
 }

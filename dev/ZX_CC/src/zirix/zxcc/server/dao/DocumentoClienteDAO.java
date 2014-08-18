@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class DocumentoClienteDAO extends GenericDAO<DocumentoClienteDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public DocumentoClienteDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -27,12 +31,13 @@ public class DocumentoClienteDAO extends GenericDAO<DocumentoClienteDAO> {
     	setAttValueFor("COD_DOCUMENTO",res.getInt("COD_DOCUMENTO"));
     	setAttValueFor("NUMERO",res.getString("NUMERO"));
     	setAttValueFor("DATA_EMISSAO",res.getDate("DATA_EMISSAO"));
-    	setAttValueFor("ORGAO_EMISSOR",res.getString("ORGAO_EMISSOR")); 	        	    	   
+    	setAttValueFor("ORGAO_EMISSOR",res.getString("ORGAO_EMISSOR")); 
+    	setAttValueFor("DELETED",res.getInt("DELETED"));	        	    	   
     }
     
     public Set<String> getPkNamesSet() {    	
     	return DocumentoClienteDAO.createKey("COD_DOCUMENTO_CLI", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-    public final static String TABLENAME = "ZX_CC_DEV.dbo.DOCUMENTO_CLIENTE";
+    public final static String TABLENAME = AMBIENTE_.db_name + "DOCUMENTO_CLIENTE";
 }

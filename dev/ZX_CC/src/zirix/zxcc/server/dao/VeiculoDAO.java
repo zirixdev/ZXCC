@@ -2,11 +2,14 @@ package zirix.zxcc.server.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
+
+import zirix.zxcc.server.ZXCCConstants;
 
 
 public class VeiculoDAO extends GenericDAO<VeiculoDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public VeiculoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -41,12 +44,13 @@ public class VeiculoDAO extends GenericDAO<VeiculoDAO> {
     	setAttValueFor("KM",res.getString("KM"));
     	setAttValueFor("DATA_ULT_VISTORIA",res.getDate("DATA_ULT_VISTORIA")); //TODO verificar
     	setAttValueFor("COD_INSTALACAO", res.getInt("COD_INSTALACAO"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {
     	return VeiculoDAO.createKey("COD_VEICULO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.VEICULO";
+	public final static String TABLENAME = AMBIENTE_.db_name + "VEICULO";
        
 }

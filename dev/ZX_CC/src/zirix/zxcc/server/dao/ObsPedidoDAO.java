@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class ObsPedidoDAO extends GenericDAO<ObsPedidoDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public ObsPedidoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -27,13 +31,14 @@ public class ObsPedidoDAO extends GenericDAO<ObsPedidoDAO> {
     	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));
     	setAttValueFor("INDICE",res.getInt("INDICE"));
     	setAttValueFor("OBSERVACAO",res.getString("OBSERVACAO"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     
     public Set<String> getPkNamesSet() {    	
     	return ObsPedidoDAO.createKey("COD_OBS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.OBS_PEDIDO";
+	public final static String TABLENAME = AMBIENTE_.db_name + "OBS_PEDIDO";
    
         
 }

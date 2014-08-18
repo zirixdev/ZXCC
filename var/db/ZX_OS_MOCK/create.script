@@ -1,9 +1,0 @@
-CREATE TABLE email_action_log (action_id INT, to_address VARCHAR(20),action_completed BINARY);
-CREATE TABLE work_status (status_id INT,status_name VARCHAR(20),status_alert_type INT);
-
-CREATE TABLE work_status (work_id INT, work_title VARCHAR(20), resp_id INT, timestamp TIMESTAMP, next_work_id INT, work_url VARCHAR(50) , work_status_id INT);
-CREATE TABLE work_leaf (work_parent_id INT,work_leaf_id INT);
-CREATE TABLE resp_data (resp_id INT,resp_email VARCHAR (20));
-
-CREATE TABLE work_const(work_const_id INT, work_const_type INT,work_id INT);
-CREATE TABLE time_const(work_const_id INT,const_value TIME);

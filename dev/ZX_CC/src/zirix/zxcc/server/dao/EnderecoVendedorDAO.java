@@ -2,10 +2,13 @@ package zirix.zxcc.server.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class EnderecoVendedorDAO extends GenericDAO<EnderecoVendedorDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public EnderecoVendedorDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -42,5 +45,5 @@ public class EnderecoVendedorDAO extends GenericDAO<EnderecoVendedorDAO> {
     	return EnderecoVendedorDAO.createKey("COD_ENDERECO_VEN", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.ENDERECO_VENDEDOR";
+	public final static String TABLENAME = AMBIENTE_.db_name + "ENDERECO_VENDEDOR";
 }

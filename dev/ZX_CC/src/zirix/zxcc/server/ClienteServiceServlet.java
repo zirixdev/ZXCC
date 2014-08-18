@@ -2,28 +2,33 @@ package zirix.zxcc.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import zirix.zxcc.server.dao.ClienteDAO;
 import zirix.zxcc.server.dao.ContatoClienteDAO;
+import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.DocumentoClienteDAO;
 import zirix.zxcc.server.dao.EmailCliVenDAO;
 import zirix.zxcc.server.dao.EnderecoClienteDAO;
 import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.ZXCCConstants;
 
 /**
  * Servlet implementation class ClienteService
  */
 	@WebServlet( name="ClienteService", urlPatterns = {"/services/cliente"}, loadOnStartup=1)
-	public class ClienteServiceServlet extends HttpServlet {
+public class ClienteServiceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -58,32 +63,32 @@ import zirix.zxcc.server.dao.PkList;
 
 			   if ((OP_CODE.compareTo("UPDATE") == 0) || (OP_CODE.compareTo("CREATE") == 0)) {
 
-				   String TIPO = request.getParameter("TIPO");
+				   String TIPO = request.getParameter("TIPO").trim();
 				   daoCliente.setAttValueFor("TIPO", TIPO);
 
-				   String NOME = request.getParameter("NOME");
+				   String NOME = request.getParameter("NOME").trim();
 				   daoCliente.setAttValueFor("NOME", NOME);
 
-				   String NOME_FANTASIA = request.getParameter("NOME_FANTASIA");
+				   String NOME_FANTASIA = request.getParameter("NOME_FANTASIA").trim();
 				   daoCliente.setAttValueFor("NOME_FANTASIA", NOME_FANTASIA);
 
-				   String SITE = request.getParameter("SITE");
+				   String SITE = request.getParameter("SITE").trim();
 				   daoCliente.setAttValueFor("SITE", SITE);
 
-				   String DATA_NASCIMENTO = request.getParameter("DATA_NASCIMENTO");
+				   String DATA_NASCIMENTO = request.getParameter("DATA_NASCIMENTO").trim();
 				   daoCliente.setAttValueFor("DATA_NASCIMENTO", DATA_NASCIMENTO);
 
 				   if (OP_CODE.compareTo("CREATE") == 0){
-					   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO");
+					   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 					   daoCliente.setAttValueFor("DATA_INGRESSO", DATA_INGRESSO);
 				   }
 
-				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR");
+				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR").trim();
 				   daoCliente.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
 
 				   if (OP_CODE.compareTo("UPDATE") == 0){
 
-					   String COD_CLIENTE = request.getParameter("COD_CLIENTE");
+					   String COD_CLIENTE = request.getParameter("COD_CLIENTE").trim();
 					   pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
 
 					   daoCliente.setPkList(pkList);
@@ -91,89 +96,128 @@ import zirix.zxcc.server.dao.PkList;
 				   }
 				   else
 				   {
-					   pkList = daoCliente.create();
+					   daoCliente.Create();
+					   int pkListValue = 0;
+					   Vector<String[]> CodCliente_ = new Vector<String[]>();
+					   
+					   try {
+						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
+								   + " 											                 FROM ZX_CC_DEV.dbo.CLIENTE "
+								   + "                                                          WHERE NOME = " + NOME );
 
-					   int pkListValue = pkList.values().iterator().next();
-
-					   HttpSession session = request.getSession(true);
-
-					   String[] myJsonDocumento = (String[]) session.getAttribute("jSonDocumento");
-					   String[] myJsonEndereco = (String[]) session.getAttribute("jSonEndereco");
-					   String[] myJsonContato = (String[]) session.getAttribute("jSonContato");
-					   String[] myJsonEmail = (String[]) session.getAttribute("jSonEmail");
-
-					   session.invalidate();
-
-					   int arraysize = myJsonDocumento.length / 4;
-					   int count = 0;
-					   for(int d = 0 ; d < arraysize ; d++){
-						   DocumentoClienteDAO daoDocumentoCliente = new DocumentoClienteDAO();
-						   daoDocumentoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
-						   daoDocumentoCliente.setAttValueFor("COD_DOCUMENTO",myJsonDocumento[d+count]);
-						   count++;
-						   daoDocumentoCliente.setAttValueFor("NUMERO",myJsonDocumento[d+count]);
-						   count++;
-						   daoDocumentoCliente.setAttValueFor("DATA_EMISSAO",myJsonDocumento[d+count]);
-						   count++;
-						   daoDocumentoCliente.setAttValueFor("ORGAO_EMISSOR",myJsonDocumento[d+count]);
-						   daoDocumentoCliente.create();
+						   for (int i=0;i < values.size();i++) {
+							   String[] attList = new String[1];
+							   attList[0] = values.get(i)[0].toString();;
+							   CodCliente_.add(attList);
+						   }
+					   }catch (SQLException ex) {
+						   ex.printStackTrace();
+					   }  finally {
+						   pkListValue = Integer.parseInt(CodCliente_.elementAt(0)[0].trim());
 					   }
 
-					   arraysize = myJsonEndereco.length / 8;
-					   count = 0;
-					   for(int d = 0 ; d < arraysize ; d++){
-						   EnderecoClienteDAO daoEnderecoCliente = new EnderecoClienteDAO();
-						   daoEnderecoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
-						   daoEnderecoCliente.setAttValueFor("ENDERECO",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("COMPLEMENTO",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("BAIRRO",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("CIDADE",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("UF",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("COD_PAIS",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("CEP",myJsonEndereco[d+count]);
-						   count++;
-						   daoEnderecoCliente.setAttValueFor("COD_ENDERECO",myJsonEndereco[d+count]);
-						   daoEnderecoCliente.create();
-					   }
-
-					   arraysize = myJsonContato.length / 6;
-					   count = 0;
-					   for(int d = 0 ; d < arraysize ; d++){
-						   ContatoClienteDAO daoContatoCliente = new ContatoClienteDAO();
-						   daoContatoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
-						   daoContatoCliente.setAttValueFor("DDD",myJsonContato[d+count]);
-						   count++;
-						   daoContatoCliente.setAttValueFor("NUMERO",myJsonContato[d+count]);
-						   count++;
-						   daoContatoCliente.setAttValueFor("COD_CONTATO",myJsonContato[d+count]);
-						   count++;
-						   daoContatoCliente.setAttValueFor("COD_PAIS",myJsonContato[d+count]);
-						   count++;
-						   daoContatoCliente.setAttValueFor("NOME",myJsonContato[d+count]);
-						   count++;
-						   daoContatoCliente.setAttValueFor("COD_GRAU",myJsonContato[d+count]);
-						   daoContatoCliente.create();
-					   }
-
-					   arraysize = myJsonEmail.length;
-					   for(int d = 0 ; d < arraysize ; d++){
-						   if(myJsonEmail[d].trim().compareTo("CONTROLE") != 0){
+					   if(pkListValue != 0){
+						   int arraysize = Integer.parseInt(request.getParameter("QDOC"));
+						   for(int d = 0 ; d < arraysize ; d++){
+							   DocumentoClienteDAO daoDocumentoCliente = new DocumentoClienteDAO();
+	
+							   daoDocumentoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
+	
+							   String COD_DOCUMENTO_ = request.getParameter("TIPODOC_"+d).trim();
+							   daoDocumentoCliente.setAttValueFor("COD_DOCUMENTO",COD_DOCUMENTO_);
+	
+							   String NUMERO_ = request.getParameter("NUMDOC_"+d).trim();
+							   daoDocumentoCliente.setAttValueFor("NUMERO",NUMERO_);
+	
+							   String DATA_EMISSAO_ = request.getParameter("DTDOC_"+d).trim();
+							   daoDocumentoCliente.setAttValueFor("DATA_EMISSAO",DATA_EMISSAO_);
+	
+							   String ORGAO_EMISSOR_ = request.getParameter("ORGDOC_"+d).trim();
+							   daoDocumentoCliente.setAttValueFor("ORGAO_EMISSOR",ORGAO_EMISSOR_);
+	
+							   daoDocumentoCliente.create();
+						   }
+	
+						   arraysize = Integer.parseInt(request.getParameter("QEND"));
+						   for(int d = 0 ; d < arraysize ; d++){
+							   EnderecoClienteDAO daoEnderecoCliente = new EnderecoClienteDAO();
+	
+							   daoEnderecoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
+	
+							   String ENDERECO_ = request.getParameter("END_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("ENDERECO",ENDERECO_);
+	
+							   String COMPLEMENTO_ = request.getParameter("COMP_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("COMPLEMENTO",COMPLEMENTO_);
+	
+							   String BAIRRO_ = request.getParameter("BAIRRO_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("BAIRRO",BAIRRO_);
+	
+							   String CIDADE_ = request.getParameter("CIDADE_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("CIDADE",CIDADE_);
+	
+							   String UF_ = request.getParameter("UF_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("UF",UF_);
+	
+							   String COD_PAIS_ = request.getParameter("PAIS_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("COD_PAIS",COD_PAIS_);
+	
+							   String CEP_ = request.getParameter("CEP_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("CEP",CEP_);
+	
+							   String COD_ENDERECO_ = request.getParameter("TIPOEND_"+d).trim();
+							   daoEnderecoCliente.setAttValueFor("COD_ENDERECO",COD_ENDERECO_);
+	
+							   daoEnderecoCliente.create();
+						   }
+	
+						   arraysize = Integer.parseInt(request.getParameter("QDOC"));
+						   for(int d = 0 ; d < arraysize ; d++){
+							   ContatoClienteDAO daoContatoCliente = new ContatoClienteDAO();
+							   
+							   daoContatoCliente.setAttValueFor("COD_CLIENTE",pkListValue);
+							   
+							   String DDD_ = request.getParameter("DDD_"+d).trim();
+							   daoContatoCliente.setAttValueFor("DDD",DDD_);
+							   
+							   String NUMERO_ = request.getParameter("NUMCTO_"+d).trim();
+							   daoContatoCliente.setAttValueFor("NUMERO",NUMERO_);
+							   
+							   String COD_CONTATO_ = request.getParameter("TIPOCTO_"+d).trim();
+							   daoContatoCliente.setAttValueFor("COD_CONTATO",COD_CONTATO_);
+							   
+							   String COD_PAIS_ = request.getParameter("PAISCTO_"+d).trim();
+							   daoContatoCliente.setAttValueFor("COD_PAIS",COD_PAIS_);
+							   
+							   String NOME_ = request.getParameter("NOMECTO_"+d).trim();
+							   daoContatoCliente.setAttValueFor("NOME",NOME_);
+							   
+							   String COD_GRAU_ = request.getParameter("PARENCTO_"+d).trim();
+							   daoContatoCliente.setAttValueFor("COD_GRAU",COD_GRAU_);
+							   
+							   daoContatoCliente.create();
+						   }
+	
+						   arraysize = Integer.parseInt(request.getParameter("QDOC"));
+						   for(int d = 0 ; d < arraysize ; d++){
 							   EmailCliVenDAO daoEmailCliVen = new EmailCliVenDAO();
+	
 							   daoEmailCliVen.setAttValueFor("COD_CLI_VEN",pkListValue);
+	
 							   daoEmailCliVen.setAttValueFor("TIPO_CLI_VEN",0);
-							   daoEmailCliVen.setAttValueFor("EMAIL",myJsonEmail[d]);
+	
+							   String EMAIL_ = request.getParameter("MAIL_"+d).trim();
+							   daoEmailCliVen.setAttValueFor("EMAIL",EMAIL_);
+	
 							   daoEmailCliVen.create();
 						   }
+					   }else{
+						   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
 					   }
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
-				   response.sendRedirect("http://localhost:8080/zxcc/zx_cc.jsp");
+				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
+				   response.sendRedirect(AMBIENTE_.ip_adress + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 
 			   else if (OP_CODE.compareTo("DELETE") == 0){

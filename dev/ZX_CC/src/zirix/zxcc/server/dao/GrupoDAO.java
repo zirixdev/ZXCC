@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class GrupoDAO extends GenericDAO<GrupoDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public GrupoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -32,7 +36,7 @@ public class GrupoDAO extends GenericDAO<GrupoDAO> {
     	return GrupoDAO.createKey("COD_GRUPO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.GRUPO";
+	public final static String TABLENAME = AMBIENTE_.db_name + "GRUPO";
    
         
 }

@@ -1,4 +1,4 @@
-/*ZIRIX CONTROL CENTER - MAIN PAGE
+/*ZIRIX CONTROL CENTER
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
@@ -13,12 +13,14 @@ import java.util.Vector;
 import zirix.zxcc.server.dao.ChipDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.ZXCCConstants;
 
 public class ChipServiceBean {
 
 	private ChipDAO dao_ = null;
 	private Integer COD_CHIP_ = null;
 	private Integer COD_MODULO_ = null;
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
 	public ChipServiceBean(String[] pkVal) {
 		setPk(pkVal);
@@ -44,9 +46,9 @@ public class ChipServiceBean {
 	}
 
 	public Integer getCodModulo(){
-		Integer CodModulo = (Integer)dao_.getAttValueFor("COD_MODULO");
-		COD_MODULO_ = CodModulo;
-		return CodModulo;
+		Integer codModulo = (Integer)dao_.getAttValueFor("COD_MODULO");
+		COD_MODULO_ = codModulo;
+		return codModulo;
 	}
 
 	public String getNfe() {
@@ -55,13 +57,13 @@ public class ChipServiceBean {
 	}
 
 	public String getIccid() {
-    	String Iccid = (String)dao_.getAttValueFor("ICCID");	    	
-    	return Iccid;
+    	String iccid = (String)dao_.getAttValueFor("ICCID");	    	
+    	return iccid;
 	}
 
 	public Integer getCodOperadora(){
-		Integer CodOperadora = (Integer)dao_.getAttValueFor("COD_OPERADORA");
-		return CodOperadora;
+		Integer codOperadora = (Integer)dao_.getAttValueFor("COD_OPERADORA");
+		return codOperadora;
 	}
 
 	public String getApn() {
@@ -70,13 +72,13 @@ public class ChipServiceBean {
 	}
 
 	public String getTecnologia() {
-    	String Tecnologia = (String)dao_.getAttValueFor("TECNOLOGIA");	    	
-    	return Tecnologia;
+    	String tecnologia = (String)dao_.getAttValueFor("TECNOLOGIA");	    	
+    	return tecnologia;
 	}
 
 	public Integer getCodStatus(){
-		Integer CodStatus = (Integer)dao_.getAttValueFor("COD_STATUS");
-		return CodStatus;
+		Integer codStatus = (Integer)dao_.getAttValueFor("COD_STATUS");
+		return codStatus;
 	}
 
 	public String getDdd() {
@@ -85,8 +87,24 @@ public class ChipServiceBean {
 	}
 
 	public String getNumeroChip() {
-    	String NumeroChip = (String)dao_.getAttValueFor("NUMERO_CHIP");	    	
-    	return NumeroChip;
+    	String numeroChip = (String)dao_.getAttValueFor("NUMERO_CHIP");	    	
+    	return numeroChip;
+	}
+
+	public String getDtVigencia() {
+
+		String dtVigencia = dao_.getAttValueFor("DATA_VIGENCIA").toString();
+    	return dtVigencia;
+	}
+
+	public Integer getCodConta(){
+		Integer codConta = (Integer)dao_.getAttValueFor("COD_CONTA");
+		return codConta;
+	}
+
+	public Integer getCodPacote(){
+		Integer codPacote = (Integer)dao_.getAttValueFor("COD_PACOTE");
+		return codPacote;
 	}
 
 	@SuppressWarnings("finally")
@@ -95,12 +113,12 @@ public class ChipServiceBean {
 		
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT NUMERO_MODULO "
-					+ " 											 FROM ZX_CC_DEV.dbo.MODULO "
+					+ " 											 FROM " + AMBIENTE_.db_name + "MODULO "
 					+ "                                             WHERE COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
-				attList[0] = values.get(i)[0].toString();;
+				attList[0] = values.get(i)[0].toString();
 				NumeroModulo.add(attList);
 			}
 			
@@ -116,13 +134,13 @@ public class ChipServiceBean {
 		Vector<String[]> ModeloModulo = new Vector<String[]>();
 
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT RTRIM(LTRIM(ZX_CC_DEV.dbo.MARCA_MODULO.nome_marca)) + ' - ' + RTRIM(LTRIM(ZX_CC_DEV.dbo.DESC_MODULO.nome_modelo)) "
-					+ " 											 FROM ZX_CC_DEV.dbo.MARCA_MODULO "
-					+ " 											    , ZX_CC_DEV.dbo.DESC_MODULO "
-					+ " 											    , ZX_CC_DEV.dbo.MODULO "
-					+ "                                             WHERE ZX_CC_DEV.dbo.MARCA_MODULO.COD_MARCA = ZX_CC_DEV.dbo.DESC_MODULO.COD_MARCA "
-					+ "                                               AND ZX_CC_DEV.dbo.DESC_MODULO.COD_MODELO = ZX_CC_DEV.dbo.MODULO.COD_MODELO "
-					+ "                                               AND ZX_CC_DEV.dbo.MODULO.COD_MODULO = " + COD_MODULO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT RTRIM(LTRIM(" + AMBIENTE_.db_name + "MARCA_MODULO.nome_marca)) + ' - ' + RTRIM(LTRIM(" + AMBIENTE_.db_name + "DESC_MODULO.nome_modelo)) "
+					+ " 											 FROM " + AMBIENTE_.db_name + "MARCA_MODULO "
+					+ " 											    , " + AMBIENTE_.db_name + "DESC_MODULO "
+					+ " 											    , " + AMBIENTE_.db_name + "MODULO "
+					+ "                                             WHERE " + AMBIENTE_.db_name + "MARCA_MODULO.COD_MARCA = " + AMBIENTE_.db_name + "DESC_MODULO.COD_MARCA "
+					+ "                                               AND " + AMBIENTE_.db_name + "DESC_MODULO.COD_MODELO = " + AMBIENTE_.db_name + "MODULO.COD_MODELO "
+					+ "                                               AND " + AMBIENTE_.db_name + "MODULO.COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
@@ -142,11 +160,11 @@ public class ChipServiceBean {
 		Vector<String[]> NomeCliente = new Vector<String[]>();
 
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT ZX_CC_DEV.dbo.CLIENTE.NOME "
-					+ " 											 FROM ZX_CC_DEV.dbo.CLIENTE "
-					+ " 											    , ZX_CC_DEV.dbo.MODULO "
-					+ "                                             WHERE ZX_CC_DEV.dbo.CLIENTE.COD_CLIENTE = ZX_CC_DEV.dbo.MODULO.COD_CLIENTE "
-					+ "                                               AND ZX_CC_DEV.dbo.MODULO.COD_MODULO = " + COD_MODULO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "CLIENTE.NOME "
+					+ " 											 FROM " + AMBIENTE_.db_name + "CLIENTE "
+					+ " 											    , " + AMBIENTE_.db_name + "MODULO "
+					+ "                                             WHERE " + AMBIENTE_.db_name + "CLIENTE.COD_CLIENTE = " + AMBIENTE_.db_name + "MODULO.COD_CLIENTE "
+					+ "                                               AND " + AMBIENTE_.db_name + "MODULO.COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];

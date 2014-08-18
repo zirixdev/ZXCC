@@ -1,12 +1,12 @@
 <!--
-ZIRIX CONTROL CENTER - MODAL PAGE
+ZIRIX CONTROL CENTER - CADASTRO VENDEDOR
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
-TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E AJAX
+TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>    
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <!--Administrativo -> Cadastro -> Vendedor-->
 <div id="administrativo-cadastro-vendedor-content">
     <form class="outer_form">

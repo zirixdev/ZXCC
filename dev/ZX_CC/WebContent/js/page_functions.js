@@ -6,6 +6,9 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
+var ip_adress = "http://192.168.0.50:8080/zxcc/";
+//var ip_adress = "http://192.168.0.32:8080/zxcc_prod/";
+
 Date.prototype.yyyymmdd = function() {
 	var yyyy = this.getFullYear().toString();
 	var mm = (this.getMonth()+1).toString();
@@ -16,19 +19,19 @@ Date.prototype.yyyymmdd = function() {
 
 function unit_function(){
     var values = $("#tipo_unidade_list").val();
-    var modal_content = '';
+    var fild_content = '';
     switch(values) {
         case "1":
-            modal_content = "div#unid_veiculo";
+        	fild_content = "div#unid_veiculo";
             break;
         default:
         $('.tipo_unidade').html('');
     }
     $.ajax({
-        url: "http://localhost:8080/zxcc/tipo_unidade.html",
+        url: ip_adress + "tipo_unidade.html",
         success: function(result) {
             var html = jQuery('<div>').html(result);
-            var content = html.find(modal_content).html();
+            var content = html.find(fild_content).html();
             $('.tipo_unidade').html(content);
         },
         error: function(e){
@@ -39,25 +42,25 @@ function unit_function(){
 
 function change_consulta_function(){
 	var values = $("input[type='radio'][name='busca_op']:checked").val();
-    var modal_content = '';
+    var fild_content = '';
     switch(values) {
         case "cliente":
-            modal_content = "div#operacional-consulta-cliente-content";
+        	fild_content = "div#operacional-consulta-cliente-content";
             break;
         case "equipamento":
-            modal_content = "div#operacional-consulta-equipamento-content";
+        	fild_content = "div#operacional-consulta-equipamento-content";
             break;
         case "chip":
-            modal_content = "div#operacional-consulta-chip-content";
+        	fild_content = "div#operacional-consulta-chip-content";
             break;
         default:
         $('.consulta_operacional').html('');
     }
     $.ajax({
-        url: "http://localhost:8080/zxcc/consulta.jsp",
+        url: ip_adress + "consulta.jsp",
         success: function(result) {
             var html = jQuery('<div>').html(result);
-            var content = html.find(modal_content).html();
+            var content = html.find(fild_content).html();
             $('.consulta_operacional').html(content);
         },
         error: function(e){
@@ -67,9 +70,11 @@ function change_consulta_function(){
 }
 
 var cod_cliente_consulta;
+var cod_modulo_consulta;
 var cod_chip_consulta;
+var cod_vendedor_consulta;
 
-function consulta_function(e){
+function operacional_consulta_function(e){
     var values = $("input[type='radio'][name='busca_op']:checked").val();
     var adress;
     switch(values) {
@@ -81,7 +86,7 @@ function consulta_function(e){
             	cod_cliente_consulta = $('#nome_list option').filter(function() {
                     return this.value == val_datalist_nome;
                 }).data('label');
-                adress="http://localhost:8080/zxcc/consulta_cliente.jsp?COD_CLIENTE=";
+                adress= ip_adress + "consulta_cliente.jsp?COD_CLIENTE=";
                 adress= adress + cod_cliente_consulta;
                 $.ajax({
                     url: adress,
@@ -91,7 +96,7 @@ function consulta_function(e){
                         carregar_dados_consulta_cliente_function();
                     },
                     error: function(){
-                        alert('error');
+                        alert('Erro ao buscar dados do CLIENTE selecionado!');
                     }
                 });
             }
@@ -101,13 +106,38 @@ function consulta_function(e){
                 return 0;
             }
             break;
+        case "equipamento":
+        	var val_datalist_id = $('#item_id_modulo').val();
+            if (val_datalist_id !== ""){
+            	cod_modulo_consulta = $('#id_list option').filter(function() {
+                    return this.value == val_datalist_id;
+                }).data('label');
+                adress= ip_adress + "consulta_equipamento.jsp?COD_MODULO=";
+                adress= adress + cod_modulo_consulta;
+                $.ajax({
+                    url: adress,
+                    success: function(result) {
+                        $('.modal-content').html(result);
+                        $('.modal').modal({backdrop:'static'});
+                    },
+                    error: function(){
+                        alert('Erro ao buscar dados do MODULO selecionado!');
+                    }
+                });
+            }
+        	else{
+        		alert('Não é possível realizar a busca sem o preenchimento do campo ID!');
+                document.getElementById("iccid_list").focus();
+                return 0;
+        	}
+        	break;
         case "chip":
         	var val_iccid_selected = $('#item_iccid').val();
         	if(val_iccid_selected !== ""){
         		cod_chip_consulta = $('#iccid_list option').filter(function() {
         			return this.value == val_iccid_selected;
             }).data('label');
-            adress="http://localhost:8080/zxcc/consulta_chip.jsp?COD_CHIP=";
+            adress= ip_adress + "consulta_chip.jsp?COD_CHIP=";
             adress= adress + cod_chip_consulta;
             $.ajax({
                 url: adress,
@@ -116,7 +146,7 @@ function consulta_function(e){
                     $('.modal').modal({backdrop:'static'});
                 },
                 error: function(){
-                    alert('error');
+                    alert('Erro ao buscar dados do SIM CARD selecionado!');
                 }
             });
         		
@@ -134,29 +164,28 @@ function consulta_function(e){
 
 function mod_int_function() {
     var values = $("input[type='radio'][name='modulo_instalado']:checked");
-    var modal_content = '';
     var txt ="";
     if (values.length > 0) {
         txt = values.val();
     }
     switch(txt) {
-        case "instalado":
-            modal_content = "div#instalado_cliente";
+    	case "1": //Estoque
+	        $('.instalacao').html('');
+	        break;
+        case "2": //Veículo
+        	$.ajax({
+    	        url: ip_adress + "modulo_inst_cad.jsp",
+    	        success: function(result) {
+                    $('.instalacao').html(result);
+                },
+                error: function(e){
+                    alert('Error to find descriptions of installed clients!');
+                }
+            });
             break;
         default:
-        $('.instalacao').html('');
+        	$('.instalacao').html('');
     }
-    $.ajax({
-        url: "http://localhost:8080/zxcc/pop_up.html",
-        success: function(result) {
-            var html = jQuery('<div>').html(result);
-            var content = html.find(modal_content).html();
-            $('.instalacao').html(content);
-        },
-        error: function(e){
-            alert('error');
-        }
-    });
 }
 
 var myDate = new Date();
@@ -1783,13 +1812,14 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		var dt_nascimento = document.getElementById("data_nasc");
 		var site = document.getElementById("url_site");
 		var cod_vendedor = $('#vendedor_list :selected').val();
+		var cod_usuario = document.getElementById("cod_usuario");
 
-		if(nome.value === ""){
+		if(nome.value.trim() === ""){
 			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Cliente.");
 			document.getElementById("nome_razaosocial").focus();
 			return 0;
 		}
-		if(apelido.value === ""){
+		if(apelido.value.trim() === ""){
 			if(tipo_pessoa === 1){
 				alert("Necessário ingressar NOME FANTASIA do Cliente.");
 				document.getElementById("nomefantasia").focus();
@@ -1798,12 +1828,12 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 				apelido.value = "";
 			}
 		}
-		if(dt_nascimento.value === ""){
+		if(dt_nascimento.value.trim() === ""){
 			alert("Necessário ingressar DATA DE NASCIMENTO do Cliente");
 			document.getElementById("data_nasc").focus();
 			return 0;
 		}
-		if(site.value === ""){
+		if(site.value.trim() === ""){
 			site.value = "";
 		}
 
@@ -1813,34 +1843,20 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 			return 0;
 		}
 
-		var json = new Array();
+		var adress_aux;
 		var documentoLength = control_vetor_doc_json.length;
-		var cont = 0;
+		adress_aux = '&QDOC=' + documentoLength;
 		for(var i=0;i<documentoLength;i++){
 			if(control_vetor_doc_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_doc_json[i].tipo_doc;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].numero;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].dt_emiss;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].org_emiss;
+				adress_aux = adress_aux + '&TIPODOC_'+ i + '=' + control_vetor_doc_json[i].tipo_doc.trim();
+				adress_aux = adress_aux + '&NUMDOC_'+ i + '=' + control_vetor_doc_json[i].numero.trim();
+				adress_aux = adress_aux + '&DTDOC_'+ i + '=' + control_vetor_doc_json[i].dt_emiss.trim();
+				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=DOC",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Documento");
-            }
-		});
 
-		json.length = 0;
-		
 		if(control_vetor_end_json[0] === 0){
 			alert("Necessário ingressar ENDEREÇO do Cliente");
 			document.getElementById("endereco").focus();
@@ -1848,39 +1864,21 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		}
 
 		var enderecoLength = control_vetor_end_json.length;
-		cont = 0;
+		adress_aux = adress_aux + '&QEND=' + enderecoLength;
 		for(i=0;i<enderecoLength;i++){
 			if(control_vetor_end_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_end_json[i].endereco;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].bairro;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].cidade;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].uf;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].pais;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].complemento;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].cep;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].tipo_end;
+				adress_aux = adress_aux + '&END_'+ i + '=' + control_vetor_end_json[i].endereco.trim();
+				adress_aux = adress_aux + '&BAIRRO_'+ i + '=' + control_vetor_end_json[i].bairro.trim();
+				adress_aux = adress_aux + '&CIDADE_'+ i + '=' + control_vetor_end_json[i].cidade.trim();
+				adress_aux = adress_aux + '&UF_'+ i + '=' + control_vetor_end_json[i].uf.trim();
+				adress_aux = adress_aux + '&PAIS_'+ i + '=' + control_vetor_end_json[i].pais.trim();
+				adress_aux = adress_aux + '&COMP_'+ i + '=' + control_vetor_end_json[i].complemento.trim();
+				adress_aux = adress_aux + '&CEP_'+ i + '=' + control_vetor_end_json[i].cep.trim();
+				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=END",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Endereço");
-            }
-		});
-
-		json.length = 0;
 
 		if(control_vetor_contato_json[0] === 0){
 			alert("Necessário ingressar CONTATO do Cliente");
@@ -1889,35 +1887,19 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		}
 
 		var contatoLength = control_vetor_contato_json.length;
-		cont = 0;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
 		for(i=0;i<contatoLength;i++){
 			if(control_vetor_contato_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_contato_json[i].tipo_contato;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].ddd;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].numero;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].cod_pais;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].nome;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].parentesco;
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_json[i].cod_pais.trim();
+				adress_aux = adress_aux + '&NOMECTO_'+ i + '=' + control_vetor_contato_json[i].nome.trim();
+				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=CONTATO",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Contato");
-            }
-		});
-
-		json.length = 0;
 
 		if(control_vetor_email_json[0] === 0){
 			alert("Necessário ingressar EMAIL do Cliente");
@@ -1926,27 +1908,20 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		}
 
 		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
 			if(control_vetor_contato[i]===0){
 				break;
 			}else{
-				json[i] = control_vetor_email_json[i].email;
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
 			}
-			if(emailLength === 1)
-				json[1] = "CONTROLE";
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=EMAIL",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Email");
-            }
-		});
+
 		d = new Date();
-		var adress = 'http://localhost:8080/zxcc/services/cliente?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value + '&NOME_FANTASIA=' + apelido.value + '&SITE=' + site.value + '&DATA_NASCIMENTO=';
-		adress = adress + dt_nascimento.value + '&DATA_INGRESSO=' + d.yyyymmdd() + '&COD_VENDEDOR='+ cod_vendedor;
+		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + d.yyyymmdd();
+		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
 		document.location.href = adress;
 	}
 	else
@@ -1954,6 +1929,8 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 }
 
 function operacional_consultar_cliente_salvar_function(){
+	alert("Em desenvolvimento!");
+	return 0;
 	ajustar_vetor_doc_function();
 	ajustar_vetor_end_function();
 	ajustar_vetor_contato_function();
@@ -1971,13 +1948,14 @@ function operacional_consultar_cliente_salvar_function(){
 		var dt_nascimento = document.getElementById("data_nasc");
 		var site = document.getElementById("url_site");
 		var cod_vendedor = $('#vendedor_list :selected').val();
+		var cod_usuario = document.getElementById("cod_usuario");
 
-		if(nome.value === ""){
+		if(nome.value.trim() === ""){
 			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Cliente.");
 			document.getElementById("nome_razaosocial").focus();
 			return 0;
 		}
-		if(apelido.value === ""){
+		if(apelido.value.trim() === ""){
 			if(tipo_pessoa === 1){
 				alert("Necessário ingressar NOME FANTASIA do Cliente.");
 				document.getElementById("nomefantasia").focus();
@@ -1986,12 +1964,12 @@ function operacional_consultar_cliente_salvar_function(){
 				apelido.value = "";
 			}
 		}
-		if(dt_nascimento.value === ""){
+		if(dt_nascimento.value.trim() === ""){
 			alert("Necessário ingressar DATA DE NASCIMENTO do Cliente");
 			document.getElementById("data_nasc").focus();
 			return 0;
 		}
-		if(site.value === ""){
+		if(site.value.trim() === ""){
 			site.value = "";
 		}
 
@@ -2001,34 +1979,20 @@ function operacional_consultar_cliente_salvar_function(){
 			return 0;
 		}
 
-		var json = new Array();
+		var adress_aux;
 		var documentoLength = control_vetor_doc_json.length;
-		var cont = 0;
+		adress_aux = '&QDOC=' + documentoLength;
 		for(var i=0;i<documentoLength;i++){
 			if(control_vetor_doc_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_doc_json[i].tipo_doc;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].numero;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].dt_emiss;
-				cont++;
-				json[i+cont] = control_vetor_doc_json[i].org_emiss;
+				adress_aux = adress_aux + '&TIPODOC_'+ i + '=' + control_vetor_doc_json[i].tipo_doc.trim();
+				adress_aux = adress_aux + '&NUMDOC_'+ i + '=' + control_vetor_doc_json[i].numero.trim();
+				adress_aux = adress_aux + '&DTDOC_'+ i + '=' + control_vetor_doc_json[i].dt_emiss.trim();
+				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=DOC",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Documento");
-            }
-		});
 
-		json.length = 0;
-		
 		if(control_vetor_end_json[0] === 0){
 			alert("Necessário ingressar ENDEREÇO do Cliente");
 			document.getElementById("endereco").focus();
@@ -2036,39 +2000,21 @@ function operacional_consultar_cliente_salvar_function(){
 		}
 
 		var enderecoLength = control_vetor_end_json.length;
-		cont = 0;
+		adress_aux = adress_aux + '&QEND=' + enderecoLength;
 		for(i=0;i<enderecoLength;i++){
 			if(control_vetor_end_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_end_json[i].endereco;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].cidade;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].bairro;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].uf;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].pais;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].complemento;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].cep;
-				cont++;
-				json[i+cont] = control_vetor_end_json[i].tipo_end;
+				adress_aux = adress_aux + '&END_'+ i + '=' + control_vetor_end_json[i].endereco.trim();
+				adress_aux = adress_aux + '&BAIRRO_'+ i + '=' + control_vetor_end_json[i].bairro.trim();
+				adress_aux = adress_aux + '&CIDADE_'+ i + '=' + control_vetor_end_json[i].cidade.trim();
+				adress_aux = adress_aux + '&UF_'+ i + '=' + control_vetor_end_json[i].uf.trim();
+				adress_aux = adress_aux + '&PAIS_'+ i + '=' + control_vetor_end_json[i].pais.trim();
+				adress_aux = adress_aux + '&COMP_'+ i + '=' + control_vetor_end_json[i].complemento.trim();
+				adress_aux = adress_aux + '&CEP_'+ i + '=' + control_vetor_end_json[i].cep.trim();
+				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=END",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Endereço");
-            }
-		});
-
-		json.length = 0;
 
 		if(control_vetor_contato_json[0] === 0){
 			alert("Necessário ingressar CONTATO do Cliente");
@@ -2077,35 +2023,19 @@ function operacional_consultar_cliente_salvar_function(){
 		}
 
 		var contatoLength = control_vetor_contato_json.length;
-		cont = 0;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
 		for(i=0;i<contatoLength;i++){
 			if(control_vetor_contato_json[i]===0){
 				break;
 			}else{
-				json[i+cont] = control_vetor_contato_json[i].tipo_contato;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].ddd;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].numero;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].cod_pais;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].nome;
-				cont++;
-				json[i+cont] = control_vetor_contato_json[i].parentesco;
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_json[i].cod_pais.trim();
+				adress_aux = adress_aux + '&NOMECTO_'+ i + '=' + control_vetor_contato_json[i].nome.trim();
+				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=CONTATO",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Contato");
-            }
-		});
-
-		json.length = 0;
 
 		if(control_vetor_email_json[0] === 0){
 			alert("Necessário ingressar EMAIL do Cliente");
@@ -2114,29 +2044,23 @@ function operacional_consultar_cliente_salvar_function(){
 		}
 
 		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
 			if(control_vetor_contato[i]===0){
 				break;
 			}else{
-				json[i] = control_vetor_email_json[i].email;
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
 			}
 		}
-		$.ajax({
-            url:"http://localhost:8080/zxcc/JSonData?CODE=EMAIL",
-            type:"POST",
-            dataType:'json',
-            data: {json:json},
-            success:function(data){
-            	alert("Enviado Email");
-            }
-		});
-		var adress = 'http://localhost:8080/zxcc/services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value + '&NOME_FANTASIA=' + apelido.value + '&SITE=' + site.value + '&DATA_NASCIMENTO=';
-		adress = adress + dt_nascimento.value + '&COD_VENDEDOR='+ cod_vendedor + '&COD_CLIENTE=' + cod_cliente_consulta;
+		
+		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value + '&COD_VENDEDOR='+ cod_vendedor.trim();
+		adress = adress + '&COD_CLIENTE=' + cod_cliente_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
 		document.location.href = adress;
 	}
 	else
 		return 0;
-		//document.location.href = adress;
 }
 
 function operacional_cadastrar_chip_function(){
@@ -2149,6 +2073,7 @@ function operacional_cadastrar_chip_function(){
 		var estado_chip = $('#estado_chip :selected').val();
 		var ddd_chip = document.getElementById("ddd_chip");
 		var numero_chip = document.getElementById("numero_chip");
+		var cod_usuario = document.getElementById("cod_usuario");
 
 		if(nfe.value.trim() === ""){
 			alert("Necessário ingressar a NFe do SIM CARD.");
@@ -2186,15 +2111,18 @@ function operacional_cadastrar_chip_function(){
 			return 0;
 		}
 
-		adress = 'http://localhost:8080/zxcc/services/chip?OP_CODE=CREATE&NFE=' + nfe.value + '&ICCID=' + iccid.value + '&OPERADORA=' + operadora_chip + '&TECNOLOGIA=' + tecnologia_chip.value + '&APN=';
-		adress = adress + apn_chip.value + '&ESTADO=' + estado_chip + '&DDD=' + ddd_chip.value + '&NUMERO=' + numero_chip.value;
+		adress = 'http://192.168.0.50:8080/zxcc/services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
+		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim();
+		adress = adress + '&DDD=' + ddd_chip.value.trim() + '&NUMERO=' + numero_chip.value.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		document.location.href = adress;
 	}
 	else
 		return 0;
 }
 
-function operacional_salvar_chip_function(){
+function operacional_consultar_chip_salvar_function(){
+	alert("Em desenvolvimento!");
+	return 0;
 	if(confirm('Deseja realizar o ingresso do Sim Card?')){
 		var nfe = document.getElementById("nfe_chip");
 		var iccid = document.getElementById("iccid");
@@ -2204,6 +2132,7 @@ function operacional_salvar_chip_function(){
 		var estado_chip = $('#estado_chip :selected').val();
 		var ddd_chip = document.getElementById("ddd_chip");
 		var numero_chip = document.getElementById("numero_chip");
+		var cod_usuario = document.getElementById("cod_usuario");
 
 		if(nfe.value.trim() === ""){
 			alert("Necessário ingressar a NFe do SIM CARD.");
@@ -2241,10 +2170,457 @@ function operacional_salvar_chip_function(){
 			return 0;
 		}
 
-		adress = 'http://localhost:8080/zxcc/services/chip?OP_CODE=UPDATE&NFE=' + nfe.value + '&ICCID=' + iccid.value + '&OPERADORA=' + operadora_chip + '&TECNOLOGIA=' + tecnologia_chip.value + '&APN=';
-		adress = adress + apn_chip.value + '&ESTADO=' + estado_chip + '&DDD=' + ddd_chip.value + '&NUMERO=' + numero_chip.value + '&COD_CHIP=' + cod_chip_consulta;
+		adress = 'http://192.168.0.50:8080/zxcc/services/chip?OP_CODE=UPDATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
+		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim() + '&DDD=' + ddd_chip.value.trim();
+		adress = adress + '&NUMERO=' + numero_chip.value.trim() + '&COD_CHIP=' + cod_chip_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		document.location.href = adress;
 	}
 	else
+		return 0;
+}
+
+function administrativo_cadastrar_vendedor_cadastrar_function(){
+	ajustar_vetor_doc_function();
+	ajustar_vetor_end_function();
+	ajustar_vetor_contato_function();
+	ajustar_vetor_email_function();
+	if(confirm('Deseja realizar o ingresso do Vendedor?')){
+		var values = $("input[type='radio'][name='pessoa']:checked").val();
+		var tipo_pessoa;
+		if(values === "pessoafisica"){
+			tipo_pessoa = 0;
+		}else{
+			tipo_pessoa = 1;
+		}
+		var nome = document.getElementById("nome_razaosocial");
+		var apelido  = document.getElementById("nomefantasia");
+		var dt_nascimento = document.getElementById("data_nasc");
+		var site = document.getElementById("url_site");
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(nome.value.trim() === ""){
+			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Vendedor.");
+			document.getElementById("nome_razaosocial").focus();
+			return 0;
+		}
+		if(apelido.value.trim() === ""){
+			if(tipo_pessoa === 1){
+				alert("Necessário ingressar NOME FANTASIA do Vendedor.");
+				document.getElementById("nomefantasia").focus();
+				return 0;
+			}else{
+				apelido.value = "";
+			}
+		}
+		if(dt_nascimento.value.trim() === ""){
+			alert("Necessário ingressar DATA DE NASCIMENTO do Vendedor");
+			document.getElementById("data_nasc").focus();
+			return 0;
+		}
+		if(site.value.trim() === ""){
+			site.value = "";
+		}
+
+		if(control_vetor_doc_json[0] === 0){
+			alert("Necessário ingressar DOCUMENTO do Vendedor");
+			document.getElementById("numero_documento").focus();
+			return 0;
+		}
+
+		var adress_aux;
+		var documentoLength = control_vetor_doc_json.length;
+		adress_aux = '&QDOC=' + documentoLength;
+		for(var i=0;i<documentoLength;i++){
+			if(control_vetor_doc_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPODOC_'+ i + '=' + control_vetor_doc_json[i].tipo_doc.trim();
+				adress_aux = adress_aux + '&NUMDOC_'+ i + '=' + control_vetor_doc_json[i].numero.trim();
+				adress_aux = adress_aux + '&DTDOC_'+ i + '=' + control_vetor_doc_json[i].dt_emiss.trim();
+				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
+			}
+		}
+
+		if(control_vetor_end_json[0] === 0){
+			alert("Necessário ingressar ENDEREÇO do Vendedor");
+			document.getElementById("endereco").focus();
+			return 0;
+		}
+
+		var enderecoLength = control_vetor_end_json.length;
+		adress_aux = adress_aux + '&QEND=' + enderecoLength;
+		for(i=0;i<enderecoLength;i++){
+			if(control_vetor_end_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&END_'+ i + '=' + control_vetor_end_json[i].endereco.trim();
+				adress_aux = adress_aux + '&BAIRRO_'+ i + '=' + control_vetor_end_json[i].bairro.trim();
+				adress_aux = adress_aux + '&CIDADE_'+ i + '=' + control_vetor_end_json[i].cidade.trim();
+				adress_aux = adress_aux + '&UF_'+ i + '=' + control_vetor_end_json[i].uf.trim();
+				adress_aux = adress_aux + '&PAIS_'+ i + '=' + control_vetor_end_json[i].pais.trim();
+				adress_aux = adress_aux + '&COMP_'+ i + '=' + control_vetor_end_json[i].complemento.trim();
+				adress_aux = adress_aux + '&CEP_'+ i + '=' + control_vetor_end_json[i].cep.trim();
+				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
+			}
+		}
+
+		if(control_vetor_contato_json[0] === 0){
+			alert("Necessário ingressar CONTATO do Vendedor");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+
+		var contatoLength = control_vetor_contato_json.length;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		for(i=0;i<contatoLength;i++){
+			if(control_vetor_contato_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_json[i].cod_pais.trim();
+				adress_aux = adress_aux + '&NOMECTO_'+ i + '=' + control_vetor_contato_json[i].nome.trim();
+				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
+			}
+		}
+
+		if(control_vetor_email_json[0] === 0){
+			alert("Necessário ingressar EMAIL do Vendedor");
+			document.getElementById("email").focus();
+			return 0;
+		}
+
+		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
+		for(i=0;i<emailLength;i++){
+			if(control_vetor_contato[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
+			}
+		}
+
+		d = new Date();
+		var adress = 'http://192.168.0.50:8080/zxcc/services/vendedor?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + d.yyyymmdd().trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
+		document.location.href = adress;
+	}
+	else
+		return 0;
+}
+
+function administrativo_consultar_vendedor_salvar_function(){
+	alert("Em desenvolvimento!");
+	return 0;
+	ajustar_vetor_doc_function();
+	ajustar_vetor_end_function();
+	ajustar_vetor_contato_function();
+	ajustar_vetor_email_function();
+	if(confirm('Deseja salvar os dados alterados do Vendedor?')){
+		var values = $("input[type='radio'][name='pessoa']:checked").val();
+		var tipo_pessoa;
+		if(values === "pessoafisica"){
+			tipo_pessoa = 0;
+		}else{
+			tipo_pessoa = 1;
+		}
+		var nome = document.getElementById("nome_razaosocial");
+		var apelido  = document.getElementById("nomefantasia");
+		var dt_nascimento = document.getElementById("data_nasc");
+		var site = document.getElementById("url_site");
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(nome.value.trim() === ""){
+			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Vendedor.");
+			document.getElementById("nome_razaosocial").focus();
+			return 0;
+		}
+		if(apelido.value.trim() === ""){
+			if(tipo_pessoa === 1){
+				alert("Necessário ingressar NOME FANTASIA do Vendedor.");
+				document.getElementById("nomefantasia").focus();
+				return 0;
+			}else{
+				apelido.value = "";
+			}
+		}
+		if(dt_nascimento.value.trim() === ""){
+			alert("Necessário ingressar DATA DE NASCIMENTO do Vendedor");
+			document.getElementById("data_nasc").focus();
+			return 0;
+		}
+		if(site.value.trim() === ""){
+			site.value = "";
+		}
+
+		if(control_vetor_doc_json[0] === 0){
+			alert("Necessário ingressar DOCUMENTO do Vendedor");
+			document.getElementById("numero_documento").focus();
+			return 0;
+		}
+
+		var adress_aux;
+		var documentoLength = control_vetor_doc_json.length;
+		adress_aux = '&QDOC=' + documentoLength;
+		for(var i=0;i<documentoLength;i++){
+			if(control_vetor_doc_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPODOC_'+ i + '=' + control_vetor_doc_json[i].tipo_doc.trim();
+				adress_aux = adress_aux + '&NUMDOC_'+ i + '=' + control_vetor_doc_json[i].numero.trim();
+				adress_aux = adress_aux + '&DTDOC_'+ i + '=' + control_vetor_doc_json[i].dt_emiss.trim();
+				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
+			}
+		}
+
+		if(control_vetor_end_json[0] === 0){
+			alert("Necessário ingressar ENDEREÇO do Vendedor");
+			document.getElementById("endereco").focus();
+			return 0;
+		}
+
+		var enderecoLength = control_vetor_end_json.length;
+		adress_aux = adress_aux + '&QEND=' + enderecoLength;
+		for(i=0;i<enderecoLength;i++){
+			if(control_vetor_end_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&END_'+ i + '=' + control_vetor_end_json[i].endereco.trim();
+				adress_aux = adress_aux + '&BAIRRO_'+ i + '=' + control_vetor_end_json[i].bairro.trim();
+				adress_aux = adress_aux + '&CIDADE_'+ i + '=' + control_vetor_end_json[i].cidade.trim();
+				adress_aux = adress_aux + '&UF_'+ i + '=' + control_vetor_end_json[i].uf.trim();
+				adress_aux = adress_aux + '&PAIS_'+ i + '=' + control_vetor_end_json[i].pais.trim();
+				adress_aux = adress_aux + '&COMP_'+ i + '=' + control_vetor_end_json[i].complemento.trim();
+				adress_aux = adress_aux + '&CEP_'+ i + '=' + control_vetor_end_json[i].cep.trim();
+				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
+			}
+		}
+
+		if(control_vetor_contato_json[0] === 0){
+			alert("Necessário ingressar CONTATO do Vendedor");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+
+		var contatoLength = control_vetor_contato_json.length;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		for(i=0;i<contatoLength;i++){
+			if(control_vetor_contato_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_json[i].cod_pais.trim();
+				adress_aux = adress_aux + '&NOMECTO_'+ i + '=' + control_vetor_contato_json[i].nome.trim();
+				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
+			}
+		}
+
+		if(control_vetor_email_json[0] === 0){
+			alert("Necessário ingressar EMAIL do Vendedor");
+			document.getElementById("email").focus();
+			return 0;
+		}
+
+		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
+		for(i=0;i<emailLength;i++){
+			if(control_vetor_contato[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
+			}
+		}
+		
+		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
+		document.location.href = adress;
+	}
+	else
+		return 0;
+}
+
+function select_modelo_function(){
+	var marca_equip_ = $('#marca_equip').val();
+	var marca_equip_val = marca_equip_;
+    var content = '';
+    if(marca_equip_ != 0){
+    	$.ajax({
+            url: ip_adress + "select_modelo.jsp?COD_MARCA=" + marca_equip_val,
+            success: function(result) {
+                $('#div_modelo_equip').html(result);
+            },
+            error: function(e){
+                alert('error...');
+            }
+        });
+    }else{
+    	content = 'Modelo:<input type="text" id="modelo_equip" class="size_84" disabled="disabled">';
+    	$('#div_modelo_equip').html(content);
+    }
+}
+
+function operacional_cadastrar_equipamento_function(){
+	if(confirm('Deseja realizar o ingresso do Equipamento?')){
+		var instalado = $("input[type='radio'][name='modulo_instalado']:checked").val();
+		var id = document.getElementById("numero_modulo");
+		var sn = document.getElementById("sn_modulo");
+		var nfe = document.getElementById("numero_nfe");
+		var marca = $('#marca_equip :selected').val();
+		var modelo = $('#modelo_equip :selected').val();
+		var val_datalist_iccid = $('#item_iccid').val();
+		var cod_chip_cad_equip = 0;
+        if (val_datalist_iccid !== ""){
+        	cod_chip_cad_equip = $('#iccid_list option').filter(function() {
+                return this.value == val_datalist_iccid;
+            }).data('label');
+        	if(cod_chip_cad_equip === ""){
+    			alert("Necessário selecionar o ICC-ID do Sim Card instalado no Equipamento.");
+    			document.getElementById("numero_chip").focus();
+    			return 0;
+    		}
+        }
+		
+        var cliente_cad_equip = "";
+        //TODO SWITCH CASE PARA OS TIPO DE INSTALAÇÃO
+        //EVOLUI CONFORME FOREM ACRESCENTANDO ESSES TIPOS
+        if(Number(instalado) === 2){
+			var val_datalist_cliente = $('#item_nome_razao').val();
+	        if (val_datalist_cliente.trim() !== ""){
+	        	cliente_cad_equip = $('#nome_list option').filter(function() {
+	                return this.value == val_datalist_cliente;
+	            }).data('label');
+	        }
+	        if(cliente_cad_equip === ""){
+	        	alert("Necessário selecionar um cliente para o Equipamento!");
+	        	document.getElementById("item_nome_razao").focus();
+	        	return 0;
+	        }
+	        //TODO VEÍCULO - AGUARDAR A CRIAÇÃO DO CADASTRO E CONSULTA DE VEÍCULOS
+		}
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(id.value.trim() === ""){
+			alert("Necessário ingressar o ID do Equipamento.");
+			document.getElementById("numero_modulo").focus();
+			return 0;
+		}
+
+		if(sn.value.trim() === ""){
+			alert("Necessário ingressar o SN do Equipamento.");
+			document.getElementById("sn_modulo").focus();
+			return 0;
+		}
+
+		if(nfe.value.trim() === ""){
+			alert("Necessário ingressar a NFe do Equipamento.");
+			document.getElementById("numero_nfe").focus();
+			return 0;
+		}
+
+		if(marca === ""){
+			alert("Necessário selecionar a MARCA do Equipamento.");
+			document.getElementById("marca_equip").focus();
+			return 0;
+		}
+
+		if(modelo === ""){
+			alert("Necessário selecionar o MODELO do Equipamento.");
+			document.getElementById("modelo_equip").focus();
+			return 0;
+		}
+
+		adress = 'http://192.168.0.50:8080/zxcc/services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
+		if(Number(instalado) !== 1){
+			adress = adress + '&COD_CLIENTE=' + cliente_cad_equip;
+		}
+		adress = adress + '&SN=' + sn.value.trim() + '&NFE=' + nfe.value.trim() + '&COD_MODELO=' + modelo + '&INSTALADO=' + instalado;
+		document.location.href = adress;
+	}else
+		return 0;
+}
+
+function operacional_consultar_equipamento_salvar_function(){
+	alert("Em desenvolvimento!");
+	return 0;
+	if(confirm('Deseja salvar os dados alterados do Equipamento?')){
+		var instalado = $("input[type='radio'][name='modulo_instalado']:checked").val();
+		var id = document.getElementById("numero_modulo");
+		var sn = document.getElementById("sn_modulo");
+		var nfe = document.getElementById("numero_nfe");
+		var marca = $('#marca_equip :selected').val();
+		var modelo = $('#modelo_equip :selected').val();
+		var val_datalist_iccid = $('#item_iccid').val();
+		var cod_chip_cad_equip = 0;
+        if (val_datalist_iccid !== ""){
+        	cod_chip_cad_equip = $('#iccid_list option').filter(function() {
+                return this.value == val_datalist_iccid;
+            }).data('label');
+        	if(cod_chip_cad_equip === ""){
+    			alert("Necessário selecionar o ICC-ID do Sim Card instalado no Equipamento.");
+    			document.getElementById("numero_chip").focus();
+    			return 0;
+    		}
+        }
+        var cliente_cad_equip = "";
+        //TODO SWITCH CASE PARA OS TIPO DE INSTALAÇÃO
+        //EVOLUI CONFORME FOREM ACRESCENTANDO ESSES TIPOS
+        if(Number(instalado) === 2){
+			var val_datalist_cliente = $('#item_nome_razao').val();
+	        if (val_datalist_cliente.trim() !== ""){
+	        	cliente_cad_equip = $('#nome_list option').filter(function() {
+	                return this.value == val_datalist_cliente;
+	            }).data('label');
+	        }
+	        if(cliente_cad_equip === ""){
+	        	alert("Necessário selecionar um cliente para o Equipamento!");
+	        	document.getElementById("item_nome_razao").focus();
+	        	return 0;
+	        }
+	        //TODO VEÍCULO - AGUARDAR A CRIAÇÃO DO CADASTRO E CONSULTA DE VEÍCULOS
+		}
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(id.value.trim() === ""){
+			alert("Necessário ingressar o ID do Equipamento.");
+			document.getElementById("numero_modulo").focus();
+			return 0;
+		}
+
+		if(sn.value.trim() === ""){
+			alert("Necessário ingressar o SN do Equipamento.");
+			document.getElementById("sn_modulo").focus();
+			return 0;
+		}
+
+		if(nfe.value.trim() === ""){
+			alert("Necessário ingressar a NFe do Equipamento.");
+			document.getElementById("numero_nfe").focus();
+			return 0;
+		}
+
+		if(marca === ""){
+			alert("Necessário selecionar a MARCA do Equipamento.");
+			document.getElementById("marca_equip").focus();
+			return 0;
+		}
+
+		if(modelo === ""){
+			alert("Necessário selecionar o MODELO do Equipamento.");
+			document.getElementById("modelo_equip").focus();
+			return 0;
+		}
+
+		adress = 'http://192.168.0.50:8080/zxcc/services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
+		if(Number(instalado) !== 1){
+			adress = adress + '&COD_CLIENTE=' + cliente_cad_equip;
+		}
+		adress = adress + '&SN=' + sn.value.trim() + '&NFE=' + nfe.value.trim() + '&COD_MODELO=' + modelo + '&INSTALADO=' + instalado + '&COD_MODULO=' + cod_modulo_consulta;
+		document.location.href = adress;
+	}else
 		return 0;
 }

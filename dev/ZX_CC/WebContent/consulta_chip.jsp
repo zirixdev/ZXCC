@@ -1,12 +1,12 @@
 <!--
-ZIRIX CONTROL CENTER - MODAL PAGE
+ZIRIX CONTROL CENTER - CONSULTA SIM CARD
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
-TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E AJAX
+TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %> 
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
 	String[] pkVal = {request.getParameter("COD_CHIP")};
@@ -29,24 +29,21 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E AJAX
 						ICC-ID: <input type="text" size="25px" id="iccid" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20" value="<%=bean.getIccid().trim()%>">
 						<br>
 						Operadora:<select id="operadora_chip" class="size_47">
-						<%
-							try {
-								Vector<OperadoraChipDAO> list = OperadoraChipDAOService.loadAll();
-								int cod_operadora_bean = bean.getCodOperadora();
-								for (int i=0;i < list.size();i++) {
-									OperadoraChipDAO dao = list.elementAt(i);
-									int cod_operadora_servlet = dao.getPkValueFor("COD_OPERADORA");
-									String str = String.valueOf(dao.getAttValueFor("NOME_OPERADORA")).trim();%>
-					       			   <option value="<%=cod_operadora_servlet%>" name="option_operadora_chip" 
-									<%if (cod_operadora_servlet == cod_operadora_bean){%> selected
-									<%}%>
-									><%=str%></option>
-						       	<%}%>
-						<%
-							   } catch (Exception e) {
-								   out.println("Error... " + e.getMessage());
-							   }
-						%>
+						<%try {
+							Vector<OperadoraChipDAO> list = OperadoraChipDAOService.loadAll();
+							int cod_operadora_bean = bean.getCodOperadora();
+							for (int i=0;i < list.size();i++) {
+								OperadoraChipDAO dao = list.elementAt(i);
+								int cod_operadora_servlet = dao.getPkValueFor("COD_OPERADORA");
+								String str = String.valueOf(dao.getAttValueFor("NOME_OPERADORA")).trim();%>
+					       			<option value="<%=cod_operadora_servlet%>" name="option_operadora_chip" 
+								<%if (cod_operadora_servlet == cod_operadora_bean){%> selected
+								<%}%>
+								><%=str%></option>
+						   <%}%>
+						<%}catch (Exception e) {
+						   	   out.println("Error... " + e.getMessage());
+						  }%>
 						</select>
 						<br>
 						Tecnologia: <input type="text" class="size_46" id="tecnologia_chip" maxlength="3" value="<%=bean.getTecnologia().trim()%>">
@@ -91,7 +88,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E AJAX
 				</fieldset>
             </div>
             <div class="div_modal_bt">
-            	<button type="button" id="incluir_modal" onclick="operacional_cadastrar_chip_function()">Incluir</button>
+            	<button type="button" id="salvar_modal" onclick="operacional_consultar_chip_salvar_function()">Salvar</button>
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>	
         </div>

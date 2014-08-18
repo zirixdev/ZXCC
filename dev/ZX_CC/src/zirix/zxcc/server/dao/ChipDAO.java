@@ -3,8 +3,11 @@ package zirix.zxcc.server.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
+import zirix.zxcc.server.ZXCCConstants;
 
 public class ChipDAO extends GenericDAO<ChipDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public ChipDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -32,13 +35,17 @@ public class ChipDAO extends GenericDAO<ChipDAO> {
     	setAttValueFor("COD_STATUS",res.getInt("COD_STATUS"));
     	setAttValueFor("DDD",res.getString("DDD"));
     	setAttValueFor("NUMERO_CHIP",res.getString("NUMERO_CHIP"));
+    	setAttValueFor("DATA_VIGENCIA",res.getDate("DATA_VIGENCIA"));
+    	setAttValueFor("COD_CONTA",res.getInt("COD_CONTA"));
+    	setAttValueFor("COD_PACOTE",res.getInt("COD_PACOTE"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     
     public Set<String> getPkNamesSet() {
     	return ChipDAO.createKey("COD_CHIP", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.CHIP";
+	public final static String TABLENAME = AMBIENTE_.db_name + "CHIP";
    
         
 }

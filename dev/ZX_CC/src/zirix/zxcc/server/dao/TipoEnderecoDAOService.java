@@ -9,45 +9,35 @@ import java.util.Vector;
 public class TipoEnderecoDAOService {
 
 	public static Vector<TipoEnderecoDAO> loadAll() throws SQLException {
-		
+
 		String query = "SELECT * FROM " + TipoEnderecoDAO.TABLENAME;
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
 		Vector<TipoEnderecoDAO> daoList = new Vector<TipoEnderecoDAO>();
-				
+
 		try {
 			con = DAOManager.getInstance().getConnection();
 			stmt = con.prepareStatement(query);
-			res = stmt.executeQuery();		
-				
-			
+			res = stmt.executeQuery();
+
 			while (res.next()) {
-							
-				int COD_ENDERECO = res.getInt("COD_ENDERECO");							
-			
-				// TODO ClienteDAO.loadPkFromResultSet
-				PkList pkList = new PkList();				
+				int COD_ENDERECO = res.getInt("COD_ENDERECO");
+
+				PkList pkList = new PkList();
 				pkList.put("COD_ENDERECO",COD_ENDERECO);
 				TipoEnderecoDAO dao = new TipoEnderecoDAO(pkList);
-				
+
 				dao.read();
-				
 				dao.loadAttsFromResultSet(res);
-				
 				daoList.add(dao);
-			}	
-			
+			}
 			return daoList;
-		
-		} catch(SQLException e){ throw e; }
-        
-        finally {
-        	
+		}catch(SQLException e){ throw e; }
+        finally{
         	if (res != null) res.close();
         	if (stmt != null) stmt.close();
         	DAOManager.getInstance().closeConnection(con);
-        }		
+        }
 	}
-	
 }

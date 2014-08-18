@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class TipoContatoDAO extends GenericDAO<TipoContatoDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public TipoContatoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -26,13 +30,14 @@ public class TipoContatoDAO extends GenericDAO<TipoContatoDAO> {
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	
     	setAttValueFor("NOME_TIPO",res.getString("NOME_TIPO"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     
     public Set<String> getPkNamesSet() {    	
     	return TipoContatoDAO.createKey("COD_CONTATO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.TIPO_CONTATO";
+	public final static String TABLENAME = AMBIENTE_.db_name + "TIPO_CONTATO";
    
         
 }

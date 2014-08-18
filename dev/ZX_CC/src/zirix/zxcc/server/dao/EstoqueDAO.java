@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class EstoqueDAO extends GenericDAO<EstadoModuloDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public EstoqueDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -24,14 +28,14 @@ public class EstoqueDAO extends GenericDAO<EstadoModuloDAO> {
 	}
             
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
-    	setAttValueFor("COD_CLIENTE", res.getInt("COD_CLIENTE"));
     	setAttValueFor("COD_INSTALACAO", res.getInt("COD_INSTALACAO"));
+    	setAttValueFor("DELETED", res.getInt("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {    	
     	return EstoqueDAO.createKey("COD_ESTOQUE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-    public final static String TABLENAME = "ZX_CC_DEV.dbo.ESTOQUE";
+    public final static String TABLENAME = AMBIENTE_.db_name + "ESTOQUE";
           
 }

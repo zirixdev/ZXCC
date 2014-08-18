@@ -1,2 +1,4 @@
-var/FRONTEND
+var/db
+dev/.metadata
+build/
 *.class

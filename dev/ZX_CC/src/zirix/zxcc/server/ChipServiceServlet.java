@@ -1,4 +1,4 @@
-/*ZIRIX CONTROL CENTER - MAIN PAGE
+/*ZIRIX CONTROL CENTER
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
@@ -17,14 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import zirix.zxcc.server.dao.ChipDAO;
 import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.ZXCCConstants;
 
 /**
  * Servlet implementation class ClienteService
  */
 	@WebServlet( name="ChipService", urlPatterns = {"/services/chip"}, loadOnStartup=1)
-	public class ChipServiceServlet extends HttpServlet {
+public class ChipServiceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -58,7 +60,8 @@ import zirix.zxcc.server.dao.PkList;
 			   PkList pkList;
 
 			   if ((OP_CODE.compareTo("UPDATE") == 0) || (OP_CODE.compareTo("CREATE") == 0)) {
-
+				   daoChip.setAttValueFor("COD_MODULO", 0);
+				   
 				   String NFE = request.getParameter("NFE");
 				   daoChip.setAttValueFor("NFE", NFE);
 				   
@@ -94,10 +97,11 @@ import zirix.zxcc.server.dao.PkList;
 				   else
 				   {
 					   //pkList = daoChip.create();
-					   daoChip.create();
+					   daoChip.Create();
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
-				   response.sendRedirect("http://localhost:8080/zxcc/zx_cc.jsp");
+				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
+				   response.sendRedirect(AMBIENTE_.ip_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 
 			   else if (OP_CODE.compareTo("DELETE") == 0){
@@ -109,7 +113,7 @@ import zirix.zxcc.server.dao.PkList;
 				   daoChip.delete();
 			   }
 		   } catch (Exception e) {
-				   out.println("Error on ClienteServiceServlet... " + ' ' + e.getMessage());
+				   out.println("Error on ChipServiceServlet... " + ' ' + e.getMessage());
 		   }
 	}
 

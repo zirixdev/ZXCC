@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-public abstract class GenericDAO<T> {
-	
+import zirix.zxcc.server.ZXCCConstants;
 
+public abstract class GenericDAO<T> {
+
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 	public static String AUTO_INCREMENT_PK_NAME = "AUTO";
 	public static int AUTO_INCREMENT_PK_VALUE = -1;
 	public static String CAN_DELETE_COLUMN_NAME = "deleted";
@@ -31,7 +33,79 @@ public abstract class GenericDAO<T> {
     /*
     * the CRUD operators
     */
-    public PkList create() throws SQLException {
+	public void Create() throws SQLException{ //Don't need to return GENERATED KEY
+		PreparedStatement stmt = null;
+        Connection con = DAOManager.getInstance().getConnection();
+
+        String query = "INSERT INTO " + getTableName() + " VALUES(";
+
+    	int valuesCount = 0;
+
+    	if (!autoIncrement_) {
+
+	    	Iterator<String> kit1 = getPkList().keySet().iterator();
+	    	while (kit1.hasNext()) {
+	    		valuesCount++;
+	    		String key = kit1.next();
+	    		query = query.concat("?");
+	    		if (kit1.hasNext())
+	    			query = query.concat(",");
+	    	}
+    	}
+
+    	// then Atts...
+    	Iterator<String> kit2 = getAttList().keySet().iterator();
+    	if(kit2.hasNext() && !autoIncrement_)
+    		query = query.concat(",");
+
+    	while (kit2.hasNext()) {
+    		valuesCount++;
+    		String key = kit2.next();
+    		query = query.concat("?");
+    		if (kit2.hasNext())
+    			query = query.concat(",");
+    	}
+
+    	query = query.concat(")");
+
+        try
+        {
+	        stmt = con.prepareStatement(query);
+	        int i = 1;
+
+	        if (!autoIncrement_) {
+		    	// PKs first
+		        Iterator<Integer> vit1 = getPkList().values().iterator();
+		    	while (vit1.hasNext()) {
+		    		Object value = vit1.next();
+		    		stmt.setObject(i++, value);
+		    	}
+	        }
+
+	    	// then Atts...
+	        Iterator<Object> vit2 = getAttList().values().iterator();
+
+	    	while (vit2.hasNext()) {
+	    		Object value = vit2.next();
+	    		stmt.setObject(i++, value);
+	    	}
+	        stmt.executeUpdate();
+	        db_sync_ = true;
+        }
+        catch(SQLException e){
+        	db_sync_ = false;
+        	throw new SQLException("CREATE failed, no rows affected..." + e);
+        }
+        finally {
+        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        		con.commit();
+    		}
+        	if (stmt != null) stmt.close();
+        	DAOManager.getInstance().closeConnection(con);
+        }
+	}
+	
+    public PkList create() throws SQLException { //Need to return GENERATED KEY
 
         PreparedStatement stmt = null;
         ResultSet generatedKeys = null;
@@ -141,7 +215,9 @@ public abstract class GenericDAO<T> {
         	throw e;
         }
         finally {
-        	con.commit();
+        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        		con.commit();
+    		}
         	if (generatedKeys != null) generatedKeys.close();
         	if (stmt != null) stmt.close();
         	DAOManager.getInstance().closeConnection(con);
@@ -266,7 +342,9 @@ public abstract class GenericDAO<T> {
             throw e;
         }
         finally {
-        	con.commit();
+        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        		con.commit();
+    		}
         	if (stmt != null) stmt.close();
         	DAOManager.getInstance().closeConnection(con);
         }
@@ -309,14 +387,12 @@ public abstract class GenericDAO<T> {
 			query = query.concat(" AND ");
         	while (kit.hasNext()) {
         		String key = kit.next();
-        		
-        		
+
         		query = query.concat(key + "=?");        		
-        		
+
         		if (kit.hasNext()) {
         			query.concat(" AND ");        			
         		}
-        			        		
         	}
 
 	        stmt = con.prepareStatement(query);
@@ -351,8 +427,9 @@ public abstract class GenericDAO<T> {
         }
         
         finally {
-
-        	con.commit();
+        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        		con.commit();
+    		}
         	if (stmt != null) stmt.close();
         	DAOManager.getInstance().closeConnection(con);
         }            	                    	       	   
@@ -400,8 +477,9 @@ public abstract class GenericDAO<T> {
 	        }
 	
 	        finally {
-	
-	        	con.commit();
+	        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+	        		con.commit();
+	    		}
 	        	if (stmt != null) stmt.close();
 	        	DAOManager.getInstance().closeConnection(con);
 	        }
@@ -424,10 +502,7 @@ public abstract class GenericDAO<T> {
         		if (kit2.hasNext())
         			query = query.concat(",");
         	}
-
-        	// TODO "AND" for conditionalUpdate
-
-            try
+        	try
             {            	
     	        stmt = con.prepareStatement(query);
 
@@ -461,8 +536,9 @@ public abstract class GenericDAO<T> {
             }
             
             finally {
-            	
-            	con.commit();
+            	if(AMBIENTE_.local.compareTo("DEV") == 0){
+            		con.commit();
+        		}
             	if (stmt != null) stmt.close();
             	DAOManager.getInstance().closeConnection(con);
             }            	                    	       	   

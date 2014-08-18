@@ -1,8 +1,0 @@
-package zirix.zxccmock;
-
-public enum WorkStatus {
-
-	COMPLETE,INCOMPLETE,ALERT;
-	
-	
-}

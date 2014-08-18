@@ -6,6 +6,9 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
+var ip_adress = "http://192.168.0.50:8080/zxcc/";
+//var ip_adress = "http://192.168.0.32:8080/zxcc_prod/";
+
 var nav = $("#topNav");
 nav.find("li").each(function(){
     if ($(this).find("ul").length > 0) {
@@ -56,9 +59,9 @@ nav.find(".li-submenu-last").each(function(){
 $('.modal_btn').on("click", function(){
     var id = $(this).attr('id');
     switch(id) {
-        case "menu_op_cad_cliente":
+        case "menu_opr_cad_cli":
             $.ajax({
-                url: "http://localhost:8080/zxcc/cadastro_cliente.jsp",
+                url: ip_adress + "cadastro_cliente.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -68,23 +71,9 @@ $('.modal_btn').on("click", function(){
                 }
             });
             break;
-        case "menu_op_cad_equip":
+        case "menu_opr_cad_eqp":
             $.ajax({
-                url: "http://localhost:8080/zxcc/pop_up.html",
-                success: function(result) {
-                    var html = jQuery('<div>').html(result);
-                    var content = html.find("div#operacional-cadastro-equipamentos-content").html();
-                    $('.modal-content').html(content);
-                    $('.modal').modal({backdrop:'static'});
-                },
-                error: function(e){
-                    alert('error');
-                }
-            });
-            break;
-        case "menu_op_cad_chip":
-            $.ajax({
-                url: "http://localhost:8080/zxcc/cadastro_chip.jsp",
+                url: ip_adress + "cadastro_equipamento.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -94,9 +83,21 @@ $('.modal_btn').on("click", function(){
                 }
             });
             break;
-        case "menu_op_con":
+        case "menu_opr_cad_chp":
             $.ajax({
-                url: "http://localhost:8080/zxcc/pop_up.html",
+                url: ip_adress + "cadastro_chip.jsp",
+                success: function(result) {
+                    $('.modal-content').html(result);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
+            break;
+        case "menu_opr_con":
+            $.ajax({
+                url: ip_adress + "pop_up.html",
                 success: function(result) {
                     var html = jQuery('<div>').html(result);
                     var content = html.find("div#operacional-consulta-content").html();
@@ -108,14 +109,30 @@ $('.modal_btn').on("click", function(){
                 }
             });
             break;
-        case "menu_logoff":
+        case "menu_adm_cad_ven":
+            $.ajax({
+                url: ip_adress + "cadastro_vendedor.jsp",
+                success: function(result) {
+                    $('.modal-content').html(result);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
+            break;
+        case "menu_ext":
         	if(confirm('Deseja sair do sitema?')){
-        		document.location.href = "http://localhost:8080/zxcc/login.html";
+        		//call invalidate session on JAVA and redirect do this url:
+        		document.location.href = ip_adress + "index.html";
         	}
+        	break;
+        case "no_permission":
+        	alert('Usuário sem permissão para essa função!');
         	break;
         default:
             $.ajax({
-                url: "http://localhost:8080/zxcc/pop_up.html",
+                url: ip_adress + "pop_up.html",
                 success: function(result) {
                     var html = jQuery('<div>').html(result);
                     var content = html.find("div#em-construcao-content").html();
@@ -127,7 +144,7 @@ $('.modal_btn').on("click", function(){
                 }
             });
             break;
-    }                 
+    }
 });
 
 $('.modal-content').on('click', '#cancel_modal', function(e){

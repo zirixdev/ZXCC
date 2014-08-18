@@ -7,28 +7,17 @@ import java.util.Vector;
 import zirix.zxcc.server.dao.UsuarioDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.ZXCCConstants;
 
 
 public class ZxAccessControlBean {
 
 	private UsuarioDAO dao_ = null;
 	private Integer COD_USUARIO_ = null;
-	private Integer COD_GRUPO_ = null;
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
 	public ZxAccessControlBean(String[] pkVal) {
 		setPk(pkVal);
-		try{
-			String query = "SELECT ZX_CC_DEV.dbo.USUARIO.COD_GRUPO FROM ZX_CC_DEV.dbo.USUARIO WHERE COD_USUARIO=\'" + COD_USUARIO_ + "\'";
-		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery(query);
-		    Object[] retVal = (Object[])values.get(0);
-
-		    if (((Integer)retVal[0]) != null){
-		    	COD_GRUPO_ = ((Integer)retVal[0]);
-		    }
-		} catch (Exception ex) {
-    		ex.printStackTrace();
-		}  finally {
-		}
 	}
 
 	public ZxAccessControlBean() {
@@ -50,7 +39,7 @@ public class ZxAccessControlBean {
 	    }
 	}
 
-	public String getNomeUsuario(){
+	public String getNomeUsuario() {
 		String nomeUsuario = (String)dao_.getAttValueFor("NOME_USUARIO");	    	
 		return nomeUsuario;
 	}
@@ -59,10 +48,10 @@ public class ZxAccessControlBean {
 	public Vector<String[]> getPermissaoUsuario(){
 		Vector<String[]> PermissaoUsuario = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT ZX_CC_DEV.dbo.PERMISSAO_USUARIO.COD_TELA "
-					+ "                                                              , ZX_CC_DEV.dbo.PERMISSAO_USUARIO.CHAVE "
-					+ "                                                           FROM ZX_CC_DEV.dbo.PERMISSAO_USUARIO "
-					+ "                                                          WHERE ZX_CC_DEV.dbo.PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.COD_TELA "
+					+ "                                                              , " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.CHAVE "
+					+ "                                                           FROM " + AMBIENTE_.db_name + "PERMISSAO_USUARIO "
+					+ "                                                          WHERE " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[2]; // pois eu sei que sao 2 atributos de fato !
@@ -78,24 +67,21 @@ public class ZxAccessControlBean {
 	}
 
 	@SuppressWarnings("finally")
-	public Vector<String[]> getPermissaoGrupo(){
-		Vector<String[]> PermissaoGrupo = new Vector<String[]>();
+	public Vector<String[]> getCodTela(){
+		Vector<String[]> CodTela = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT ZX_CC_DEV.dbo.PERMISSAO_GRUPO.COD_TELA "
-					+ "                                                              , ZX_CC_DEV.dbo.PERMISSAO_GRUPO.CHAVE "
-					+ "                                                           FROM ZX_CC_DEV.dbo.PERMISSAO_GRUPO "
-					+ "                                                          WHERE ZX_CC_DEV.dbo.PERMISSAO_GRUPO.COD_GRUPO = " + COD_GRUPO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "TELA.COD_TELA "
+					+ "                                                           FROM " + AMBIENTE_.db_name + "TELA ");
 
 		    for (int i=0;i < values.size();i++) {
-			    String[] attList = new String[2]; // pois eu sei que sao 2 atributos de fato !
+			    String[] attList = new String[1]; // pois eu sei que sao 2 atributos de fato !
 			    attList[0] = values.get(i)[0].toString();
-			    attList[1] = values.get(i)[1].toString();
-			    PermissaoGrupo.add(attList);
+			    CodTela.add(attList);
 		    }
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}  finally {
-			return PermissaoGrupo;
+			return CodTela;
 		}
 	}
 }

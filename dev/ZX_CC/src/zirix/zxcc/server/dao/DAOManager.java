@@ -7,48 +7,54 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class DAOManager {
 
-	
-	public static final int CONNECTION_CHECK_TIMEOUT_IN_SECS = 10;	
-	
-		
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
+	public static final int CONNECTION_CHECK_TIMEOUT_IN_SECS = 10;
+
 	public static DAOManager getInstance() {
         return DAOManagerSingleton.INSTANCE.get();
     }  
-	
+
     public Connection getConnection() throws SQLException {
-        try
-        {
+        try{
             return src.getConnection();
         }
         catch(SQLException e) { throw e; }
     }
     
-    public Connection getLocalConnection() throws SQLException {
-	
-    	String url="jdbc:sqlserver://localhost:1433;integratedSecurity=true";    	
-    	Connection conn = null;
+    @SuppressWarnings("finally")
+	public Connection getLocalConnection() throws SQLException {
     	
-    	try {
-    		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    	    conn = DriverManager.getConnection(url);
-    	    
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    		
-    	} finally {
-    		
-    		return conn;
+    	if(AMBIENTE_.local.compareTo("DEV") == 0){
+	    	String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
+	    	Connection conn = null;
+	    	try{
+	    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	    	    conn = DriverManager.getConnection(url);
+	    	}catch (Exception ex){
+	    		ex.printStackTrace();
+	    	}finally{
+	    		return conn;
+	    	}
+    	}else{
+    		String url="jdbc:mysql://192.168.0.32/ZX_CC_PROD";
+        	Connection conn = null;
+        	try{
+        		Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+        		conn = DriverManager.getConnection (url, "root", "");
+        	}catch (Exception ex){
+        		ex.printStackTrace();
+        	}finally{
+        		return conn;
+        	}
     	}
-    	
     }
     
     public void executeUpdate(String query) throws SQLException {
@@ -91,8 +97,9 @@ public class DAOManager {
         }
         
         finally {
-
-        	con.commit();
+        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        		con.commit();
+    		}
         	if (res != null) res.close();
         	if (stmt != null) stmt.close();
         	closeConnection(con);
@@ -117,7 +124,7 @@ public class DAOManager {
         try
         {
         	// Look up the JNDI data source only once at init time
-  	      Context envCtx = (Context) new InitialContext().lookup("java:comp/env"); 	      
+  	      Context envCtx = (Context) new InitialContext().lookup("java:comp/env");
   	      src = (DataSource) envCtx.lookup("jdbc/poolConn");
   	      
         } catch(Exception e) { throw e; }

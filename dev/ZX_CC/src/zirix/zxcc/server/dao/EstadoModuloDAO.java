@@ -2,10 +2,13 @@ package zirix.zxcc.server.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class EstadoModuloDAO extends GenericDAO<EstoqueDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public EstadoModuloDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -25,12 +28,13 @@ public class EstadoModuloDAO extends GenericDAO<EstoqueDAO> {
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("NOME_ESTADO", res.getString("NOME_ESTADO"));
+    	setAttValueFor("DELETED", res.getInt("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {    	
     	return EstadoModuloDAO.createKey("COD_ESTADO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-    public final static String TABLENAME = "ZX_CC_DEV.dbo.ESTADO_MODULO";
+    public final static String TABLENAME = AMBIENTE_.db_name + "ESTADO_MODULO";
           
 }

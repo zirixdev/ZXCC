@@ -11,12 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import zirix.zxcc.server.dao.DAOManager;
+import zirix.zxcc.server.ZXCCConstants;
+
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet( name="LoginServlet", urlPatterns = {"/services/login"}, loadOnStartup=1)
 public class LoginServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
+	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,18 +40,18 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			String query = "SELECT ZX_CC_DEV.dbo.USUARIO.COD_USUARIO FROM ZX_CC_DEV.dbo.USUARIO WHERE LOGIN=\'" + userLoginName + "\'"	+ " AND SENHA=\'" + userPassword + "\'";
+			String query = "SELECT " + AMBIENTE_.db_name + "USUARIO.COD_USUARIO FROM " + AMBIENTE_.db_name + "USUARIO WHERE LOGIN=\'" + userLoginName + "\'"	+ " AND SENHA=\'" + userPassword + "\'";
 
 		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery(query);
 		    Object[] retVal = (Object[])values.get(0);
 
 		    if (((Integer)retVal[0]) != null){
-		    	response.sendRedirect("http://localhost:8080/zxcc/zx_cc.jsp?COD_USUARIO="+((Integer)retVal[0]));
+		    	response.sendRedirect(AMBIENTE_.ip_adress + "zx_cc.jsp?COD_USUARIO="+((Integer)retVal[0]));
 		    }
 		    else
 		    	out.println("<h1> ERROR TRIM ... </h1>");
 	    } catch (Exception ex) {
-	    	response.sendRedirect("http://localhost:8080/zxcc/login.jsp?LOGIN_FAILED=FAIL");
+	    	response.sendRedirect(AMBIENTE_.ip_adress + "index.jsp?LOGIN_FAILED=FAIL");
     		ex.printStackTrace(); // TODO zx_cc Error page !
 		}  finally {
 		}		 		   		   

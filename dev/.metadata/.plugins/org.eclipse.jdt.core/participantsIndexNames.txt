@@ -1,3 +1,5 @@
 INDEX VERSION 1.127
+/home/mvera/Oficina/ZXCC/dev/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1219345505.index
+/ZX_CC_PROD/src
 /home/mvera/Oficina/ZXCC/dev/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/210968103.index
 /ZX_CC/src

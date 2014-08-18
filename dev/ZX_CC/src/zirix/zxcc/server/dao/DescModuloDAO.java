@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class DescModuloDAO extends GenericDAO<DescModuloDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public DescModuloDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -25,14 +29,15 @@ public class DescModuloDAO extends GenericDAO<DescModuloDAO> {
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	
     	setAttValueFor("NOME_MODELO",res.getString("NOME_MODELO"));
-    	setAttValueFor("COD_MARCA",res.getInt("COD_MARCA"));  	        	    	   
+    	setAttValueFor("COD_MARCA",res.getInt("COD_MARCA"));  	  
+    	setAttValueFor("DELETED",res.getInt("DELETED"));      	    	   
     }
     
     public Set<String> getPkNamesSet() {    	
     	return DescModuloDAO.createKey("COD_MODELO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
     
-    public final static String TABLENAME = "ZX_CC_DEV.dbo.DESC_MODULO";
+    public final static String TABLENAME = AMBIENTE_.db_name + "DESC_MODULO";
    
         
 }

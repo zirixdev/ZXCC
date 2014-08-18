@@ -2,10 +2,13 @@ package zirix.zxcc.server.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class InfoContatoDAO extends GenericDAO<InfoContatoDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public InfoContatoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -26,12 +29,13 @@ public class InfoContatoDAO extends GenericDAO<InfoContatoDAO> {
             
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("NOME_GRAU", res.getString("NOME_GRAU"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     
     public Set<String> getPkNamesSet() {    	
     	return InfoContatoDAO.createKey("COD_GRAU", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.INFO_CONTATO";
+	public final static String TABLENAME = AMBIENTE_.db_name + "INFO_CONTATO";
           
 }

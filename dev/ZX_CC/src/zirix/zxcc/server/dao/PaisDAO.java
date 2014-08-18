@@ -2,10 +2,13 @@ package zirix.zxcc.server.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 
+import zirix.zxcc.server.ZXCCConstants;
+
 public class PaisDAO extends GenericDAO<PaisDAO> {
+
+	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public PaisDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -25,12 +28,13 @@ public class PaisDAO extends GenericDAO<PaisDAO> {
 	}
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("NOME_PAIS", res.getString("NOME_PAIS"));
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {    	
     	return PaisDAO.createKey("COD_PAIS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = "ZX_CC_DEV.dbo.PAIS";
+	public final static String TABLENAME = AMBIENTE_.db_name + "PAIS";
           
 }
