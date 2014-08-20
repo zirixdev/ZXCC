@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>510</x>
+      <y>60</y>
+      <w>150</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Work Schedule
+Database
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Database</type>
+    <coordinates>
+      <x>170</x>
+      <y>250</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>sched_work
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>350</x>
+      <y>250</y>
+      <w>180</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>WORK_ID
+WORK_NAME
+PROCESS_ID
+RESP_ID
+START_TIMESTAMP
+END_TIMESTAMP
+RESTRICTION_ID
+PROCESS_STATE_ID
+
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Database</type>
+    <coordinates>
+      <x>170</x>
+      <y>470</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>sched_process</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>350</x>
+      <y>470</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>PROCESS_ID
+CURRENT_STATE_ID
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>350</x>
+      <y>800</y>
+      <w>130</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>STATE_ID
+STATE_NAME
+NEXT_STATE_ID
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>510</x>
+      <y>650</y>
+      <w>150</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Flux Definition
+Database
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Database</type>
+    <coordinates>
+      <x>170</x>
+      <y>800</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>process_state
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
