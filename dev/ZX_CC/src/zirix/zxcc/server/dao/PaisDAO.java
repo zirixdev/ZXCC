@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class PaisDAO extends GenericDAO<PaisDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public PaisDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -35,6 +34,6 @@ public class PaisDAO extends GenericDAO<PaisDAO> {
     	return PaisDAO.createKey("COD_PAIS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "PAIS";
+	public final static String TABLENAME = ZXCCConstants.db_name + "PAIS";
           
 }

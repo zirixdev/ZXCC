@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public TipoEnderecoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -36,5 +35,5 @@ public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
     	return TipoEnderecoDAO.createKey("COD_ENDERECO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "TIPO_ENDERECO";
+	public final static String TABLENAME = ZXCCConstants.db_name + "TIPO_ENDERECO";
 }

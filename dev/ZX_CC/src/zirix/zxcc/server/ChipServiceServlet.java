@@ -26,7 +26,6 @@ import zirix.zxcc.server.ZXCCConstants;
 public class ChipServiceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -101,7 +100,7 @@ public class ChipServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(AMBIENTE_.ip_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXCCConstants.url_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 
 			   else if (OP_CODE.compareTo("DELETE") == 0){

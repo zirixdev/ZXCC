@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class StatusChipDAO extends GenericDAO<StatusChipDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public StatusChipDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -36,7 +35,7 @@ public class StatusChipDAO extends GenericDAO<StatusChipDAO> {
     	return StatusChipDAO.createKey("COD_STATUS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "STATUS_CHIP";
+	public final static String TABLENAME = ZXCCConstants.db_name + "STATUS_CHIP";
    
         
 }

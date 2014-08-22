@@ -14,7 +14,6 @@ public class ZxAccessControlBean {
 
 	private UsuarioDAO dao_ = null;
 	private Integer COD_USUARIO_ = null;
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
 	public ZxAccessControlBean(String[] pkVal) {
 		setPk(pkVal);
@@ -48,10 +47,10 @@ public class ZxAccessControlBean {
 	public Vector<String[]> getPermissaoUsuario(){
 		Vector<String[]> PermissaoUsuario = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.COD_TELA "
-					+ "                                                              , " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.CHAVE "
-					+ "                                                           FROM " + AMBIENTE_.db_name + "PERMISSAO_USUARIO "
-					+ "                                                          WHERE " + AMBIENTE_.db_name + "PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.COD_TELA "
+					+ "                                                              , " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.CHAVE "
+					+ "                                                           FROM " + ZXCCConstants.db_name + "PERMISSAO_USUARIO "
+					+ "                                                          WHERE " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[2]; // pois eu sei que sao 2 atributos de fato !
@@ -70,8 +69,8 @@ public class ZxAccessControlBean {
 	public Vector<String[]> getCodTela(){
 		Vector<String[]> CodTela = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "TELA.COD_TELA "
-					+ "                                                           FROM " + AMBIENTE_.db_name + "TELA ");
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "TELA.COD_TELA "
+					+ "                                                           FROM " + ZXCCConstants.db_name + "TELA ");
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[1]; // pois eu sei que sao 2 atributos de fato !

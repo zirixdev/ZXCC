@@ -8,8 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class ContatoVendedorDAO extends GenericDAO<ContatoVendedorDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
-
     public ContatoVendedorDAO(PkList pkList) {
         super(TABLENAME,pkList);
         setCanDelete(true);
@@ -41,6 +39,6 @@ public class ContatoVendedorDAO extends GenericDAO<ContatoVendedorDAO> {
     	return ContatoVendedorDAO.createKey("COD_CONTATO_VEN", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-    public final static String TABLENAME = AMBIENTE_.db_name + "CONTATO_VENDEDOR";
+    public final static String TABLENAME = ZXCCConstants.db_name + "CONTATO_VENDEDOR";
 
 }

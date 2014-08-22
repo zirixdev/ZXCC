@@ -28,7 +28,6 @@ import zirix.zxcc.server.ZXCCConstants;
 	public class VendedorServiceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -99,7 +98,7 @@ import zirix.zxcc.server.ZXCCConstants;
 					   
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
-								   + " 											                 FROM " + AMBIENTE_.db_name + "CLIENTE "
+								   + " 											                 FROM " + ZXCCConstants.db_name + "CLIENTE "
 								   + "                                                          WHERE NOME = " + NOME );
 
 						   for (int i=0;i < values.size();i++) {
@@ -214,7 +213,7 @@ import zirix.zxcc.server.ZXCCConstants;
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(AMBIENTE_.ip_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXCCConstants.url_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 
 			   else if (OP_CODE.compareTo("DELETE") == 0){

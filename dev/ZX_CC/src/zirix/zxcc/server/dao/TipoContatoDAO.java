@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class TipoContatoDAO extends GenericDAO<TipoContatoDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public TipoContatoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -37,7 +36,7 @@ public class TipoContatoDAO extends GenericDAO<TipoContatoDAO> {
     	return TipoContatoDAO.createKey("COD_CONTATO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "TIPO_CONTATO";
+	public final static String TABLENAME = ZXCCConstants.db_name + "TIPO_CONTATO";
    
         
 }

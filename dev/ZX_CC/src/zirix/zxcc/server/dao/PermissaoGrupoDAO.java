@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class PermissaoGrupoDAO extends GenericDAO<PermissaoGrupoDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public PermissaoGrupoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -37,7 +36,7 @@ public class PermissaoGrupoDAO extends GenericDAO<PermissaoGrupoDAO> {
     	return PermissaoGrupoDAO.createKey("COD_PERMISSAO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "PERMISSAO_GRUPO";
+	public final static String TABLENAME = ZXCCConstants.db_name + "PERMISSAO_GRUPO";
    
         
 }

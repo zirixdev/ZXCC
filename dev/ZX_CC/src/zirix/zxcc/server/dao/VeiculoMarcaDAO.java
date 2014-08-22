@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class VeiculoMarcaDAO extends GenericDAO<VeiculoMarcaDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public VeiculoMarcaDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -36,5 +35,5 @@ public class VeiculoMarcaDAO extends GenericDAO<VeiculoMarcaDAO> {
     	return VeiculoMarcaDAO.createKey("COD_MARCA", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "VEICULO_MARCA";
+	public final static String TABLENAME = ZXCCConstants.db_name + "VEICULO_MARCA";
 }

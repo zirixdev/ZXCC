@@ -15,7 +15,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class DAOManager {
 
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 	public static final int CONNECTION_CHECK_TIMEOUT_IN_SECS = 10;
 
 	public static DAOManager getInstance() {
@@ -32,7 +31,7 @@ public class DAOManager {
     @SuppressWarnings("finally")
 	public Connection getLocalConnection() throws SQLException {
     	
-    	if(AMBIENTE_.local.compareTo("DEV") == 0){
+    	if(ZXCCConstants.local.compareTo("DEV") == 0){
 	    	String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
 	    	Connection conn = null;
 	    	try{
@@ -97,7 +96,7 @@ public class DAOManager {
         }
         
         finally {
-        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        	if(ZXCCConstants.local.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (res != null) res.close();

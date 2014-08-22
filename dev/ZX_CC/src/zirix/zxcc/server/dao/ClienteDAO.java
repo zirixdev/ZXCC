@@ -7,7 +7,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class ClienteDAO extends GenericDAO<ClienteDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public ClienteDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -57,5 +56,5 @@ public class ClienteDAO extends GenericDAO<ClienteDAO> {
     	return ClienteDAO.createKey("COD_CLIENTE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "CLIENTE";
+	public final static String TABLENAME = ZXCCConstants.db_name + "CLIENTE";
 }

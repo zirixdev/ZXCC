@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class PedidoDAO extends GenericDAO<PedidoDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public PedidoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -40,7 +39,7 @@ public class PedidoDAO extends GenericDAO<PedidoDAO> {
     	return PedidoDAO.createKey("COD_PEDIDO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = AMBIENTE_.db_name + "PEDIDO";
+	public final static String TABLENAME = ZXCCConstants.db_name + "PEDIDO";
    
         
 }

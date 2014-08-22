@@ -11,7 +11,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public abstract class GenericDAO<T> {
 
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 	public static String AUTO_INCREMENT_PK_NAME = "AUTO";
 	public static int AUTO_INCREMENT_PK_VALUE = -1;
 	public static String CAN_DELETE_COLUMN_NAME = "deleted";
@@ -97,7 +96,7 @@ public abstract class GenericDAO<T> {
         	throw new SQLException("CREATE failed, no rows affected..." + e);
         }
         finally {
-        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        	if(ZXCCConstants.local.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -215,7 +214,7 @@ public abstract class GenericDAO<T> {
         	throw e;
         }
         finally {
-        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        	if(ZXCCConstants.local.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (generatedKeys != null) generatedKeys.close();
@@ -342,7 +341,7 @@ public abstract class GenericDAO<T> {
             throw e;
         }
         finally {
-        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        	if(ZXCCConstants.local.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -427,7 +426,7 @@ public abstract class GenericDAO<T> {
         }
         
         finally {
-        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+        	if(ZXCCConstants.local.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -477,7 +476,7 @@ public abstract class GenericDAO<T> {
 	        }
 	
 	        finally {
-	        	if(AMBIENTE_.local.compareTo("DEV") == 0){
+	        	if(ZXCCConstants.local.compareTo("DEV") == 0){
 	        		con.commit();
 	    		}
 	        	if (stmt != null) stmt.close();
@@ -536,7 +535,7 @@ public abstract class GenericDAO<T> {
             }
             
             finally {
-            	if(AMBIENTE_.local.compareTo("DEV") == 0){
+            	if(ZXCCConstants.local.compareTo("DEV") == 0){
             		con.commit();
         		}
             	if (stmt != null) stmt.close();

@@ -6,8 +6,8 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
-var ip_adress = "http://192.168.0.50:8080/zxcc/";
-//var ip_adress = "http://192.168.0.32:8080/zxcc_prod/";
+var url_adress = "http://192.168.0.50:8080/zxcc/";
+//var url_adress = "www.zirix.com/";
 
 Date.prototype.yyyymmdd = function() {
 	var yyyy = this.getFullYear().toString();
@@ -28,7 +28,7 @@ function unit_function(){
         $('.tipo_unidade').html('');
     }
     $.ajax({
-        url: ip_adress + "tipo_unidade.html",
+        url: url_adress + "tipo_unidade.html",
         success: function(result) {
             var html = jQuery('<div>').html(result);
             var content = html.find(fild_content).html();
@@ -57,7 +57,7 @@ function change_consulta_function(){
         $('.consulta_operacional').html('');
     }
     $.ajax({
-        url: ip_adress + "consulta.jsp",
+        url: url_adress + "consulta.jsp",
         success: function(result) {
             var html = jQuery('<div>').html(result);
             var content = html.find(fild_content).html();
@@ -86,7 +86,7 @@ function operacional_consulta_function(e){
             	cod_cliente_consulta = $('#nome_list option').filter(function() {
                     return this.value == val_datalist_nome;
                 }).data('label');
-                adress= ip_adress + "consulta_cliente.jsp?COD_CLIENTE=";
+                adress= url_adress + "consulta_cliente.jsp?COD_CLIENTE=";
                 adress= adress + cod_cliente_consulta;
                 $.ajax({
                     url: adress,
@@ -112,7 +112,7 @@ function operacional_consulta_function(e){
             	cod_modulo_consulta = $('#id_list option').filter(function() {
                     return this.value == val_datalist_id;
                 }).data('label');
-                adress= ip_adress + "consulta_equipamento.jsp?COD_MODULO=";
+                adress= url_adress + "consulta_equipamento.jsp?COD_MODULO=";
                 adress= adress + cod_modulo_consulta;
                 $.ajax({
                     url: adress,
@@ -137,7 +137,7 @@ function operacional_consulta_function(e){
         		cod_chip_consulta = $('#iccid_list option').filter(function() {
         			return this.value == val_iccid_selected;
             }).data('label');
-            adress= ip_adress + "consulta_chip.jsp?COD_CHIP=";
+            adress= url_adress + "consulta_chip.jsp?COD_CHIP=";
             adress= adress + cod_chip_consulta;
             $.ajax({
                 url: adress,
@@ -174,7 +174,7 @@ function mod_int_function() {
 	        break;
         case "2": //Veículo
         	$.ajax({
-    	        url: ip_adress + "modulo_inst_cad.jsp",
+    	        url: url_adress + "modulo_inst_cad.jsp",
     	        success: function(result) {
                     $('.instalacao').html(result);
                 },
@@ -2450,7 +2450,7 @@ function select_modelo_function(){
     var content = '';
     if(marca_equip_ != 0){
     	$.ajax({
-            url: ip_adress + "select_modelo.jsp?COD_MARCA=" + marca_equip_val,
+            url: url_adress + "select_modelo.jsp?COD_MARCA=" + marca_equip_val,
             success: function(result) {
                 $('#div_modelo_equip').html(result);
             },
@@ -2623,4 +2623,8 @@ function operacional_consultar_equipamento_salvar_function(){
 		document.location.href = adress;
 	}else
 		return 0;
+}
+
+function reloadIFrame() {
+	parent.frames['TESTE_IFRAME'].location.href = "teste.html";
 }

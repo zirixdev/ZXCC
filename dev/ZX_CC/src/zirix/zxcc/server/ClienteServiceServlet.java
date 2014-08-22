@@ -24,73 +24,72 @@ import zirix.zxcc.server.ZXCCConstants;
 /**
  * Servlet implementation class ClienteService
  */
-	@WebServlet( name="ClienteService", urlPatterns = {"/services/cliente"}, loadOnStartup=1)
+@WebServlet( name="ClienteService", urlPatterns = {"/services/cliente"}, loadOnStartup=1)
 public class ClienteServiceServlet extends HttpServlet {
-
+	
 	private static final long serialVersionUID = 1L;
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
-
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ClienteServiceServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
+	
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ClienteServiceServlet() {
+	    super();
+	    // TODO Auto-generated constructor stub
+	}
+	
 	/**
 	 * @see Servlet#destroy()
 	 */
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
-
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	
 		// Set response content type
 		   response.setContentType("text/html");
-
+	
 		   PrintWriter out = response.getWriter();
-
+	
 		   String OP_CODE = request.getParameter("OP_CODE");
-
+	
 		   try {
 			   ClienteDAO daoCliente = new ClienteDAO();
 			   PkList pkList;
-
+	
 			   if ((OP_CODE.compareTo("UPDATE") == 0) || (OP_CODE.compareTo("CREATE") == 0)) {
-
+	
 				   String TIPO = request.getParameter("TIPO").trim();
 				   daoCliente.setAttValueFor("TIPO", TIPO);
-
+	
 				   String NOME = request.getParameter("NOME").trim();
 				   daoCliente.setAttValueFor("NOME", NOME);
-
+	
 				   String NOME_FANTASIA = request.getParameter("NOME_FANTASIA").trim();
 				   daoCliente.setAttValueFor("NOME_FANTASIA", NOME_FANTASIA);
-
+	
 				   String SITE = request.getParameter("SITE").trim();
 				   daoCliente.setAttValueFor("SITE", SITE);
-
+	
 				   String DATA_NASCIMENTO = request.getParameter("DATA_NASCIMENTO").trim();
 				   daoCliente.setAttValueFor("DATA_NASCIMENTO", DATA_NASCIMENTO);
-
+	
 				   if (OP_CODE.compareTo("CREATE") == 0){
 					   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 					   daoCliente.setAttValueFor("DATA_INGRESSO", DATA_INGRESSO);
 				   }
-
+	
 				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR").trim();
 				   daoCliente.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
-
+	
 				   if (OP_CODE.compareTo("UPDATE") == 0){
-
+	
 					   String COD_CLIENTE = request.getParameter("COD_CLIENTE").trim();
 					   pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-
+	
 					   daoCliente.setPkList(pkList);
 					   daoCliente.update();
 				   }
@@ -104,7 +103,7 @@ public class ClienteServiceServlet extends HttpServlet {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
 								   + " 											                 FROM ZX_CC_DEV.dbo.CLIENTE "
 								   + "                                                          WHERE NOME = " + NOME );
-
+	
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];
 							   attList[0] = values.get(i)[0].toString();;
@@ -115,7 +114,7 @@ public class ClienteServiceServlet extends HttpServlet {
 					   }  finally {
 						   pkListValue = Integer.parseInt(CodCliente_.elementAt(0)[0].trim());
 					   }
-
+	
 					   if(pkListValue != 0){
 						   int arraysize = Integer.parseInt(request.getParameter("QDOC"));
 						   for(int d = 0 ; d < arraysize ; d++){
@@ -217,14 +216,14 @@ public class ClienteServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(AMBIENTE_.ip_adress + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXCCConstants.url_adress + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
-
+	
 			   else if (OP_CODE.compareTo("DELETE") == 0){
-
+	
 				   String COD_CLIENTE = request.getParameter("COD_CLIENTE");
 				   pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-
+	
 				   daoCliente.setPkList(pkList);
 				   daoCliente.delete();
 			   }
@@ -232,11 +231,11 @@ public class ClienteServiceServlet extends HttpServlet {
 				   out.println("Error on ClienteServiceServlet... " + ' ' + e.getMessage());
 		   }
 	}
-
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	
 	}
 }

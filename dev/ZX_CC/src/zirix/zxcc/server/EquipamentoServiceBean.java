@@ -21,7 +21,6 @@ public class EquipamentoServiceBean {
 	private Integer COD_MODULO_ = null;
 	private Integer COD_MODELO_ = null;
 	private Integer COD_CHIP_ = null;
-	private ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
 	public EquipamentoServiceBean(String[] pkVal) {
 		setPk(pkVal);
@@ -92,13 +91,13 @@ public class EquipamentoServiceBean {
 		Vector<Integer[]> CodUnidade = new Vector<Integer[]>();
 		
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "TIPO_UNIDADE.COD_UNIDADE "
-					+ " 											 FROM " + AMBIENTE_.db_name + "TIPO_UNIDADE "
-					+ " 											    , " + AMBIENTE_.db_name + "INSTALACAO "
-					+ " 											    , " + AMBIENTE_.db_name + "MODULO "
-					+ "                                             WHERE " + AMBIENTE_.db_name + "TIPO_UNIDADE.COD_UNIDADE = " + AMBIENTE_.db_name + "INSTALACAO.COD_UNIDADE "
-					+ "                                               AND " + AMBIENTE_.db_name + "INSTALACAO.COD_INSTALACAO = " + AMBIENTE_.db_name + "MODULO.COD_INSTALACAO "
-					+ "                                               AND " + AMBIENTE_.db_name + "MODULO.COD_MODULO = " + COD_MODULO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "TIPO_UNIDADE.COD_UNIDADE "
+					+ " 											 FROM " + ZXCCConstants.db_name + "TIPO_UNIDADE "
+					+ " 											    , " + ZXCCConstants.db_name + "INSTALACAO "
+					+ " 											    , " + ZXCCConstants.db_name + "MODULO "
+					+ "                                             WHERE " + ZXCCConstants.db_name + "TIPO_UNIDADE.COD_UNIDADE = " + ZXCCConstants.db_name + "INSTALACAO.COD_UNIDADE "
+					+ "                                               AND " + ZXCCConstants.db_name + "INSTALACAO.COD_INSTALACAO = " + ZXCCConstants.db_name + "MODULO.COD_INSTALACAO "
+					+ "                                               AND " + ZXCCConstants.db_name + "MODULO.COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				Integer[] attList = new Integer[1];
@@ -118,7 +117,7 @@ public class EquipamentoServiceBean {
 		Vector<String[]> ModeloModulo = new Vector<String[]>();
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_MODELO, NOME_MODELO, COD_MARCA "
-					+ " 											 FROM " + AMBIENTE_.db_name + "DESC_MODULO "
+					+ " 											 FROM " + ZXCCConstants.db_name + "DESC_MODULO "
 					+ "                                             WHERE COD_MODELO = " + COD_MODELO_);
 
 			for (int i=0;i < values.size();i++) {
@@ -140,11 +139,11 @@ public class EquipamentoServiceBean {
 	public Vector<String[]> getMarcaModulo(){
 		Vector<String[]> MarcaModulo = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + AMBIENTE_.db_name + "MARCA_MODULO.NOME_MARCA "
-					+ " 											 FROM " + AMBIENTE_.db_name + "DESC_MODULO "
-					+ "                                                 , " + AMBIENTE_.db_name + "MARCA_MODULO "
-					+ "                                             WHERE " + AMBIENTE_.db_name + "MARCA_MODULO.COD_MARCA = " + AMBIENTE_.db_name + "DESC_MODULO.COD_MARCA"
-					+ "                                               AND " + AMBIENTE_.db_name + "DESC_MODULO.COD_MODELO = " + COD_MODELO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "MARCA_MODULO.NOME_MARCA "
+					+ " 											 FROM " + ZXCCConstants.db_name + "DESC_MODULO "
+					+ "                                                 , " + ZXCCConstants.db_name + "MARCA_MODULO "
+					+ "                                             WHERE " + ZXCCConstants.db_name + "MARCA_MODULO.COD_MARCA = " + ZXCCConstants.db_name + "DESC_MODULO.COD_MARCA"
+					+ "                                               AND " + ZXCCConstants.db_name + "DESC_MODULO.COD_MODELO = " + COD_MODELO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
@@ -165,7 +164,7 @@ public class EquipamentoServiceBean {
 		
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT ICCID "
-					+ " 											 FROM " + AMBIENTE_.db_name + "CHIP "
+					+ " 											 FROM " + ZXCCConstants.db_name + "CHIP "
 					+ "                                             WHERE COD_CHIP = " + COD_CHIP_);
 
 			for (int i=0;i < values.size();i++) {

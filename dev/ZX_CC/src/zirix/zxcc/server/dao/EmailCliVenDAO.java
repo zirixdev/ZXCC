@@ -8,7 +8,7 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class EmailCliVenDAO extends GenericDAO<EmailCliVenDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
+
 
     public EmailCliVenDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -37,5 +37,5 @@ public class EmailCliVenDAO extends GenericDAO<EmailCliVenDAO> {
     	return EmailCliVenDAO.createKey("COD_EMAIL", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-    public final static String TABLENAME = AMBIENTE_.db_name + "EMAIL_CLI_VEN";
+    public final static String TABLENAME = ZXCCConstants.db_name + "EMAIL_CLI_VEN";
 }

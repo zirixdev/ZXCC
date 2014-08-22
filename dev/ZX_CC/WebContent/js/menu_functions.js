@@ -1,13 +1,13 @@
 /*
-ZIRIX CONTROL CENTER - MODAL PAGE
+ZIRIX CONTROL CENTER - CONTROLE DOS MENUS
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
-var ip_adress = "http://192.168.0.50:8080/zxcc/";
-//var ip_adress = "http://192.168.0.32:8080/zxcc_prod/";
+var url_adress = "http://192.168.0.50:8080/zxcc/";
+//var url_adress = "www.zirix.com/";
 
 var nav = $("#topNav");
 nav.find("li").each(function(){
@@ -61,7 +61,7 @@ $('.modal_btn').on("click", function(){
     switch(id) {
         case "menu_opr_cad_cli":
             $.ajax({
-                url: ip_adress + "cadastro_cliente.jsp",
+                url: url_adress + "cadastro_cliente.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -73,7 +73,7 @@ $('.modal_btn').on("click", function(){
             break;
         case "menu_opr_cad_eqp":
             $.ajax({
-                url: ip_adress + "cadastro_equipamento.jsp",
+                url: url_adress + "cadastro_equipamento.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -85,7 +85,7 @@ $('.modal_btn').on("click", function(){
             break;
         case "menu_opr_cad_chp":
             $.ajax({
-                url: ip_adress + "cadastro_chip.jsp",
+                url: url_adress + "cadastro_chip.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -97,7 +97,7 @@ $('.modal_btn').on("click", function(){
             break;
         case "menu_opr_con":
             $.ajax({
-                url: ip_adress + "pop_up.html",
+                url: url_adress + "pop_up.html",
                 success: function(result) {
                     var html = jQuery('<div>').html(result);
                     var content = html.find("div#operacional-consulta-content").html();
@@ -111,7 +111,7 @@ $('.modal_btn').on("click", function(){
             break;
         case "menu_adm_cad_ven":
             $.ajax({
-                url: ip_adress + "cadastro_vendedor.jsp",
+                url: url_adress + "cadastro_vendedor.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -124,7 +124,7 @@ $('.modal_btn').on("click", function(){
         case "menu_ext":
         	if(confirm('Deseja sair do sitema?')){
         		//call invalidate session on JAVA and redirect do this url:
-        		document.location.href = ip_adress + "index.html";
+        		document.location.href = url_adress + "index.html";
         	}
         	break;
         case "no_permission":
@@ -132,7 +132,7 @@ $('.modal_btn').on("click", function(){
         	break;
         default:
             $.ajax({
-                url: ip_adress + "pop_up.html",
+                url: url_adress + "pop_up.html",
                 success: function(result) {
                     var html = jQuery('<div>').html(result);
                     var content = html.find("div#em-construcao-content").html();

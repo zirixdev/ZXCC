@@ -8,7 +8,6 @@ import zirix.zxcc.server.ZXCCConstants;
 
 public class DescModuloDAO extends GenericDAO<DescModuloDAO> {
 
-	private static ZXCCConstants AMBIENTE_ = new ZXCCConstants();
 
     public DescModuloDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -37,7 +36,7 @@ public class DescModuloDAO extends GenericDAO<DescModuloDAO> {
     	return DescModuloDAO.createKey("COD_MODELO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
     
-    public final static String TABLENAME = AMBIENTE_.db_name + "DESC_MODULO";
+    public final static String TABLENAME = ZXCCConstants.db_name + "DESC_MODULO";
    
         
 }

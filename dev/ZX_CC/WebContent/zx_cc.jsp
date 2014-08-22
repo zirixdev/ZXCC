@@ -12,7 +12,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 <%
 	String[] pkVal = {request.getParameter("COD_USUARIO")};
 	ZxAccessControlBean bean = new ZxAccessControlBean(pkVal);
-	ZXCCConstants zxConst = new ZXCCConstants();
 	Vector<String[]> permissaoUsuarioList = bean.getPermissaoUsuario();
 	Vector<String[]> telaList = bean.getCodTela();
 	
@@ -21,7 +20,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	for (int i=0;i < permissaoUsuarioList.size();i++){
 		permissionTela[Integer.parseInt(permissaoUsuarioList.elementAt(i)[0].trim())-1] = Integer.parseInt(permissaoUsuarioList.elementAt(i)[1].trim());
 	}
-
 %>
 
 <html lang="pt-br">  
@@ -45,29 +43,29 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <nav id="topNav">
                     <ul>
                         <li class="li-menu">
-                            <a <%if(permissionTela[0] == zxConst.READ || permissionTela[0] == zxConst.WRITE) {%>
+                            <a <%if(permissionTela[0] == ZXCCConstants.READ || permissionTela[0] == ZXCCConstants.WRITE) {%>
                             id="menu_opr">Operacional</a> <%//TELA = 1%>
                             <ul class="ul-submenu">
                                 <li class="li-submenu">
-                                    <a <%if(permissionTela[1] == zxConst.WRITE){%> 
+                                    <a <%if(permissionTela[1] == ZXCCConstants.WRITE){%> 
                                     id="menu_opr_cad">Cadastro</a> <%//TELA = 2 %>
                                     <ul class="ul-submenu-filho">
                                         <li>
-                                            <a <%if(permissionTela[2] == zxConst.WRITE){%> 
+                                            <a <%if(permissionTela[2] == ZXCCConstants.WRITE){%> 
                                             id="menu_opr_cad_cli" class="modal_btn" >Cliente</a> <%//TELA = 3 %>
 											<%}else{%>
 											id="no_permission" class="modal_btn">Cliente</a> <%//TELA = 3%>
 											<%}%>
                                         </li>
                                         <li>
-                                            <a <%if(permissionTela[3] == zxConst.WRITE){%> 
+                                            <a <%if(permissionTela[3] == ZXCCConstants.WRITE){%> 
                                             id="menu_opr_cad_eqp" class="modal_btn">Equipamento</a> <%//TELA = 4 %>
 											<%}else{%>
 											id="no_permission" class="modal_btn">Equipamento</a> <%//TELA = 4%>
 											<%}%>
                                         </li>
                                         <li class="last">
-                                            <a <%if(permissionTela[4] == zxConst.WRITE){%> 
+                                            <a <%if(permissionTela[4] == ZXCCConstants.WRITE){%> 
                                             id="menu_opr_cad_chp" class="modal_btn">Sim Card</a> <%//TELA = 5 %>
 											<%}else{%>
 											id="no_permission" class="modal_btn">Sim Card</a> <%//TELA = 5%>
@@ -79,7 +77,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									<%}%>
                                 </li>
                                 <li class="li-submenu-last">
-                                    <a <%if(permissionTela[5] == zxConst.READ || permissionTela[5] == zxConst.WRITE) {%>
+                                    <a <%if(permissionTela[5] == ZXCCConstants.READ || permissionTela[5] == ZXCCConstants.WRITE) {%>
                                     id="menu_opr_con" class="modal_btn">Consultas</a> <%//TELA = 6 %>
                                     <%}else{%>
 									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 6%>
@@ -91,15 +89,15 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                             <%}%>
                         </li>
                         <li class="li-menu">
-                            <a <%if(permissionTela[6] == zxConst.READ || permissionTela[6] == zxConst.WRITE) {%>
+                            <a <%if(permissionTela[6] == ZXCCConstants.READ || permissionTela[6] == ZXCCConstants.WRITE) {%>
                             id="menu_adm">Administrativo</a> <% //TELA = 7 %>
                             <ul class="ul-submenu">
                                 <li class="li-submenu">
-                                    <a <%if(permissionTela[7] == zxConst.WRITE){%> 
+                                    <a <%if(permissionTela[7] == ZXCCConstants.WRITE){%> 
                                     id="menu_adm_cad">Cadastro</a> <% //TELA = 8 %>
                                     <ul class="ul-submenu-filho">
                                         <li class="last">
-                                    	<a <%if(permissionTela[8] == zxConst.WRITE){%> 
+                                    	<a <%if(permissionTela[8] == ZXCCConstants.WRITE){%> 
                                         id="menu_adm_cad_ven" class="modal_btn">Vendedor</a> <%//TELA = 9 %>
 	                                    <%}else{%>
 										id="no_permission" class="modal_btn">Vendedor</a> <%//TELA = 9%>
@@ -111,7 +109,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									<%}%>
                                 </li>
                                 <li class="li-submenu-last">
-                                    <a <%if(permissionTela[9] == zxConst.READ || permissionTela[9] == zxConst.WRITE) {%>
+                                    <a <%if(permissionTela[9] == ZXCCConstants.READ || permissionTela[9] == ZXCCConstants.WRITE) {%>
                                     id="menu_adm_con" class="modal_btn">Consultas</a> <%//TELA = 10 %>
                                     <%}else{%>
 									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 10%>
@@ -123,18 +121,18 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                             <%}%>
                         </li>
                         <li class="li-menu">
-                            <a <%if(permissionTela[10] == zxConst.READ || permissionTela[10] == zxConst.WRITE) {%>
+                            <a <%if(permissionTela[10] == ZXCCConstants.READ || permissionTela[10] == ZXCCConstants.WRITE) {%>
                             id="menu_com">Comercial</a> <% //TELA = 11 %>
                             <ul class="ul-submenu">
                                 <li>
-                                    <a <%if(permissionTela[11] == zxConst.WRITE) {%>
+                                    <a <%if(permissionTela[11] == ZXCCConstants.WRITE) {%>
                                     id="menu_com_ped" class="modal_btn">Novo Pedido</a> <%//TELA = 12 %>
                                     <%}else{%>
 									id="no_permission" class="modal_btn">Novo Pedido</a> <%//TELA = 12%>
 									<%}%>
                                 </li>
                                 <li class="last">
-                                    <a <%if(permissionTela[16] == zxConst.READ || permissionTela[16] == zxConst.WRITE) {%>
+                                    <a <%if(permissionTela[16] == ZXCCConstants.READ || permissionTela[16] == ZXCCConstants.WRITE) {%>
                                     id="menu_com_con" class="modal_btn">Consultas</a> <%//TELA = 17 %>
                                     <%}else{%>
 									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 17%>
@@ -159,7 +157,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                         </li>
                     </ul>
                 </nav>
-                <section class="tarefas"></section>
+                <section class="tarefas">
+                	<iframe src="teste.html" name="TESTE_IFRAME">
+
+                	</iframe>
+                </section>
                 <section class="conteudo"></section>
             </div>
             <footer>
@@ -179,6 +181,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <script src="js/bootstrap.min.js"></script>
         <script src="js/menu_functions.js"></script>
         <script src="js/page_functions.js"></script>
+        <script> window.setInterval("reloadIFrame();", 60000); </script>
   </body>
 
 </html>
