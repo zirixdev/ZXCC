@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class MotivoHistModuloDAO extends GenericDAO<MotivoHistModuloDAO> {
 
@@ -35,5 +35,5 @@ public class MotivoHistModuloDAO extends GenericDAO<MotivoHistModuloDAO> {
     	return MotivoHistModuloDAO.createKey("COD_MOTIVO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "MOTIVO_HIST_MODULO";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "MOTIVO_HIST_MODULO";
 }

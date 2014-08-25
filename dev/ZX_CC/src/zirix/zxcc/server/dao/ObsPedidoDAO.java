@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class ObsPedidoDAO extends GenericDAO<ObsPedidoDAO> {
 
@@ -37,7 +37,7 @@ public class ObsPedidoDAO extends GenericDAO<ObsPedidoDAO> {
     	return ObsPedidoDAO.createKey("COD_OBS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "OBS_PEDIDO";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "OBS_PEDIDO";
    
         
 }

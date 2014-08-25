@@ -7,7 +7,7 @@ import java.util.Vector;
 import zirix.zxcc.server.dao.UsuarioDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 
 public class ZxAccessControlBean {
@@ -47,10 +47,10 @@ public class ZxAccessControlBean {
 	public Vector<String[]> getPermissaoUsuario(){
 		Vector<String[]> PermissaoUsuario = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.COD_TELA "
-					+ "                                                              , " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.CHAVE "
-					+ "                                                           FROM " + ZXCCConstants.db_name + "PERMISSAO_USUARIO "
-					+ "                                                          WHERE " + ZXCCConstants.db_name + "PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstantsServlet.DB_NAME_ + "PERMISSAO_USUARIO.COD_TELA "
+					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "PERMISSAO_USUARIO.CHAVE "
+					+ "                                                           FROM " + ZXCCConstantsServlet.DB_NAME_ + "PERMISSAO_USUARIO "
+					+ "                                                          WHERE " + ZXCCConstantsServlet.DB_NAME_ + "PERMISSAO_USUARIO.COD_USUARIO = " + COD_USUARIO_);
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[2]; // pois eu sei que sao 2 atributos de fato !
@@ -69,8 +69,8 @@ public class ZxAccessControlBean {
 	public Vector<String[]> getCodTela(){
 		Vector<String[]> CodTela = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstants.db_name + "TELA.COD_TELA "
-					+ "                                                           FROM " + ZXCCConstants.db_name + "TELA ");
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstantsServlet.DB_NAME_ + "TELA.COD_TELA "
+					+ "                                                           FROM " + ZXCCConstantsServlet.DB_NAME_ + "TELA ");
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[1]; // pois eu sei que sao 2 atributos de fato !

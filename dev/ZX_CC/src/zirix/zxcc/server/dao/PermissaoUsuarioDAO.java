@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class PermissaoUsuarioDAO extends GenericDAO<PermissaoUsuarioDAO> {
 
@@ -36,7 +36,7 @@ public class PermissaoUsuarioDAO extends GenericDAO<PermissaoUsuarioDAO> {
     	return PermissaoUsuarioDAO.createKey("COD_PERMISSAO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "PERMISSAO_USUARIO";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "PERMISSAO_USUARIO";
    
         
 }

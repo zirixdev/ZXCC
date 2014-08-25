@@ -43,96 +43,186 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <nav id="topNav">
                     <ul>
                         <li class="li-menu">
-                            <a <%if(permissionTela[0] == ZXCCConstants.READ || permissionTela[0] == ZXCCConstants.WRITE) {%>
-                            id="menu_opr">Operacional</a> <%//TELA = 1%>
+                            <a <%if(permissionTela[0] == ZXCCConstantsServlet.READ || permissionTela[0] == ZXCCConstantsServlet.WRITE) {%>
+                            id="menu_opr">Operacional</a> <%
+ 	//TELA = 1
+ %>
                             <ul class="ul-submenu">
                                 <li class="li-submenu">
-                                    <a <%if(permissionTela[1] == ZXCCConstants.WRITE){%> 
-                                    id="menu_opr_cad">Cadastro</a> <%//TELA = 2 %>
+                                    <a <%if(permissionTela[1] == ZXCCConstantsServlet.WRITE){%> 
+                                    id="menu_opr_cad">Cadastro</a> <%
+ 	//TELA = 2
+ %>
                                     <ul class="ul-submenu-filho">
                                         <li>
-                                            <a <%if(permissionTela[2] == ZXCCConstants.WRITE){%> 
-                                            id="menu_opr_cad_cli" class="modal_btn" >Cliente</a> <%//TELA = 3 %>
-											<%}else{%>
-											id="no_permission" class="modal_btn">Cliente</a> <%//TELA = 3%>
-											<%}%>
+                                            <a <%if(permissionTela[2] == ZXCCConstantsServlet.WRITE){%> 
+                                            id="menu_opr_cad_cli" class="modal_btn" >Cliente</a> <%
+ 	//TELA = 3
+ %>
+											<%
+												}else{
+											%>
+											id="no_permission" class="modal_btn">Cliente</a> <%
+ 	//TELA = 3
+ %>
+											<%
+												}
+											%>
                                         </li>
                                         <li>
-                                            <a <%if(permissionTela[3] == ZXCCConstants.WRITE){%> 
-                                            id="menu_opr_cad_eqp" class="modal_btn">Equipamento</a> <%//TELA = 4 %>
-											<%}else{%>
-											id="no_permission" class="modal_btn">Equipamento</a> <%//TELA = 4%>
-											<%}%>
+                                            <a <%if(permissionTela[3] == ZXCCConstantsServlet.WRITE){%> 
+                                            id="menu_opr_cad_eqp" class="modal_btn">Equipamento</a> <%
+ 	//TELA = 4
+ %>
+											<%
+												}else{
+											%>
+											id="no_permission" class="modal_btn">Equipamento</a> <%
+ 	//TELA = 4
+ %>
+											<%
+												}
+											%>
                                         </li>
                                         <li class="last">
-                                            <a <%if(permissionTela[4] == ZXCCConstants.WRITE){%> 
-                                            id="menu_opr_cad_chp" class="modal_btn">Sim Card</a> <%//TELA = 5 %>
-											<%}else{%>
-											id="no_permission" class="modal_btn">Sim Card</a> <%//TELA = 5%>
-											<%}%>
+                                            <a <%if(permissionTela[4] == ZXCCConstantsServlet.WRITE){%> 
+                                            id="menu_opr_cad_chp" class="modal_btn">Sim Card</a> <%
+ 	//TELA = 5
+ %>
+											<%
+												}else{
+											%>
+											id="no_permission" class="modal_btn">Sim Card</a> <%
+ 	//TELA = 5
+ %>
+											<%
+												}
+											%>
                                         </li>
                                     </ul>
-                                    <%}else{%>
-									id="no_permission" class="modal_btn">Cadastro</a> <%//TELA = 2%>
-									<%}%>
+                                    <%
+                                    	}else{
+                                    %>
+									id="no_permission" class="modal_btn">Cadastro</a> <%
+ 	//TELA = 2
+ %>
+									<%
+										}
+									%>
                                 </li>
                                 <li class="li-submenu-last">
-                                    <a <%if(permissionTela[5] == ZXCCConstants.READ || permissionTela[5] == ZXCCConstants.WRITE) {%>
-                                    id="menu_opr_con" class="modal_btn">Consultas</a> <%//TELA = 6 %>
-                                    <%}else{%>
-									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 6%>
-									<%}%>
+                                    <a <%if(permissionTela[5] == ZXCCConstantsServlet.READ || permissionTela[5] == ZXCCConstantsServlet.WRITE) {%>
+                                    id="menu_opr_con" class="modal_btn">Consultas</a> <%
+ 	//TELA = 6
+ %>
+                                    <%
+                                    	}else{
+                                    %>
+									id="no_permission" class="modal_btn">Consultas</a> <%
+ 	//TELA = 6
+ %>
+									<%
+										}
+									%>
                                 </li>
                             </ul>
-                            <%}else{%>
-                            id="no_permission" class="modal_btn">Operacional</a> <%//TELA = 1%>
-                            <%}%>
+                            <%
+                            	}else{
+                            %>
+                            id="no_permission" class="modal_btn">Operacional</a> <%
+ 	//TELA = 1
+ %>
+                            <%
+                            	}
+                            %>
                         </li>
                         <li class="li-menu">
-                            <a <%if(permissionTela[6] == ZXCCConstants.READ || permissionTela[6] == ZXCCConstants.WRITE) {%>
-                            id="menu_adm">Administrativo</a> <% //TELA = 7 %>
+                            <a <%if(permissionTela[6] == ZXCCConstantsServlet.READ || permissionTela[6] == ZXCCConstantsServlet.WRITE) {%>
+                            id="menu_adm">Administrativo</a> <%
+ 	//TELA = 7
+ %>
                             <ul class="ul-submenu">
                                 <li class="li-submenu">
-                                    <a <%if(permissionTela[7] == ZXCCConstants.WRITE){%> 
-                                    id="menu_adm_cad">Cadastro</a> <% //TELA = 8 %>
+                                    <a <%if(permissionTela[7] == ZXCCConstantsServlet.WRITE){%> 
+                                    id="menu_adm_cad">Cadastro</a> <%
+ 	//TELA = 8
+ %>
                                     <ul class="ul-submenu-filho">
                                         <li class="last">
-                                    	<a <%if(permissionTela[8] == ZXCCConstants.WRITE){%> 
-                                        id="menu_adm_cad_ven" class="modal_btn">Vendedor</a> <%//TELA = 9 %>
-	                                    <%}else{%>
-										id="no_permission" class="modal_btn">Vendedor</a> <%//TELA = 9%>
-										<%}%>
+                                    	<a <%if(permissionTela[8] == ZXCCConstantsServlet.WRITE){%> 
+                                        id="menu_adm_cad_ven" class="modal_btn">Vendedor</a> <%
+ 	//TELA = 9
+ %>
+	                                    <%
+	                                    	}else{
+	                                    %>
+										id="no_permission" class="modal_btn">Vendedor</a> <%
+ 	//TELA = 9
+ %>
+										<%
+											}
+										%>
                                         </li>
                                     </ul>
-                                    <%}else{%>
-									id="no_permission" class="modal_btn">Cadastro</a> <%//TELA = 8%>
-									<%}%>
+                                    <%
+                                    	}else{
+                                    %>
+									id="no_permission" class="modal_btn">Cadastro</a> <%
+ 	//TELA = 8
+ %>
+									<%
+										}
+									%>
                                 </li>
                                 <li class="li-submenu-last">
-                                    <a <%if(permissionTela[9] == ZXCCConstants.READ || permissionTela[9] == ZXCCConstants.WRITE) {%>
-                                    id="menu_adm_con" class="modal_btn">Consultas</a> <%//TELA = 10 %>
-                                    <%}else{%>
-									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 10%>
-									<%}%>
+                                    <a <%if(permissionTela[9] == ZXCCConstantsServlet.READ || permissionTela[9] == ZXCCConstantsServlet.WRITE) {%>
+                                    id="menu_adm_con" class="modal_btn">Consultas</a> <%
+ 	//TELA = 10
+ %>
+                                    <%
+                                    	}else{
+                                    %>
+									id="no_permission" class="modal_btn">Consultas</a> <%
+ 	//TELA = 10
+ %>
+									<%
+										}
+									%>
                                 </li>
                             </ul>
-                            <%}else{%>
-                            id="no_permission" class="modal_btn">Administrativo</a> <%//TELA = 7%>
-                            <%}%>
+                            <%
+                            	}else{
+                            %>
+                            id="no_permission" class="modal_btn">Administrativo</a> <%
+ 	//TELA = 7
+ %>
+                            <%
+                            	}
+                            %>
                         </li>
                         <li class="li-menu">
-                            <a <%if(permissionTela[10] == ZXCCConstants.READ || permissionTela[10] == ZXCCConstants.WRITE) {%>
-                            id="menu_com">Comercial</a> <% //TELA = 11 %>
+                            <a <%if(permissionTela[10] == ZXCCConstantsServlet.READ || permissionTela[10] == ZXCCConstantsServlet.WRITE) {%>
+                            id="menu_com">Comercial</a> <%
+ 	//TELA = 11
+ %>
                             <ul class="ul-submenu">
                                 <li>
-                                    <a <%if(permissionTela[11] == ZXCCConstants.WRITE) {%>
-                                    id="menu_com_ped" class="modal_btn">Novo Pedido</a> <%//TELA = 12 %>
-                                    <%}else{%>
-									id="no_permission" class="modal_btn">Novo Pedido</a> <%//TELA = 12%>
-									<%}%>
+                                    <a <%if(permissionTela[11] == ZXCCConstantsServlet.WRITE) {%>
+                                    id="menu_com_ped" class="modal_btn">Novo Pedido</a> <%
+ 	//TELA = 12
+ %>
+                                    <%
+                                    	}else{
+                                    %>
+									id="no_permission" class="modal_btn">Novo Pedido</a> <%
+ 	//TELA = 12
+ %>
+									<%
+										}
+									%>
                                 </li>
                                 <li class="last">
-                                    <a <%if(permissionTela[16] == ZXCCConstants.READ || permissionTela[16] == ZXCCConstants.WRITE) {%>
+                                    <a <%if(permissionTela[16] == ZXCCConstantsServlet.READ || permissionTela[16] == ZXCCConstantsServlet.WRITE) {%>
                                     id="menu_com_con" class="modal_btn">Consultas</a> <%//TELA = 17 %>
                                     <%}else{%>
 									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 17%>
@@ -162,7 +252,15 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 
                 	</iframe>
                 </section>
-                <section class="conteudo"></section>
+                <section class="conteudo">
+                <%if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){%>
+                	URL_ADRESS = <%=ZXCCConstantsServlet.getAdress()%>
+	                <br>
+	                DB_NAME = <%=ZXCCConstantsServlet.getDbName()%>
+	                <br>
+	                LOCAL = <%=ZXCCConstantsServlet.getLocal()%>
+                <%} %>
+                </section>
             </div>
             <footer>
                <h1>Zirix - Control Center</h1>

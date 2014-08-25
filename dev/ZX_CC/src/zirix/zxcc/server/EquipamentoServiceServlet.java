@@ -23,7 +23,7 @@ import zirix.zxcc.server.dao.InstalacaoDAO;
 import zirix.zxcc.server.dao.ModuloDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 /**
  * Servlet implementation class ClienteService
@@ -102,7 +102,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   Vector<String[]> CodInstalacao_ = new Vector<String[]>();
 				   try {
 					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(*) "
-							   + " 											                 FROM " + ZXCCConstants.db_name + "INSTALACAO "
+							   + " 											                 FROM " + ZXCCConstantsServlet.DB_NAME_ + "INSTALACAO "
 							   + "                                                          WHERE COD_MODULO = 0 "
 							   + "                                                            AND COD_UNIDADE = " + INSTALADO
 							   + "                                                            AND DELETED = 0 ");
@@ -127,7 +127,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 
 				   try {
 					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_INSTALACAO "
-							   + " 											                 FROM " + ZXCCConstants.db_name + "INSTALACAO "
+							   + " 											                 FROM " + ZXCCConstantsServlet.DB_NAME_ + "INSTALACAO "
 							   + "                                                          WHERE COD_MODULO = 0 "
 							   + "                                                            AND COD_UNIDADE = " + INSTALADO
 							   + "                                                            AND DELETED = 0 ");
@@ -164,7 +164,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_MODULO "
-								   + " 											                 FROM " + ZXCCConstants.db_name + "MODULO "
+								   + " 											                 FROM " + ZXCCConstantsServlet.DB_NAME_ + "MODULO "
 								   + "                                                          WHERE NUMERO_MODULO = " + NUMERO_MODULO );
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];
@@ -179,7 +179,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 
 					   if(pkModulo != 0){
 						   try {
-							   DAOManager.getInstance().executeQuery("UPDATE " + ZXCCConstants.db_name + "INSTALACAO SET COD_MODULO = " + pkModulo + " WHERE COD_INSTALACAO = " + pkInstalacao);
+							   DAOManager.getInstance().executeQuery("UPDATE " + ZXCCConstantsServlet.DB_NAME_ + "INSTALACAO SET COD_MODULO = " + pkModulo + " WHERE COD_INSTALACAO = " + pkInstalacao);
 						   }catch (SQLException ex) {
 							   ex.printStackTrace();
 						   }finally{}
@@ -200,7 +200,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 						   }
 
 						   try {
-							   DAOManager.getInstance().executeQuery("UPDATE " + ZXCCConstants.db_name + "CHIP SET COD_MODULO = " + pkModulo + " WHERE COD_CHIP = " + COD_CHIP);
+							   DAOManager.getInstance().executeQuery("UPDATE " + ZXCCConstantsServlet.DB_NAME_ + "CHIP SET COD_MODULO = " + pkModulo + " WHERE COD_CHIP = " + COD_CHIP);
 						   }catch (SQLException ex) {
 							   ex.printStackTrace();
 						   }finally{}
@@ -208,7 +208,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(ZXCCConstants.url_adress + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXCCConstantsServlet.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 
 			   else if (OP_CODE.compareTo("DELETE") == 0){

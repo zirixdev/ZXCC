@@ -19,7 +19,7 @@ import zirix.zxcc.server.dao.DocumentoClienteDAO;
 import zirix.zxcc.server.dao.EmailCliVenDAO;
 import zirix.zxcc.server.dao.EnderecoClienteDAO;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 /**
  * Servlet implementation class ClienteService
@@ -216,7 +216,7 @@ public class ClienteServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(ZXCCConstants.url_adress + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXCCConstantsServlet.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 	
 			   else if (OP_CODE.compareTo("DELETE") == 0){

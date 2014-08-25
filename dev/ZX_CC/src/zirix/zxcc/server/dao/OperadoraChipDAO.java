@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class OperadoraChipDAO extends GenericDAO<OperadoraChipDAO> {
 
@@ -35,5 +35,5 @@ public class OperadoraChipDAO extends GenericDAO<OperadoraChipDAO> {
     	return OperadoraChipDAO.createKey("COD_OPERADORA", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "OPERADORA_CHIP";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "OPERADORA_CHIP";
 }

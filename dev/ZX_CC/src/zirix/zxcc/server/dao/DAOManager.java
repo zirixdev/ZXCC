@@ -11,7 +11,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class DAOManager {
 
@@ -31,7 +31,7 @@ public class DAOManager {
     @SuppressWarnings("finally")
 	public Connection getLocalConnection() throws SQLException {
     	
-    	if(ZXCCConstants.local.compareTo("DEV") == 0){
+    	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
 	    	String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
 	    	Connection conn = null;
 	    	try{
@@ -96,7 +96,7 @@ public class DAOManager {
         }
         
         finally {
-        	if(ZXCCConstants.local.compareTo("DEV") == 0){
+        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (res != null) res.close();

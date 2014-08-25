@@ -3,7 +3,7 @@ package zirix.zxcc.server.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class ClienteDAO extends GenericDAO<ClienteDAO> {
 
@@ -56,5 +56,5 @@ public class ClienteDAO extends GenericDAO<ClienteDAO> {
     	return ClienteDAO.createKey("COD_CLIENTE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "CLIENTE";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "CLIENTE";
 }

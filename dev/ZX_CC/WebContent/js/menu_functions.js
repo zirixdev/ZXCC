@@ -6,6 +6,7 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
+
 var url_adress = "http://192.168.0.50:8080/zxcc/";
 //var url_adress = "www.zirix.com/";
 

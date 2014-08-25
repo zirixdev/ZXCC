@@ -3,7 +3,7 @@ package zirix.zxcc.server.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class AnexoPedidoDAO extends GenericDAO<AnexoPedidoDAO> {
 
@@ -34,5 +34,5 @@ public class AnexoPedidoDAO extends GenericDAO<AnexoPedidoDAO> {
     	return AnexoPedidoDAO.createKey("COD_ANEXO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-    public final static String TABLENAME = ZXCCConstants.db_name + "ANEXO_PEDIDO";
+    public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "ANEXO_PEDIDO";
 }

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstants;
+import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
 
@@ -35,5 +35,5 @@ public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
     	return TipoEnderecoDAO.createKey("COD_ENDERECO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstants.db_name + "TIPO_ENDERECO";
+	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "TIPO_ENDERECO";
 }
