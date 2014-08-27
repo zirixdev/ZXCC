@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class TipoUnidadeDAO extends GenericDAO<TipoUnidadeDAO> {
 
@@ -35,5 +35,5 @@ public class TipoUnidadeDAO extends GenericDAO<TipoUnidadeDAO> {
     	return TipoUnidadeDAO.createKey("COD_UNIDADE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "TIPO_UNIDADE";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "TIPO_UNIDADE";
 }

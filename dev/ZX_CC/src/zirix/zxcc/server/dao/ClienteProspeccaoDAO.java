@@ -3,16 +3,16 @@ package zirix.zxcc.server.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
-
 import zirix.zxcc.server.*;
 
-public class VendedorDAO extends GenericDAO<VendedorDAO> {
+public class ClienteProspeccaoDAO extends GenericDAO<ClienteProspeccaoDAO> {
 
-    public VendedorDAO(PkList pkList) {
+
+    public ClienteProspeccaoDAO(PkList pkList) {
         super(TABLENAME,pkList);
     }
 
-    public VendedorDAO(){
+    public ClienteProspeccaoDAO(){
     	super(TABLENAME);
     }
 
@@ -23,22 +23,19 @@ public class VendedorDAO extends GenericDAO<VendedorDAO> {
 
 		return key;
 	}
-            
-    public void loadAttsFromResultSet(ResultSet res) throws SQLException {
 
+    public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("NOME",res.getString("NOME"));
     	setAttValueFor("TIPO",res.getInt("TIPO"));
     	setAttValueFor("NOME_FANTASIA",res.getString("NOME_FANTASIA"));
-    	setAttValueFor("SITE",res.getString("SITE"));
-    	setAttValueFor("DATA_NASCIMENTO",res.getDate("DATA_NASCIMENTO"));
     	setAttValueFor("DATA_INGRESSO",res.getDate("DATA_INGRESSO"));
-    	setAttValueFor("DELETED",res.getInt("DELETED"));
-    	
+    	setAttValueFor("COD_VENDEDOR", res.getInt("COD_VENDEDOR"));  
+    	setAttValueFor("DELETED",res.getInt("DELETED"));   	
     }
 
     public Set<String> getPkNamesSet() {
-    	return VendedorDAO.createKey("COD_VENDEDOR", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
+    	return ClienteProspeccaoDAO.createKey("COD_CLIENTE_PROSPECCAO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXMain.DB_NAME_ + "VENDEDOR";   
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "CLIENTE_PROSPECCAO";
 }

@@ -40,18 +40,18 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			String query = "SELECT " + ZXCCConstantsServlet.DB_NAME_ + "USUARIO.COD_USUARIO FROM " + ZXCCConstantsServlet.DB_NAME_ + "USUARIO WHERE LOGIN=\'" + userLoginName + "\'"	+ " AND SENHA=\'" + userPassword + "\'";
+			String query = "SELECT " + ZXMain.DB_NAME_ + "USUARIO.COD_USUARIO FROM " + ZXMain.DB_NAME_ + "USUARIO WHERE LOGIN=\'" + userLoginName + "\'"	+ " AND SENHA=\'" + userPassword + "\'";
 
 		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery(query);
 		    Object[] retVal = (Object[])values.get(0);
 
 		    if (((Integer)retVal[0]) != null){
-		    	response.sendRedirect(ZXCCConstantsServlet.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO="+((Integer)retVal[0]));
+		    	response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO="+((Integer)retVal[0]));
 		    }
 		    else
 		    	out.println("<h1> ERROR TRIM ... </h1>");
 	    } catch (Exception ex) {
-	    	response.sendRedirect(ZXCCConstantsServlet.URL_ADRESS_ + "index.jsp?LOGIN_FAILED=FAIL");
+	    	response.sendRedirect(ZXMain.URL_ADRESS_ + "index.jsp?LOGIN_FAILED=FAIL");
     		ex.printStackTrace(); // TODO zx_cc Error page !
 		}  finally {
 		}		 		   		   

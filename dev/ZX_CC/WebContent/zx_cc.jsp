@@ -56,7 +56,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <ul class="ul-submenu-filho">
                                         <li>
                                             <a <%if(permissionTela[2] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_opr_cad_cli" class="modal_btn" >Cliente</a> <%
+                                            id="menu_opr_cad_cli" class="modal_btn">Cliente</a> <%
  	//TELA = 3
  %>
 											<%
@@ -206,16 +206,48 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
  	//TELA = 11
  %>
                             <ul class="ul-submenu">
-                                <li>
-                                    <a <%if(permissionTela[11] == ZXCCConstantsServlet.WRITE) {%>
-                                    id="menu_com_ped" class="modal_btn">Novo Pedido</a> <%
+                                <li class="li-submenu">
+                                	<a <%if(permissionTela[17] == ZXCCConstantsServlet.WRITE){%> 
+                                    id="menu_com_cad">Cadastro</a> <%
+ 	//TELA = 18
+ %>
+                                    <ul class="ul-submenu-filho">
+                                    	<li>
+                                            <a <%if(permissionTela[18] == ZXCCConstantsServlet.WRITE){%> 
+                                            id="menu_com_cad_cli" class="modal_btn">Prospecção</a> <%
+ 	//TELA = 19
+ %>
+											<%
+												}else{
+											%>
+											id="no_permission" class="modal_btn">Prospecção</a> <%
+ 	//TELA = 19
+ %>
+											<%
+												}
+											%>
+                                        </li>
+                                		<li class="last">
+		                                    <a <%if(permissionTela[11] == ZXCCConstantsServlet.WRITE) {%>
+                                    		id="menu_com_cad_ped" class="modal_btn">Novo Pedido</a> <%
  	//TELA = 12
  %>
+                                    		<%
+                                    			}else{
+                                    		%>
+											id="no_permission" class="modal_btn">Novo Pedido</a> <%
+ 	//TELA = 12
+ %>
+											<%
+												}
+											%>
+                                		</li>
+                                    </ul>
                                     <%
                                     	}else{
                                     %>
-									id="no_permission" class="modal_btn">Novo Pedido</a> <%
- 	//TELA = 12
+									id="no_permission" class="modal_btn">Cadastro</a> <%
+ 	//TELA = 18
  %>
 									<%
 										}
@@ -223,42 +255,56 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                 </li>
                                 <li class="last">
                                     <a <%if(permissionTela[16] == ZXCCConstantsServlet.READ || permissionTela[16] == ZXCCConstantsServlet.WRITE) {%>
-                                    id="menu_com_con" class="modal_btn">Consultas</a> <%//TELA = 17 %>
+                                    id="menu_com_con" class="modal_btn">Consultas</a> <%
+    //TELA = 17
+%>
                                     <%}else{%>
-									id="no_permission" class="modal_btn">Consultas</a> <%//TELA = 17%>
+									id="no_permission" class="modal_btn">Consultas</a> <%
+	//TELA = 17
+%>
 									<%}%>
                                 </li>
                             </ul>
                             <%}else{%>
-                            id="no_permission" class="modal_btn">Comercial</a> <%//TELA = 11%>
+                            id="no_permission" class="modal_btn">Comercial</a> <%
+    //TELA = 11
+%>
                             <%}%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_rel" class="modal_btn">Relatórios</a> <%//TELA = 13 %>
+                            <a id="menu_rel" class="modal_btn">Relatórios</a> <%
+    //TELA = 13
+%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_cfg" class="modal_btn">Configurações</a> <%//TELA = 14 %>
+                            <a id="menu_cfg" class="modal_btn">Configurações</a> <%
+    //TELA = 14
+%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_sos" class="modal_btn">Ajuda</a> <%//TELA = 15 %>
+                            <a id="menu_sos" class="modal_btn">Ajuda</a> <%
+    //TELA = 15
+%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_ext" class="modal_btn">Sair</a> <%//TELA = 16 %>
+                            <a id="menu_ext" class="modal_btn">Sair</a> <%
+    //TELA = 16
+%>
                         </li>
                     </ul>
                 </nav>
                 <section class="tarefas">
-                	<iframe src="teste.html" name="TESTE_IFRAME">
+                	<iframe src="tarefas.jsp" name="tarefasIFrame">
 
                 	</iframe>
                 </section>
                 <section class="conteudo">
-                <%if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){%>
-                	URL_ADRESS = <%=ZXCCConstantsServlet.getAdress()%>
+                <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
+                	URL_ADRESS = <%=ZXMain.getAdress()%>
 	                <br>
-	                DB_NAME = <%=ZXCCConstantsServlet.getDbName()%>
+	                DB_NAME = <%=ZXMain.getDbName()%>
 	                <br>
-	                LOCAL = <%=ZXCCConstantsServlet.getLocal()%>
+	                LOCAL = <%=ZXMain.getLocal()%>
                 <%} %>
                 </section>
             </div>
@@ -279,7 +325,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <script src="js/bootstrap.min.js"></script>
         <script src="js/menu_functions.js"></script>
         <script src="js/page_functions.js"></script>
-        <script> window.setInterval("reloadIFrame();", 60000); </script>
+        <script>window.setInterval("reloadIFrame();", 60000); </script>
   </body>
 
 </html>

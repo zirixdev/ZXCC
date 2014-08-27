@@ -6,15 +6,16 @@ import java.util.Set;
 
 import zirix.zxcc.server.*;
 
-public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
+public class EmailProspeccaoDAO extends GenericDAO<EmailProspeccaoDAO> {
 
 
-    public TipoEnderecoDAO(PkList pkList) {
+
+    public EmailProspeccaoDAO(PkList pkList) {
         super(TABLENAME,pkList);
         setCanDelete(true);
     }
 
-    public TipoEnderecoDAO(){
+    public EmailProspeccaoDAO(){
     	super(TABLENAME);
     }
 
@@ -25,15 +26,15 @@ public class TipoEnderecoDAO extends GenericDAO<TipoEnderecoDAO> {
 
 		return key;
 	}
-            
+
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
-    	setAttValueFor("NOME",res.getString("NOME"));
-    	setAttValueFor("DELETED",res.getInt("DELETED"));
-    }
-    
-    public Set<String> getPkNamesSet() {
-    	return TipoEnderecoDAO.createKey("COD_ENDERECO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
+    	setAttValueFor("COD_CLIENTE_PROSPECCAO",res.getInt("COD_CLIENTE_PROSPECCAO"));
+    	setAttValueFor("EMAIL",res.getString("EMAIL"));
     }
 
-	public final static String TABLENAME = ZXMain.DB_NAME_ + "TIPO_ENDERECO";
+    public Set<String> getPkNamesSet() {
+    	return EmailProspeccaoDAO.createKey("COD_EMAIL", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
+    }
+
+    public final static String TABLENAME = ZXMain.DB_NAME_ + "EMAIL_PROSPECCAO";
 }

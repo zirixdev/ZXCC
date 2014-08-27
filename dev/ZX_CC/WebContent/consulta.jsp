@@ -92,3 +92,27 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         </datalist>
     </fieldset>
 </div>
+
+<!--Comercial -> Consulta -> Cliente-->
+<div id="comercial-consulta-cliente-content">
+    <br>
+    <fieldset class="fieldinner">
+        Nome / Razão Social: <input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_65">
+        <datalist id="nome_list">      	
+		<%        	
+			try {
+						
+				Vector<ClienteProspeccaoDAO> list = ClienteProspeccaoDAOService.loadAll();
+				for (int i=0;i < list.size();i++) {
+					   ClienteProspeccaoDAO dao = list.elementAt(i);
+					   String str = String.valueOf(dao.getAttValueFor("NOME")).trim();%>				   	
+	       			   <option value="<%=str%>" data-label="<%=dao.getPkValueFor("COD_CLIENTE_PROSPECCAO")%>">
+	       		<%}%>
+		<%
+			   } catch (Exception e) {
+				   out.println("Error... " + e.getMessage());
+			   }	
+		%>
+        </datalist>
+    </fieldset>
+</div>

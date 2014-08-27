@@ -19,7 +19,6 @@ import zirix.zxcc.server.dao.DocumentoClienteDAO;
 import zirix.zxcc.server.dao.EmailCliVenDAO;
 import zirix.zxcc.server.dao.EnderecoClienteDAO;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstantsServlet;
 
 /**
  * Servlet implementation class ClienteService
@@ -101,7 +100,7 @@ public class ClienteServiceServlet extends HttpServlet {
 					   
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
-								   + " 											                 FROM ZX_CC_DEV.dbo.CLIENTE "
+								   + " 											                 FROM " + ZXMain.DB_NAME_ + "CLIENTE "
 								   + "                                                          WHERE NOME = " + NOME );
 	
 						   for (int i=0;i < values.size();i++) {
@@ -170,7 +169,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   daoEnderecoCliente.create();
 						   }
 	
-						   arraysize = Integer.parseInt(request.getParameter("QDOC"));
+						   arraysize = Integer.parseInt(request.getParameter("QCTO"));
 						   for(int d = 0 ; d < arraysize ; d++){
 							   ContatoClienteDAO daoContatoCliente = new ContatoClienteDAO();
 							   
@@ -197,7 +196,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   daoContatoCliente.create();
 						   }
 	
-						   arraysize = Integer.parseInt(request.getParameter("QDOC"));
+						   arraysize = Integer.parseInt(request.getParameter("QMAIL"));
 						   for(int d = 0 ; d < arraysize ; d++){
 							   EmailCliVenDAO daoEmailCliVen = new EmailCliVenDAO();
 	
@@ -216,7 +215,7 @@ public class ClienteServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(ZXCCConstantsServlet.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXMain.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 	
 			   else if (OP_CODE.compareTo("DELETE") == 0){

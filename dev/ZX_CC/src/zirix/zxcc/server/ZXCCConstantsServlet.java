@@ -16,10 +16,6 @@ public class ZXCCConstantsServlet extends HttpServlet {
 	public static int READ = 0;
 	public static int WRITE = 1;
 
-	public static String URL_ADRESS_= null; //"http://192.168.0.50:8080/zxcc/"; "http://www.zirix.com/zxcc_prod/";
-	public static String DB_NAME_= null; //"ZX_CC_DEV.dbo."; "ZX_CC_PROD";
-	public static String LOCAL_= null; //"DEV"; "PROD";
-
     public ZXCCConstantsServlet() {
         main();
     }
@@ -29,7 +25,8 @@ public class ZXCCConstantsServlet extends HttpServlet {
     	try {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-			Document doc = docBuilder.parse (new File("webapps/zxcc/WEB-INF/VariaveisZXCC.xml"));
+			//Document doc = docBuilder.parse (new File("webapps/zxcc_prod/js/VariaveisZXCC.xml"));
+			Document doc = docBuilder.parse (new File("webapps/zxcc/js/VariaveisZXCC.xml"));
 
 			doc.getDocumentElement ().normalize ();
 
@@ -44,20 +41,17 @@ public class ZXCCConstantsServlet extends HttpServlet {
 					NodeList firstNameList = firstPersonElement.getElementsByTagName("db_name");
 					Element firstNameElement = (Element)firstNameList.item(0);
 					NodeList textFNList = firstNameElement.getChildNodes();
-					DB_NAME_ = (String)textFNList.item(0).getNodeValue().trim();
-					System.err.println("DB_NAME_ = " + DB_NAME_);
+					ZXMain.setDbName((String)textFNList.item(0).getNodeValue().trim());
 
 					NodeList lastNameList = firstPersonElement.getElementsByTagName("adress");
 					Element lastNameElement = (Element)lastNameList.item(0);
 					NodeList textLNList = lastNameElement.getChildNodes();
-					URL_ADRESS_ = (String)textLNList.item(0).getNodeValue().trim();
-					System.err.println("URL_ADRESS_ = " + URL_ADRESS_);
+					ZXMain.setUrlAdress((String)textLNList.item(0).getNodeValue().trim());
 
 					NodeList ageList = firstPersonElement.getElementsByTagName("local");
 					Element ageElement = (Element)ageList.item(0);
 					NodeList textAgeList = ageElement.getChildNodes();
-					LOCAL_ = (String)textAgeList.item(0).getNodeValue().trim();
-					System.err.println("LOCAL_ = " + LOCAL_);
+					ZXMain.setLocal((String)textAgeList.item(0).getNodeValue().trim());
 				}
 			}
 		}catch (SAXParseException err) {
@@ -70,9 +64,4 @@ public class ZXCCConstantsServlet extends HttpServlet {
 			t.printStackTrace ();
 		}
 	}
-
-    public static String getLocal(){return LOCAL_;}
-    public static String getDbName(){return DB_NAME_;}
-    public static String getAdress(){return URL_ADRESS_;}
-    
 }

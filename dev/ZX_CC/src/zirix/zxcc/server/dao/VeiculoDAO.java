@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 
 public class VeiculoDAO extends GenericDAO<VeiculoDAO> {
@@ -50,6 +50,6 @@ public class VeiculoDAO extends GenericDAO<VeiculoDAO> {
     	return VeiculoDAO.createKey("COD_VEICULO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "VEICULO";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "VEICULO";
        
 }

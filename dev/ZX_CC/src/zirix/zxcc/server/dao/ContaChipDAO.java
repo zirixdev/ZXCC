@@ -3,7 +3,7 @@ package zirix.zxcc.server.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class ContaChipDAO extends GenericDAO<ChipDAO> {
 
@@ -33,5 +33,5 @@ public class ContaChipDAO extends GenericDAO<ChipDAO> {
     	return ContaChipDAO.createKey("COD_CONTA", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "CONTA_CHIP";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "CONTA_CHIP";
 }

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public abstract class GenericDAO<T> {
 
@@ -96,7 +96,7 @@ public abstract class GenericDAO<T> {
         	throw new SQLException("CREATE failed, no rows affected..." + e);
         }
         finally {
-        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -214,7 +214,7 @@ public abstract class GenericDAO<T> {
         	throw e;
         }
         finally {
-        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (generatedKeys != null) generatedKeys.close();
@@ -341,7 +341,7 @@ public abstract class GenericDAO<T> {
             throw e;
         }
         finally {
-        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -426,7 +426,7 @@ public abstract class GenericDAO<T> {
         }
         
         finally {
-        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -476,7 +476,7 @@ public abstract class GenericDAO<T> {
 	        }
 	
 	        finally {
-	        	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+	        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
 	        		con.commit();
 	    		}
 	        	if (stmt != null) stmt.close();
@@ -535,7 +535,7 @@ public abstract class GenericDAO<T> {
             }
             
             finally {
-            	if(ZXCCConstantsServlet.LOCAL_.compareTo("DEV") == 0){
+            	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
             		con.commit();
         		}
             	if (stmt != null) stmt.close();

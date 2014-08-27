@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class EstoqueDAO extends GenericDAO<EstadoModuloDAO> {
 
@@ -35,6 +35,6 @@ public class EstoqueDAO extends GenericDAO<EstadoModuloDAO> {
     	return EstoqueDAO.createKey("COD_ESTOQUE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-    public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "ESTOQUE";
+    public final static String TABLENAME = ZXMain.DB_NAME_ + "ESTOQUE";
           
 }

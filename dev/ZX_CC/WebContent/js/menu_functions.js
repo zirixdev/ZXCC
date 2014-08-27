@@ -6,9 +6,8 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
-
-var url_adress = "http://192.168.0.50:8080/zxcc/";
-//var url_adress = "www.zirix.com/";
+xmlDoc=loadXMLDoc("js/VariaveisZXCC.xml");
+var url_adress = xmlDoc.getElementsByTagName("adress")[0].textContent;
 
 var nav = $("#topNav");
 nav.find("li").each(function(){
@@ -122,9 +121,35 @@ $('.modal_btn').on("click", function(){
                 }
             });
             break;
+        case "menu_com_cad_cli":
+            $.ajax({
+                url: url_adress + "cadastro_cli_prospect.jsp",
+                success: function(result) {
+                    $('.modal-content').html(result);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
+            break;
+        case "menu_com_con":
+            $.ajax({
+                url: url_adress + "pop_up.html",
+                success: function(result) {
+                    var html = jQuery('<div>').html(result);
+                    var content = html.find("div#comercial-consulta-content").html();
+                    $('.modal-content').html(content);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
+            break;
         case "menu_ext":
         	if(confirm('Deseja sair do sitema?')){
-        		//call invalidate session on JAVA and redirect do this url:
+        		//call invalidate session on JAVA and redirect to this url:
         		document.location.href = url_adress + "index.html";
         	}
         	break;
@@ -152,4 +177,5 @@ $('.modal-content').on('click', '#cancel_modal', function(e){
     e.preventDefault();
     $('.modal-content').html('');
     $('.modal').modal('hide');
+    reload();
 });

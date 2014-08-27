@@ -6,8 +6,9 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
-var url_adress = "http://192.168.0.50:8080/zxcc/";
-//var url_adress = "www.zirix.com/";
+xmlDoc=loadXMLDoc("js/VariaveisZXCC.xml");
+var url_adress = xmlDoc.getElementsByTagName("adress")[0].textContent;
+
 
 Date.prototype.yyyymmdd = function() {
 	var yyyy = this.getFullYear().toString();
@@ -40,7 +41,7 @@ function unit_function(){
     });
 }
 
-function change_consulta_function(){
+function change_consulta_operacional_function(){
 	var values = $("input[type='radio'][name='busca_op']:checked").val();
     var fild_content = '';
     switch(values) {
@@ -54,7 +55,8 @@ function change_consulta_function(){
         	fild_content = "div#operacional-consulta-chip-content";
             break;
         default:
-        $('.consulta_operacional').html('');
+        	$('.consulta_operacional').html('');
+        	break;
     }
     $.ajax({
         url: url_adress + "consulta.jsp",
@@ -73,6 +75,7 @@ var cod_cliente_consulta;
 var cod_modulo_consulta;
 var cod_chip_consulta;
 var cod_vendedor_consulta;
+var cod_cliente_prospect_consulta;
 
 function operacional_consulta_function(e){
     var values = $("input[type='radio'][name='busca_op']:checked").val();
@@ -160,6 +163,70 @@ function operacional_consulta_function(e){
         default:
             $('.consulta_operacional').html('');
     }
+}
+
+function comercial_consulta_function(e){
+    var values = $("input[type='radio'][name='busca_com']:checked").val();
+    var adress;
+    switch(values) {
+        case "cliente":
+            var val_datalist_nome = $('#item_nome_razao').val();
+            if (val_datalist_nome !== ""){
+            	cod_cliente_prospect_consulta = $('#nome_list option').filter(function() {
+                    return this.value == val_datalist_nome;
+                }).data('label');
+                adress= url_adress + "consulta_cli_prospect.jsp?COD_CLIENTE_PROSPECCAO=";
+                adress= adress + cod_cliente_prospect_consulta;
+                $.ajax({
+                    url: adress,
+                    success: function(result) {
+                        $('.modal-content').html(result);
+                        $('.modal').modal({backdrop:'static'});
+                        carregar_dados_consulta_cliente_prospect_function();
+                    },
+                    error: function(){
+                        alert('Erro ao buscar dados do CLIENTE selecionado!');
+                    }
+                });
+            }
+            else{
+                alert('Não é possível realizar a busca sem o preenchimento do campo Nome / Razão Social!');
+                document.getElementById("item_nome_razao").focus();
+                return 0;
+            }
+            break;
+        case "pedido":
+        	break;
+        default:
+            $('.consulta_comercial').html('');
+    }
+}
+
+function change_consulta_comercial_function(){
+	var values = $("input[type='radio'][name='busca_com']:checked").val();
+    var fild_content = '';
+    switch(values) {
+        case "cliente":
+        	fild_content = "div#comercial-consulta-cliente-content";
+            break;
+        case "pedido":
+        	fild_content = "div#comercial-consulta-pedido-content";
+            break;
+        default:
+        	$('.consulta_comercial').html('');
+        	break;
+    }
+    $.ajax({
+        url: url_adress + "consulta.jsp",
+        success: function(result) {
+            var html = jQuery('<div>').html(result);
+            var content = html.find(fild_content).html();
+            $('.consulta_comercial').html(content);
+        },
+        error: function(e){
+            alert('error');
+        }
+    });
 }
 
 function mod_int_function() {
@@ -367,10 +434,7 @@ Favor digitar o número do documento corretamente.');
 
         $('#doc_' + control_div_doc[j].cod).html(content_div_doc);
         control_div_doc[j].excluida = 0;
-        control_vetor_doc[j].numero = num_doc;
-        control_vetor_doc[j].tipo_doc = doc_list;
-        control_vetor_doc[j].dt_emiss = dt_emis;
-        control_vetor_doc[j].org_emiss = org_ems;
+        control_vetor_doc[j] = new vetor_doc_inserido(num_doc, doc_list, dt_emis, org_ems);
     }
     limpa_campos_doc_function();
     var content_div_bt = '<button type="button" id="incluir_documento" onclick="insert_documentos_function()">Incluir</button>';
@@ -396,6 +460,7 @@ function delete_documentos_function() {
 
     var content_div_bt = '<button type="button" id="incluir_documento" onclick="insert_documentos_function()">Incluir</button>';
     $('#div_doc_bt').html(content_div_bt);
+    limpa_campos_doc_function();
 }
 
 function change_doc_button_function(){
@@ -784,15 +849,7 @@ function insert_endereco_function() {
 
         $('#end_' + control_div_end[j].cod).html(content_div_end);
         control_div_end[j].excluida = 0;
-
-        control_vetor_end[j].endereco = endereco;
-        control_vetor_end[j].complemento = complemento;
-        control_vetor_end[j].bairro = bairro;
-        control_vetor_end[j].cidade = cidade;
-        control_vetor_end[j].uf = uf_list;
-        control_vetor_end[j].pais = pais_list;
-        control_vetor_end[j].cep = cep;
-        control_vetor_end[j].tipo_end = tipo_end_list;
+        control_vetor_end[j] = new vetor_end_inserido(endereco,complemento,bairro,cidade,uf_list,pais_list,cep,tipo_end_list);
     }
     limpa_campos_end_function();
     var content_div_bt = '<button type="button" id="incluir_endereco" onclick="insert_endereco_function()">Incluir</button>';
@@ -818,6 +875,7 @@ function delete_endereco_function() {
 
     var content_div_bt = '<button type="button" id="incluir_endereco" onclick="insert_endereco_function()">Incluir</button>';
     $('#div_end_bt').html(content_div_bt);
+    limpa_campos_end_function();
 }
 
 function change_end_button_function(){
@@ -1099,13 +1157,7 @@ function insert_contatos_function() {
 
         $('#contato_' + control_div_contato[j].cod).html(content_div_contato);
         control_div_contato[j].excluida = 0;
-
-        control_vetor_contato[j].ddd = ddd;
-        control_vetor_contato[j].numero = numero;
-        control_vetor_contato[j].tipo_contato = tipo_contato;
-        control_vetor_contato[j].cod_pais = cod_pais;
-        control_vetor_contato[j].nome = nome;
-        control_vetor_contato[j].parentesco = parentesco;
+        control_vetor_contato[j] = new vetor_contato_inserido(ddd, numero, tipo_contato, cod_pais, nome, parentesco);
     }
     limpa_campos_contato_function();
     var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_function()">Incluir</button>';
@@ -1136,6 +1188,7 @@ function delete_contatos_function() {
 
     var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_function()">Incluir</button>';
     $('#div_contato_bt').html(content_div_bt);
+    limpa_campos_contato_function();
 }
 
 function change_contato_button_function(){
@@ -1327,7 +1380,7 @@ function insert_emails_function() {
 
         $('#email_' + control_div_email[j].cod).html(content_div_email);
         control_div_email[j].excluida = 0;
-        control_vetor_email[j].email = email;
+        control_vetor_email[j] = new vetor_email_inserido(email);
     }
     limpa_campos_email_function();
     var content_div_bt = '<button type="button" id="incluir_email" onclick="insert_emails_function()">Incluir</button>';
@@ -1354,6 +1407,7 @@ function delete_emails_function() {
 
     var content_div_bt = '<button type="button" id="incluir_email" onclick="insert_emails_function()">Incluir</button>';
     $('#div_email_bt').html(content_div_bt);
+    limpa_campos_email_function();
 }
 
 function change_email_button_function(){
@@ -1918,7 +1972,7 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		}
 
 		d = new Date();
-		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/cliente?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + d.yyyymmdd();
 		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
@@ -2053,7 +2107,7 @@ function operacional_consultar_cliente_salvar_function(){
 			}
 		}
 		
-		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value + '&COD_VENDEDOR='+ cod_vendedor.trim();
 		adress = adress + '&COD_CLIENTE=' + cod_cliente_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
@@ -2111,7 +2165,7 @@ function operacional_cadastrar_chip_function(){
 			return 0;
 		}
 
-		adress = 'http://192.168.0.50:8080/zxcc/services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
+		adress = url_adress + 'services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
 		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim();
 		adress = adress + '&DDD=' + ddd_chip.value.trim() + '&NUMERO=' + numero_chip.value.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		document.location.href = adress;
@@ -2170,7 +2224,7 @@ function operacional_consultar_chip_salvar_function(){
 			return 0;
 		}
 
-		adress = 'http://192.168.0.50:8080/zxcc/services/chip?OP_CODE=UPDATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
+		adress = url_adress + 'services/chip?OP_CODE=UPDATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
 		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim() + '&DDD=' + ddd_chip.value.trim();
 		adress = adress + '&NUMERO=' + numero_chip.value.trim() + '&COD_CHIP=' + cod_chip_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		document.location.href = adress;
@@ -2302,7 +2356,7 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 		}
 
 		d = new Date();
-		var adress = 'http://192.168.0.50:8080/zxcc/services/vendedor?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/vendedor?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + d.yyyymmdd().trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
 		document.location.href = adress;
@@ -2435,7 +2489,7 @@ function administrativo_consultar_vendedor_salvar_function(){
 			}
 		}
 		
-		var adress = 'http://192.168.0.50:8080/zxcc/services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/cliente?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
 		document.location.href = adress;
@@ -2534,7 +2588,7 @@ function operacional_cadastrar_equipamento_function(){
 			return 0;
 		}
 
-		adress = 'http://192.168.0.50:8080/zxcc/services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
+		adress = url_adress + 'services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
 		if(Number(instalado) !== 1){
 			adress = adress + '&COD_CLIENTE=' + cliente_cad_equip;
 		}
@@ -2615,7 +2669,7 @@ function operacional_consultar_equipamento_salvar_function(){
 			return 0;
 		}
 
-		adress = 'http://192.168.0.50:8080/zxcc/services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
+		adress = url_adress + 'services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
 		if(Number(instalado) !== 1){
 			adress = adress + '&COD_CLIENTE=' + cliente_cad_equip;
 		}
@@ -2626,5 +2680,508 @@ function operacional_consultar_equipamento_salvar_function(){
 }
 
 function reloadIFrame() {
-	parent.frames['TESTE_IFRAME'].location.href = "teste.html";
+	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp";
+}
+
+var clean_contato_prospect;
+var control_div_contato_prospect = new Array();
+function div_contato_inseridas_prospect (cod, excluida){
+    this.cod = cod;
+    this.excluida = excluida;
+}
+
+function vetor_contato_inserido_prospect(ddd, numero, tipo_contato, cod_pais){
+    this.ddd = ddd;
+    this.numero = numero;
+    this.tipo_contato = tipo_contato;
+    this.cod_pais = cod_pais;
+}
+
+var control_vetor_contato_prospect = new Array();
+control_vetor_contato_prospect[0] = 0;
+var control_vetor_contato_prospect_tipo = new Array();
+
+function insert_contatos_prospect_function() {
+    clean_contato_prospect = $('#div_contato').html();
+    var ddd = document.getElementById("ddd").value.trim();
+    var numero = document.getElementById("numero_contato").value.trim();
+    var tipo_contato = $('#tipocont_list').val();
+    var tipo_contato_nome = $('#tipocont_list :selected').text();
+    var cod_pais = document.getElementById("cod_pais").value.trim();
+    var insert = "X";
+
+    var tipo_contato_tipo_obj = $('#tipocont_list');
+    var tipo_contato_tamanho = tipo_contato_tipo_obj[0].length;
+    for (var i=0; i<tipo_contato_tamanho;i++){
+        control_vetor_contato_prospect_tipo[i] = document.getElementsByName("option_contato_tipo")[i].text;
+    }
+
+    if (ddd === ""){
+        alert('Necessário ingressar o DDD do contato.');
+        document.getElementById("ddd").focus();
+        return 0;
+    }
+
+    if (numero === ""){
+        alert('Necessário ingressar o NÚMERO do contato.');
+        document.getElementById("numero_contato").focus();
+        return 0;
+    }
+
+    if (cod_pais === ""){
+        alert('Necessário ingressar o COD. PAÍS do contato.');
+        document.getElementById("cod_pais").focus();
+        return 0;
+    }
+
+    i = control_div_contato_prospect.length;
+    var j = 0;
+
+    if (i !== 0){
+        while (j < i && insert === "X"){
+            if (control_div_contato_prospect[j].excluida === 1){
+                insert = j;
+            }
+            else{
+                j++;
+            }
+        }
+        if (insert === "X"){
+            control_div_contato_prospect[i] = new div_contato_inseridas_prospect(i,0);
+            control_vetor_contato_prospect[i] = new vetor_contato_inserido_prospect(ddd, numero, tipo_contato, cod_pais);
+        }
+    }
+    else{
+        control_div_contato_prospect[0] = new div_contato_inseridas_prospect(0,0);
+        control_vetor_contato_prospect[0] = new vetor_contato_inserido_prospect(ddd, numero, tipo_contato, cod_pais);
+    }
+
+    if (insert === "X"){
+        var content_div_contato = $('#contato_inserido').html();
+        content_div_contato = content_div_contato + '<div id="contato_' + control_div_contato_prospect[i].cod + '" class="div_inseridos">\n\
+                                                  <input type="radio" name="contato_inserido" value="contato_' + control_div_contato_prospect[i].cod + '" onclick="change_contato_prospect_button_function()">\n\
+                                                  <div id="tipo_contato_' + control_div_contato_prospect[i].cod + '">' + tipo_contato_nome + '</div>: +\n\
+                                                  <div id="cod_pais_' + control_div_contato_prospect[i].cod + '">' + cod_pais + '</div>\n\
+                                                  (<div id="ddd_contato_' + control_div_contato_prospect[i].cod + '">' + ddd + '</div>)\n\
+                                                  <div id="numero_contato_' + control_div_contato_prospect[i].cod + '">' + numero + '</div> </div>';
+
+        $('#contato_inserido').html(content_div_contato);
+    }
+    else {
+        var content_div_contato = '<input type="radio" name="contato_inserido" value="contato_' + control_div_contato_prospect[j].cod + '" onclick="change_contato_prospect_button_function()">\n\
+                                                  <div id="tipo_contato_' + control_div_contato_prospect[j].cod + '">' + tipo_contato_nome + '</div>: +\n\
+                                                  <div id="cod_pais_' + control_div_contato_prospect[j].cod + '">' + cod_pais + '</div>\n\
+                                                  (<div id="ddd_contato_' + control_div_contato_prospect[j].cod + '">' + ddd + '</div>)\n\
+                                                  <div id="numero_contato_' + control_div_contato_prospect[j].cod + '">' + numero + '</div> <br>';
+
+        $('#contato_' + control_div_contato_prospect[j].cod).html(content_div_contato);
+        control_div_contato_prospect[j].excluida = 0;
+        control_vetor_contato_prospect[j] = new vetor_contato_inserido_prospect(ddd, numero, tipo_contato, cod_pais);
+    }
+    limpa_campos_contato_prospect_function();
+    var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_prospect_function()">Incluir</button>';
+    $('#div_contato_bt').html(content_div_bt);
+    document.getElementById("ddd").focus();
+}
+
+function delete_contatos_prospect_function() {
+    var div_select = $("input[type='radio'][name='contato_inserido']:checked").val();
+    var length = div_select.length;
+    var div_deletar = div_select.charAt(length - 1);
+
+    var tipo_contato = $('#tipo_contato_' + div_deletar).html();
+    var cod_pais = $('#cod_pais_' + div_deletar).html();
+    var ddd = $('#ddd_contato_' + div_deletar).html();
+    var numero = $('#numero_contato_' + div_deletar).html();
+
+    var content_div_contato = $('#' + div_select).html();
+
+    if (confirm('O contato ' + tipo_contato.trim() + ': +' + cod_pais.trim() + '(' + ddd.trim() + ')' + numero.trim() + ' será apagado.')) {
+        $('#' + div_select).html("");
+        control_div_contato_prospect[div_deletar].excluida = 1;
+        control_vetor_contato_prospect[div_deletar] = 0;
+    } else {
+        $('#' + div_select).html(content_div_contato);
+    }
+
+    var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_prospect_function()">Incluir</button>';
+    $('#div_contato_bt').html(content_div_bt);
+    limpa_campos_contato_prospect_function();
+}
+
+function change_contato_prospect_button_function(){
+    var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_prospect_function()">Incluir</button>\n\
+                          <button type="button" id="editar_contato" onclick="editar_contatos_prospect_function()">Editar</button>\n\
+                          <button type="button" id="delete_contato" onclick="delete_contatos_prospect_function()">Excluir</button>';
+    $('#div_contato_bt').html(content_div_bt);
+}
+
+var div_contato_prospect_editar;
+
+function editar_contatos_prospect_function() {
+    var content_div_bt = '<button type="button" id="salvar_contato" onclick="salvar_contatos_prospect_function()">Salvar</button>\n\
+                          <button type="button" id="cancelar_contato" onclick="cancelar_contatos_prospect_function()">Cancelar</button>';
+    $('#div_contato_bt').html(content_div_bt);
+
+    var div_select = $("input[type='radio'][name='contato_inserido']:checked").val();
+    var content_div_contato = $('#' + div_select).html();
+    var length = div_select.length;
+    div_contato_prospect_editar = div_select.charAt(length - 1);
+
+    var ddd = control_vetor_contato_prospect[div_contato_prospect_editar].ddd;
+    var numero = control_vetor_contato_prospect[div_contato_prospect_editar].numero;
+    var tipo_contato = control_vetor_contato_prospect[div_contato_prospect_editar].tipo_contato;
+    var cod_pais = control_vetor_contato_prospect[div_contato_prospect_editar].cod_pais;
+
+    $('#' + div_select).html("");
+    $('#' + div_select).html(content_div_contato);
+
+    content_div_contato = "";
+
+    content_div_contato = 'DDD:<input type="text" class="size_5" id="ddd" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);" value="' + ddd + '">\n\
+                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="10" onkeypress="javascript: return EntradaNumerico(event);" value="' + numero + '">\n\
+                        Tipo do Contato:\n\
+                        <select id="tipocont_list" class="size_21">';
+    for(var i=0;i<control_vetor_contato_prospect_tipo.length;i++){
+        content_div_contato = content_div_contato + '<option value="' + Number(i+1) + '" name="option_contato_tipo"';
+        if (Number(tipo_contato) === Number(i+1)){
+            content_div_contato = content_div_contato + ' selected';
+        }
+        content_div_contato = content_div_contato + '>' + control_vetor_contato_prospect_tipo[i] + '</option>';
+    }
+    content_div_contato = content_div_contato + '</select>\n\
+                        Cod. País: <input type="text" class="size_5" id="cod_pais" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);" value="' + cod_pais + '">';
+
+    $('#div_contato').html("");
+    $('#div_contato').html(content_div_contato);
+}
+
+function limpa_campos_contato_prospect_function(){
+    var content_div_contato = clean_contato_prospect;
+    $('#div_contato').html("");
+    $('#div_contato').html(content_div_contato);
+}
+
+function cancelar_contatos_prospect_function(){
+    var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_prospect_function()">Incluir</button>';
+    $('#div_contato_bt').html(content_div_bt);
+
+    limpa_campos_contato_prospect_function();
+}
+
+function salvar_contatos_prospect_function(){
+    var content_div_bt = '<button type="button" id="incluir_contato" onclick="insert_contatos_prospect_function()">Incluir</button>';
+    $('#div_contato_bt').html(content_div_bt);
+
+    var div_salvar = div_contato_prospect_editar;
+
+    $('#contato_' + div_salvar).html("");    
+
+    var ddd = document.getElementById("ddd").value.trim();
+    var numero = document.getElementById("numero_contato").value.trim();
+    var tipo_contato = $('#tipocont_list').val();
+    var tipo_contato_nome = $('#tipocont_list :selected').text();
+    var cod_pais = document.getElementById("cod_pais").value.trim();
+
+    if (ddd === ""){
+        alert('Necessário ingressar o DDD do contato.');
+        document.getElementById("ddd").focus();
+        return 0;
+    }
+
+    if (numero === ""){
+        alert('Necessário ingressar o NÚMERO do contato.');
+        document.getElementById("numero_contato").focus();
+        return 0;
+    }
+
+    if (cod_pais === ""){
+        alert('Necessário ingressar o COD. PAÍS do contato.');
+        document.getElementById("cod_pais").focus();
+        return 0;
+    }
+
+    var content_div_contato = '<input type="radio" name="contato_inserido" value="contato_' + control_div_contato_prospect[div_salvar].cod + '" onclick="change_contato_prospect_button_function()">\n\
+                                                  <div id="tipo_contato_' + control_div_contato_prospect[div_salvar].cod + '">' + tipo_contato_nome + '</div>: +\n\
+                                                  <div id="cod_pais_' + control_div_contato_prospect[div_salvar].cod + '">' + cod_pais + '</div>\n\
+                                                  (<div id="ddd_contato_' + control_div_contato_prospect[div_salvar].cod + '">' + ddd + '</div>)&nbsp;\n\
+                                                  <div id="numero_contato_' + control_div_contato_prospect[div_salvar].cod + '">' + numero + '</div> <br>';
+
+    $('#contato_' + control_div_contato_prospect[div_salvar].cod).html(content_div_contato);
+    control_div_contato_prospect[div_salvar].excluida = 0;
+
+    control_vetor_contato_prospect[div_salvar].ddd = ddd;
+    control_vetor_contato_prospect[div_salvar].numero = numero;
+    control_vetor_contato_prospect[div_salvar].tipo_contato = tipo_contato;
+    control_vetor_contato_prospect[div_salvar].cod_pais = cod_pais;
+
+    limpa_campos_contato_prospect_function();
+}
+
+var control_vetor_contato_prospect_json = new Array();
+function ajustar_vetor_contato_prospect_function(){
+
+	var length = control_vetor_contato_prospect.length;
+	var flag;
+	var j;
+	for(var x=0; x<length; x++)
+		control_vetor_contato_prospect_json[x] = control_vetor_contato_prospect[x];
+
+	for(var i=0; i<length; i++){
+		if(control_vetor_contato_prospect_json[i] === 0){
+			flag = true;
+			j = i + 1;
+			while(flag && j<length){
+				if(control_vetor_contato_prospect_json[j] !== 0){
+					control_vetor_contato_prospect_json[i] = control_vetor_contato_prospect_json[j];
+					control_vetor_contato_prospect_json[j] = 0;
+					flag = false;
+				}
+				j++;
+			}
+		}
+	}
+	for(i=0;i<length;i++){
+		if(control_vetor_contato_prospect_json[i] === 0)
+			break;
+	}
+	control_vetor_contato_prospect_json.length = i;
+}
+
+function comercial_cadastrar_cliente_prospect_cadastrar_function(){
+	ajustar_vetor_contato_prospect_function();
+	ajustar_vetor_email_function();
+	if(confirm('Deseja realizar o ingresso do Cliente?')){
+		var values = $("input[type='radio'][name='pessoa']:checked").val();
+		var tipo_pessoa;
+		if(values === "pessoafisica"){
+			tipo_pessoa = 0;
+		}else{
+			tipo_pessoa = 1;
+		}
+		var nome = document.getElementById("nome_razaosocial");
+		var apelido  = document.getElementById("nomefantasia");
+		var cod_vendedor = $('#vendedor_list :selected').val();
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(nome.value.trim() === ""){
+			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Cliente.");
+			document.getElementById("nome_razaosocial").focus();
+			return 0;
+		}
+		if(apelido.value.trim() === ""){
+			if(tipo_pessoa === 1){
+				alert("Necessário ingressar NOME FANTASIA do Cliente.");
+				document.getElementById("nomefantasia").focus();
+				return 0;
+			}else{
+				apelido.value = "";
+			}
+		}
+
+		if(control_vetor_contato_prospect_json[0] === 0){
+			alert("Necessário ingressar CONTATO do Cliente");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+
+		var contatoLength = control_vetor_contato_prospect_json.length;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		for(var i=0;i<contatoLength;i++){
+			if(control_vetor_contato_prospect_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_prospect_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].cod_pais.trim();
+			}
+		}
+
+		if(control_vetor_email_json[0] === 0){
+			alert("Necessário ingressar EMAIL do Cliente");
+			document.getElementById("email").focus();
+			return 0;
+		}
+
+		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
+		for(i=0;i<emailLength;i++){
+			if(control_vetor_contato[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
+			}
+		}
+
+		d = new Date();
+		var adress = url_adress + 'services/prospect?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&DATA_INGRESSO=' + d.yyyymmdd() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
+		document.location.href = adress;
+	}
+	else
+		return 0;
+}
+
+function comercial_consultar_cliente_prospect_salvar_function(){
+	alert("Em desenvolvimento!");
+	return 0;
+	ajustar_vetor_contato_prospect_function();
+	ajustar_vetor_email_function();
+	if(confirm('Deseja salvar os dados alterados do Cliente?')){
+		var values = $("input[type='radio'][name='pessoa']:checked").val();
+		var tipo_pessoa;
+		if(values === "pessoafisica"){
+			tipo_pessoa = 0;
+		}else{
+			tipo_pessoa = 1;
+		}
+		var nome = document.getElementById("nome_razaosocial");
+		var apelido  = document.getElementById("nomefantasia");
+		var cod_vendedor = $('#vendedor_list :selected').val();
+		var cod_usuario = document.getElementById("cod_usuario");
+
+		if(nome.value.trim() === ""){
+			alert("Necessário ingressar NOME ou RAZÃO SOCIAL do Cliente.");
+			document.getElementById("nome_razaosocial").focus();
+			return 0;
+		}
+		if(apelido.value.trim() === ""){
+			if(tipo_pessoa === 1){
+				alert("Necessário ingressar NOME FANTASIA do Cliente.");
+				document.getElementById("nomefantasia").focus();
+				return 0;
+			}else{
+				apelido.value = "";
+			}
+		}
+
+		if(control_vetor_contato_prospect_json[0] === 0){
+			alert("Necessário ingressar CONTATO do Cliente");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+
+		var contatoLength = control_vetor_contato_prospect_json.length;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		for(var i=0;i<contatoLength;i++){
+			if(control_vetor_contato_prospect_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_prospect_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_prospect_json[i].cod_pais.trim();
+			}
+		}
+
+		if(control_vetor_email_json[0] === 0){
+			alert("Necessário ingressar EMAIL do Cliente");
+			document.getElementById("email").focus();
+			return 0;
+		}
+
+		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
+		for(i=0;i<emailLength;i++){
+			if(control_vetor_contato[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
+			}
+		}
+		
+		var adress = url_adress + 'services/prospect?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_CLIENTE_PROSPECT=' + cod_cliente_prospect_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + adress_aux;
+		document.location.href = adress;
+	}
+	else
+		return 0;
+}
+
+var contato_prospect_carregado_array = new Array();
+
+function contato_prospect_carregado(ddd, numero, tipo_contato, cod_pais){
+    this.ddd = ddd;
+    this.numero = numero;
+    this.tipo_contato = tipo_contato;
+    this.cod_pais = cod_pais;
+}
+
+function carregar_dados_consulta_cliente_prospect_function(){
+    var i;
+    var j;
+    /*Carregar contatos*/
+    var div_contato_inserido_obj = $("#contato_inserido");
+    var tamanho_contato = div_contato_inserido_obj[0].childElementCount;
+    clean_contato = $('#div_contato').html();
+    for(i=0;i<tamanho_contato;i++){
+    	contato_prospect_carregado_array[i] = new contato_prospect_carregado();
+    	contato_prospect_carregado_array[i].ddd = $('#ddd_contato_oculta_' + i).html().trim();
+    	contato_prospect_carregado_array[i].numero = $('#numero_contato_oculta_' + i).html().trim();
+    	contato_prospect_carregado_array[i].tipo_contato = $('#tipo_contato_oculta_' + i).html().trim();
+    	contato_prospect_carregado_array[i].cod_pais = $('#cod_pais_oculta_' + i).html().trim();
+    }
+    var tipo_contato_tipo_obj = $('#tipocont_list');
+    var tipo_contato_tamanho_tipo = tipo_contato_tipo_obj[0].length;
+    for (i=0; i<tipo_contato_tamanho_tipo;i++){
+    	control_vetor_contato_prospect_tipo[i] = document.getElementsByName("option_contato_tipo")[i].text;
+    }
+
+    for(i=0;i<tamanho_contato;i++){
+    	control_div_contato_prospect[i] = new div_contato_inseridas_prospect(0, 0);
+    	control_vetor_contato_prospect[i] = new vetor_contato_inserido();
+    	control_vetor_contato_prospect[i].ddd = contato_prospect_carregado_array[i].ddd;
+    	control_vetor_contato_prospect[i].numero = contato_prospect_carregado_array[i].numero;
+        for(j=0;j<tipo_contato_tamanho_tipo;j++){
+            if(control_vetor_contato_prospect_tipo[j] === contato_prospect_carregado_array[i].tipo_contato){
+            	control_vetor_contato_prospect[i].tipo_contato = Number(j+1);
+                break;
+            }
+        }
+        control_vetor_contato_prospect[i].cod_pais = contato_prospect_carregado_array[i].cod_pais;
+    }
+    $('#contato_inserido').html("");
+
+    var content_div_contato = "";
+
+    for(i=0;i<tamanho_contato;i++){
+    	content_div_contato = content_div_contato + '<div id="contato_' + i + '" class="div_inseridos">\n\
+        <input type="radio" name="contato_inserido" value="contato_' + i + '" onclick="change_contato_prospect_button_function()">\n\
+        <div id="tipo_contato_' + i + '">' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato) - 1] + '</div>: +\n\
+        <div id="cod_pais_' + i + '">' + control_vetor_contato[i].cod_pais + '</div>\n\
+        (<div id="ddd_contato_' + i + '">' + control_vetor_contato[i].ddd + '</div>)\n\
+        <div id="numero_contato_' + i + '">' + control_vetor_contato[i].numero + '</div> <br> </div>';
+    }
+
+    $('#contato_inserido').html(content_div_contato);
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+    /*Carregar emails*/
+    var div_email_inserido_obj = $("#emails_inserido");
+    var tamanho_email = div_email_inserido_obj[0].childElementCount;
+    clean_email = $('#div_email').html();
+    for(i=0;i<tamanho_email;i++){
+        email_carregado_array[i] = new email_carregado();
+        email_carregado_array[i].email = $('#nome_email_oculta_' + i).html().trim();
+    }
+    for(i=0;i<tamanho_email;i++){
+    	control_div_email[i] = new div_email_inseridas(0, 0);
+    	control_vetor_email[i] = new vetor_email_inserido();
+        control_vetor_email[i].email = email_carregado_array[i].email;
+    }
+    $('#emails_inserido').html("");
+
+    var content_div_email = "";
+
+    for(i=0;i<tamanho_email;i++){
+    	content_div_email = content_div_email + '<div id="email_' + i + '" class="div_inseridos">\n\
+        <input type="radio" name="email_inserido" value="email_' + i + '" onclick="change_email_button_function()">\n\
+        <div id="nome_email_' + i + '">' + control_vetor_email[i].email + '</div> <br> </div>';
+    }
+
+    $('#emails_inserido').html(content_div_email);
 }

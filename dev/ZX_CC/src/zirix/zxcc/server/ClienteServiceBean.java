@@ -12,7 +12,6 @@ import java.util.Vector;
 import zirix.zxcc.server.dao.ClienteDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class ClienteServiceBean {
 
@@ -21,13 +20,9 @@ public class ClienteServiceBean {
 
 	public ClienteServiceBean(String[] pkVal) {
 		setPk(pkVal);
-
-	    System.err.println("CRIEI O BEAN PKVAL");
 	}
 
 	public ClienteServiceBean() {
-
-	    System.err.println("CRIEI O BEAN");
 	}
 
 	public void setPk(Object[] pkVal) {
@@ -45,55 +40,41 @@ public class ClienteServiceBean {
 	}
 
 	public Integer getCodVendedor(){
-	    System.err.println("\ngetCodVendedor");
-
 		Integer codVendedor = (Integer)dao_.getAttValueFor("COD_VENDEDOR");
 		return codVendedor;
 	}
 
 	public Integer getTipo(){
-	    System.err.println("\ngetTipo");
-
 		Integer tipo = (Integer)dao_.getAttValueFor("TIPO");
 		return tipo;
 	}
 
 	public String getNome() {
-	    System.err.println("\ngetNome");
-
     	String nome = (String)dao_.getAttValueFor("NOME");
     	return nome;
 	}
 
 	public String getNomeFantasia() {
-	    System.err.println("\ngetNomeFantasia");
-
     	String nomeFantasia = (String)dao_.getAttValueFor("NOME_FANTASIA");
     	return nomeFantasia;
 	}
 
 	public String getDtNascimento() {
-	    System.err.println("\ngetDtNascimento");
-
 		String dtNascimento = dao_.getAttValueFor("DATA_NASCIMENTO").toString();
     	return dtNascimento;
 	}
 
 	public String getSite() {
-	    System.err.println("\ngetSite");
-
     	String site = (String)dao_.getAttValueFor("SITE");
     	return site;
 	}
 
 	@SuppressWarnings("finally")
 	public Vector<String[]> getEnd() {
-	    System.err.println("\ngetEnd");
-
 	    Vector<String[]> endClienteList = new Vector<String[]>();
 	    try {
 		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT ENDERECO, BAIRRO, CIDADE, UF, COD_PAIS, COMPLEMENTO, CEP, COD_ENDERECO "
-		    		+ "							   FROM " + ZXCCConstantsServlet.DB_NAME_ + "ENDERECO_CLIENTE "
+		    		+ "							   FROM " + ZXMain.DB_NAME_ + "ENDERECO_CLIENTE "
 		    		+ "							  WHERE COD_CLIENTE = " + COD_CLIENTE_);
 
 		    for (int i=0;i < values.size();i++) {
@@ -117,22 +98,20 @@ public class ClienteServiceBean {
 
 	@SuppressWarnings("finally")
 	public Vector<String[]> getContato(){
-	    System.err.println("\ngetContato");
-
 		Vector<String[]> contatoClienteList = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_CONTATO.NOME_TIPO "
-					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.DDD "
-					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.NUMERO "
-					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.COD_PAIS "
-					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.NOME "
-					+ "                                                              , " + ZXCCConstantsServlet.DB_NAME_ + "INFO_CONTATO.NOME_GRAU "
-		    		+ "							   FROM " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE "
-					+ "                               , " + ZXCCConstantsServlet.DB_NAME_ + "INFO_CONTATO "
-					+ "                               , " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_CONTATO "
-		    		+ "							  WHERE " + ZXCCConstantsServlet.DB_NAME_ + "INFO_CONTATO.COD_GRAU = " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.COD_GRAU "
-		    		+ "                             AND " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_CONTATO.COD_CONTATO = " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.COD_CONTATO "
-		    		+ "                             AND " + ZXCCConstantsServlet.DB_NAME_ + "CONTATO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "TIPO_CONTATO.NOME_TIPO "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.DDD "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.NUMERO "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_PAIS "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.NOME "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "INFO_CONTATO.NOME_GRAU "
+		    		+ "							   FROM " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE "
+					+ "                               , " + ZXMain.DB_NAME_ + "INFO_CONTATO "
+					+ "                               , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
+		    		+ "							  WHERE " + ZXMain.DB_NAME_ + "INFO_CONTATO.COD_GRAU = " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_GRAU "
+		    		+ "                             AND " + ZXMain.DB_NAME_ + "TIPO_CONTATO.COD_CONTATO = " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CONTATO "
+		    		+ "                             AND " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[6]; // pois eu sei que sao 6 atributos de fato !
@@ -153,18 +132,16 @@ public class ClienteServiceBean {
 
 	@SuppressWarnings("finally")
 	public Vector<String[]> getDocumento(){
-	    System.err.println("\ngetDocumento");
-
 		Vector<String[]> documentoClienteList = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE.NUMERO "
-					+ ",							    " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_DOCUMENTO.NOME "
-					+ ",                                " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE.DATA_EMISSAO "
-					+ ",                                " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE.ORGAO_EMISSOR "
-		    		+ "							   FROM " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE "
-		    		+ "							      , " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_DOCUMENTO "
-		    		+ "							  WHERE " + ZXCCConstantsServlet.DB_NAME_ + "TIPO_DOCUMENTO.COD_DOCUMENTO = " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_DOCUMENTO "
-		    		+ "                             AND " + ZXCCConstantsServlet.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.NUMERO "
+					+ ",							    " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO.NOME "
+					+ ",                                " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.DATA_EMISSAO "
+					+ ",                                " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.ORGAO_EMISSOR "
+		    		+ "							   FROM " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE "
+		    		+ "							      , " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO "
+		    		+ "							  WHERE " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO.COD_DOCUMENTO = " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_DOCUMENTO "
+		    		+ "                             AND " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
 
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[4]; // pois eu sei que sao 4 atributos de fato !
@@ -183,12 +160,10 @@ public class ClienteServiceBean {
 
 	@SuppressWarnings("finally")
 	public Vector<String[]> getEmail(){
-	    System.err.println("\ngetEmail");
-
 		Vector<String[]> emailClienteList = new Vector<String[]>();
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT EMAIL "
-		    		+ "							   FROM " + ZXCCConstantsServlet.DB_NAME_ + "EMAIL_CLI_VEN "
+		    		+ "							   FROM " + ZXMain.DB_NAME_ + "EMAIL_CLI_VEN "
 		    		+ "							  WHERE TIPO_CLI_VEN = 0 "
 		    		+ "                             AND COD_CLI_VEN = " + COD_CLIENTE_);
 

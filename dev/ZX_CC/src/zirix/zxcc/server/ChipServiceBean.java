@@ -13,7 +13,6 @@ import java.util.Vector;
 import zirix.zxcc.server.dao.ChipDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.PkList;
-import zirix.zxcc.server.ZXCCConstantsServlet;
 
 public class ChipServiceBean {
 
@@ -112,7 +111,7 @@ public class ChipServiceBean {
 		
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT NUMERO_MODULO "
-					+ " 											 FROM " + ZXCCConstantsServlet.DB_NAME_ + "MODULO "
+					+ " 											 FROM " + ZXMain.DB_NAME_ + "MODULO "
 					+ "                                             WHERE COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
@@ -133,13 +132,13 @@ public class ChipServiceBean {
 		Vector<String[]> ModeloModulo = new Vector<String[]>();
 
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT RTRIM(LTRIM(" + ZXCCConstantsServlet.DB_NAME_ + "MARCA_MODULO.nome_marca)) + ' - ' + RTRIM(LTRIM(" + ZXCCConstantsServlet.DB_NAME_ + "DESC_MODULO.nome_modelo)) "
-					+ " 											 FROM " + ZXCCConstantsServlet.DB_NAME_ + "MARCA_MODULO "
-					+ " 											    , " + ZXCCConstantsServlet.DB_NAME_ + "DESC_MODULO "
-					+ " 											    , " + ZXCCConstantsServlet.DB_NAME_ + "MODULO "
-					+ "                                             WHERE " + ZXCCConstantsServlet.DB_NAME_ + "MARCA_MODULO.COD_MARCA = " + ZXCCConstantsServlet.DB_NAME_ + "DESC_MODULO.COD_MARCA "
-					+ "                                               AND " + ZXCCConstantsServlet.DB_NAME_ + "DESC_MODULO.COD_MODELO = " + ZXCCConstantsServlet.DB_NAME_ + "MODULO.COD_MODELO "
-					+ "                                               AND " + ZXCCConstantsServlet.DB_NAME_ + "MODULO.COD_MODULO = " + COD_MODULO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT RTRIM(LTRIM(" + ZXMain.DB_NAME_ + "MARCA_MODULO.nome_marca)) + ' - ' + RTRIM(LTRIM(" + ZXMain.DB_NAME_ + "DESC_MODULO.nome_modelo)) "
+					+ " 											 FROM " + ZXMain.DB_NAME_ + "MARCA_MODULO "
+					+ " 											    , " + ZXMain.DB_NAME_ + "DESC_MODULO "
+					+ " 											    , " + ZXMain.DB_NAME_ + "MODULO "
+					+ "                                             WHERE " + ZXMain.DB_NAME_ + "MARCA_MODULO.COD_MARCA = " + ZXMain.DB_NAME_ + "DESC_MODULO.COD_MARCA "
+					+ "                                               AND " + ZXMain.DB_NAME_ + "DESC_MODULO.COD_MODELO = " + ZXMain.DB_NAME_ + "MODULO.COD_MODELO "
+					+ "                                               AND " + ZXMain.DB_NAME_ + "MODULO.COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
@@ -159,11 +158,11 @@ public class ChipServiceBean {
 		Vector<String[]> NomeCliente = new Vector<String[]>();
 
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXCCConstantsServlet.DB_NAME_ + "CLIENTE.NOME "
-					+ " 											 FROM " + ZXCCConstantsServlet.DB_NAME_ + "CLIENTE "
-					+ " 											    , " + ZXCCConstantsServlet.DB_NAME_ + "MODULO "
-					+ "                                             WHERE " + ZXCCConstantsServlet.DB_NAME_ + "CLIENTE.COD_CLIENTE = " + ZXCCConstantsServlet.DB_NAME_ + "MODULO.COD_CLIENTE "
-					+ "                                               AND " + ZXCCConstantsServlet.DB_NAME_ + "MODULO.COD_MODULO = " + COD_MODULO_);
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "CLIENTE.NOME "
+					+ " 											 FROM " + ZXMain.DB_NAME_ + "CLIENTE "
+					+ " 											    , " + ZXMain.DB_NAME_ + "MODULO "
+					+ "                                             WHERE " + ZXMain.DB_NAME_ + "CLIENTE.COD_CLIENTE = " + ZXMain.DB_NAME_ + "MODULO.COD_CLIENTE "
+					+ "                                               AND " + ZXMain.DB_NAME_ + "MODULO.COD_MODULO = " + COD_MODULO_);
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];

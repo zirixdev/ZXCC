@@ -1,14 +1,21 @@
 package zirix.zxcc.server;
 
-import java.sql.SQLException;
-
-import zirix.zxcc.server.dao.*;
-
 public class ZXMain {
 
+	public static String URL_ADRESS_= null;
+	public static String DB_NAME_= null;
+	public static String LOCAL_= null;
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
+
+	public static void setUrlAdress(String UrlAdress){ URL_ADRESS_ = UrlAdress;}
+	public static void setDbName(String DbName){ DB_NAME_ = DbName;}
+	public static void setLocal(String Local){ LOCAL_ = Local;}
+
+    public static String getLocal(){return LOCAL_;}
+    public static String getDbName(){return DB_NAME_;}
+    public static String getAdress(){return URL_ADRESS_;}
 
 }

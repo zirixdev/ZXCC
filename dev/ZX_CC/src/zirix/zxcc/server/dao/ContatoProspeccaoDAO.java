@@ -5,15 +5,15 @@ import java.sql.SQLException;
 import java.util.Set;
 import zirix.zxcc.server.*;
 
-public class ContatoClienteDAO extends GenericDAO<ContatoClienteDAO> {
+public class ContatoProspeccaoDAO extends GenericDAO<ContatoProspeccaoDAO> {
 
 
-    public ContatoClienteDAO(PkList pkList) {
+    public ContatoProspeccaoDAO(PkList pkList) {
         super(TABLENAME,pkList);
         setCanDelete(true);
     }
 
-    public ContatoClienteDAO(){
+    public ContatoProspeccaoDAO(){
     	super(TABLENAME);
     }
         
@@ -26,18 +26,16 @@ public class ContatoClienteDAO extends GenericDAO<ContatoClienteDAO> {
 	}
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
-    	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));
+    	setAttValueFor("COD_CLIENTE_PROSPECCAO",res.getInt("COD_CLIENTE_PROSPECCAO"));
     	setAttValueFor("COD_CONTATO",res.getInt("COD_CONTATO"));
     	setAttValueFor("DDD",res.getString("DDD"));
     	setAttValueFor("NUMERO",res.getString("NUMERO"));
     	setAttValueFor("COD_PAIS",res.getInt("COD_PAIS"));
-    	setAttValueFor("NOME",res.getString("NOME"));
-    	setAttValueFor("COD_GRAU",res.getInt("COD_GRAU"));
     }
     
     public Set<String> getPkNamesSet() {    	
-    	return ContatoClienteDAO.createKey("COD_CONTATO_CLI", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
+    	return ContatoProspeccaoDAO.createKey("COD_CONTATO_PROS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
     
-    public final static String TABLENAME = ZXMain.DB_NAME_ + "CONTATO_CLIENTE";
+    public final static String TABLENAME = ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO";
 }

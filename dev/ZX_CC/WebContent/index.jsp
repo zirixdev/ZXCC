@@ -23,7 +23,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
     </head>  
     <body>
         <div class="container_login">        
-            <form class="login_form" action="<%=ZXCCConstantsServlet.URL_ADRESS_%>services/login">
+            <form class="login_form" action="<%=ZXMain.URL_ADRESS_%>services/login">
                 <img src="imagens/zx_cc_login.jpg" border="0">
                 <div class="fields_form">
                     Login:&nbsp;&nbsp;<input type="text" name="login_login" style="color: #000;" autofocus="autofocus">

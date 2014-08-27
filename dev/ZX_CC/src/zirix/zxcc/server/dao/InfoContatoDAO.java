@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class InfoContatoDAO extends GenericDAO<InfoContatoDAO> {
 
@@ -35,6 +35,6 @@ public class InfoContatoDAO extends GenericDAO<InfoContatoDAO> {
     	return InfoContatoDAO.createKey("COD_GRAU", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "INFO_CONTATO";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "INFO_CONTATO";
           
 }

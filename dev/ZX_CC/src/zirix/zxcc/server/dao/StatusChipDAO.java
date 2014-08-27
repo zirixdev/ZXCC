@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class StatusChipDAO extends GenericDAO<StatusChipDAO> {
 
@@ -35,7 +35,7 @@ public class StatusChipDAO extends GenericDAO<StatusChipDAO> {
     	return StatusChipDAO.createKey("COD_STATUS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "STATUS_CHIP";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "STATUS_CHIP";
    
         
 }

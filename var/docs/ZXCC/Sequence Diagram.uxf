@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Usuário</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>130</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>JSP FORM</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>250</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>START BEAN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>970</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>EVALUATOR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>850</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SERVLET</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>610</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SCHEDULE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1090</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>RESPONSAVEL</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Actor</type>
+    <coordinates>
+      <x>0</x>
+      <y>70</y>
+      <w>100</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Actor</type>
+    <coordinates>
+      <x>1090</x>
+      <y>70</y>
+      <w>100</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>50</x>
+      <y>60</y>
+      <w>160</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Abertura de
+Novo Pedido</panel_attributes>
+    <additional_attributes>30;50;140;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>90</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>330</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>80</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Cadastro concluído</panel_attributes>
+    <additional_attributes>30;50;160;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Database</type>
+    <coordinates>
+      <x>370</x>
+      <y>40</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>flux_db
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Database</type>
+    <coordinates>
+      <x>490</x>
+      <y>40</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>schedule_db
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>280</x>
+      <y>100</y>
+      <w>170</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+Verifica qual o
+Fluxo</panel_attributes>
+    <additional_attributes>30;50;150;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>450</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>510</x>
+      <y>500</y>
+      <w>170</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+.
+Cria nova tarefa no 
+schedule_db</panel_attributes>
+    <additional_attributes>30;50;150;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>570</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>280</x>
+      <y>150</y>
+      <w>280</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+Cria a primeira tarefa no sched_db</panel_attributes>
+    <additional_attributes>30;50;260;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>510</x>
+      <y>20</y>
+      <w>928</w>
+      <h>266</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;
+.
+.
+.
+.
+Verifica se o tempo
+da tarefa expirou
+.
+Verifica se o tempo
+da tarefa estiver a
+expirar</panel_attributes>
+    <additional_attributes>800;30;840;30;840;140;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>690</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>810</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>930</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1050</x>
+      <y>240</y>
+      <w>340</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+.
+Informa responsável se tempo estiver a expirar
+Informa responsável se tempo expirar</panel_attributes>
+    <additional_attributes>110;50;240;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>840</x>
+      <y>330</y>
+      <w>220</w>
+      <h>122</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+Envia para o Evaluetor
+verificar se todas as tarefas
+foram realizadas</panel_attributes>
+    <additional_attributes>50;50;180;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>630</x>
+      <y>390</y>
+      <w>400</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+.
+Se completas todas as tarefas do estado informa
+ao Schedule que possiga para o próximo passo</panel_attributes>
+    <additional_attributes>30;50;380;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>310</x>
+      <y>460</y>
+      <w>444</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+.
+Busca próximo Work caso todas as tarefas estejam completas</panel_attributes>
+    <additional_attributes>110;50;350;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>10</x>
+      <y>220</y>
+      <w>310</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+Usuário da o START via JS</panel_attributes>
+    <additional_attributes>30;50;290;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>240</x>
+      <y>250</y>
+      <w>350</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+Bean atualiza sched com START TIMESTAMP</panel_attributes>
+    <additional_attributes>60;50;300;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>130</x>
+      <y>290</y>
+      <w>790</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+.
+JSP envia pro SERVLET a tarefa executada e atualizar</panel_attributes>
+    <additional_attributes>30;50;770;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1210</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>CRON</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1050</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>10</x>
+      <y>190</y>
+      <w>790</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;
+.
+Verifica e atualiza a lista de tarefas para o usuário logado</panel_attributes>
+    <additional_attributes>30;50;770;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>730</x>
+      <y>40</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SCHED BEAN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1170</x>
+      <y>0</y>
+      <w>50</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>30;30;30;680</additional_attributes>
+  </element>
+</diagram>

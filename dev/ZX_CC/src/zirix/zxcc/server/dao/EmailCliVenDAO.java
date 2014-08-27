@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import zirix.zxcc.server.ZXCCConstantsServlet;
+import zirix.zxcc.server.*;
 
 public class EmailCliVenDAO extends GenericDAO<EmailCliVenDAO> {
 
@@ -37,5 +37,5 @@ public class EmailCliVenDAO extends GenericDAO<EmailCliVenDAO> {
     	return EmailCliVenDAO.createKey("COD_EMAIL", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-    public final static String TABLENAME = ZXCCConstantsServlet.DB_NAME_ + "EMAIL_CLI_VEN";
+    public final static String TABLENAME = ZXMain.DB_NAME_ + "EMAIL_CLI_VEN";
 }
