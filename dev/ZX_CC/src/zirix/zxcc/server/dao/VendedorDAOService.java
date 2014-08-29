@@ -10,7 +10,7 @@ public class VendedorDAOService {
 
 	public static Vector<VendedorDAO> loadAll() throws SQLException {
 		
-		String query = "SELECT * FROM " + VendedorDAO.TABLENAME;
+		String query = "SELECT * FROM " + VendedorDAO.TABLENAME + " ORDER BY NOME ASC";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;

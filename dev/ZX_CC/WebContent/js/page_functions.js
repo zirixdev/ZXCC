@@ -1964,7 +1964,7 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
@@ -2100,7 +2100,7 @@ function operacional_consultar_cliente_salvar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
@@ -2348,7 +2348,7 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
@@ -2482,7 +2482,7 @@ function administrativo_consultar_vendedor_salvar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
@@ -2986,7 +2986,7 @@ function comercial_cadastrar_cliente_prospect_cadastrar_function(){
 		}
 
 		var contatoLength = control_vetor_contato_prospect_json.length;
-		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		var adress_aux = '&QCTO=' + contatoLength;
 		for(var i=0;i<contatoLength;i++){
 			if(control_vetor_contato_prospect_json[i]===0){
 				break;
@@ -3007,7 +3007,7 @@ function comercial_cadastrar_cliente_prospect_cadastrar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
@@ -3015,7 +3015,7 @@ function comercial_cadastrar_cliente_prospect_cadastrar_function(){
 		}
 
 		d = new Date();
-		var adress = url_adress + 'services/prospect?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/prospect?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&DATA_INGRESSO=' + d.yyyymmdd() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
 		document.location.href = adress;
@@ -3064,7 +3064,7 @@ function comercial_consultar_cliente_prospect_salvar_function(){
 		}
 
 		var contatoLength = control_vetor_contato_prospect_json.length;
-		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		var adress_aux= '&QCTO=' + contatoLength;
 		for(var i=0;i<contatoLength;i++){
 			if(control_vetor_contato_prospect_json[i]===0){
 				break;
@@ -3085,14 +3085,14 @@ function comercial_consultar_cliente_prospect_salvar_function(){
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
-			if(control_vetor_contato[i]===0){
+			if(control_vetor_email_json[i]===0){
 				break;
 			}else{
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
 			}
 		}
 		
-		var adress = url_adress + 'services/prospect?OP_CODE=UPDATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		var adress = url_adress + 'services/prospect?OP_CODE=UPDATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_CLIENTE_PROSPECT=' + cod_cliente_prospect_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
 		adress = adress + adress_aux;
 		document.location.href = adress;

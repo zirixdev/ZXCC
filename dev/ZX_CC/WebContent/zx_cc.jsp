@@ -24,9 +24,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 
 <html lang="pt-br">  
     <head>
-        <title>ZX_CC</title>
+        <title>ZX CC</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta charset="utf-8">    
+        <meta charset="utf-8">
         <link rel="stylesheet" href="css/Bootstrap/bootstrap.min.css">   
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/style.css">

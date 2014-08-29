@@ -93,6 +93,8 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   daoModulo.setAttValueFor("NFE", NFE);
 
 				   daoModulo.setAttValueFor("COD_ESTADO", 1);
+				   
+				   daoModulo.setAttValueFor("DELETED", 0);
 
 				   //REALIZAR CREATE INSTALACAO TEMP
 				   int pkInstalacao = 0;
@@ -164,7 +166,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_MODULO "
 								   + " 											                 FROM " + ZXMain.DB_NAME_ + "MODULO "
-								   + "                                                          WHERE NUMERO_MODULO = " + NUMERO_MODULO );
+								   + "                                                          WHERE NUMERO_MODULO = '" + NUMERO_MODULO + "'");
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];
 							   attList[0] = values.get(i)[0].toString();

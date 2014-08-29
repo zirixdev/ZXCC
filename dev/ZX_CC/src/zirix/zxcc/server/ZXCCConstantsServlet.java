@@ -25,7 +25,6 @@ public class ZXCCConstantsServlet extends HttpServlet {
     	try {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-			//Document doc = docBuilder.parse (new File("webapps/zxcc_prod/js/VariaveisZXCC.xml"));
 			Document doc = docBuilder.parse (new File("webapps/zxcc/js/VariaveisZXCC.xml"));
 
 			doc.getDocumentElement ().normalize ();

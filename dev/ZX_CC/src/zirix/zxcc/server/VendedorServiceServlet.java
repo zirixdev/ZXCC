@@ -75,6 +75,8 @@ import zirix.zxcc.server.dao.PkList;
 
 				   String DATA_NASCIMENTO = request.getParameter("DATA_NASCIMENTO").trim();
 				   daoVendedor.setAttValueFor("DATA_NASCIMENTO", DATA_NASCIMENTO);
+				   
+				   daoVendedor.setAttValueFor("DELETED", 0);
 
 				   if (OP_CODE.compareTo("CREATE") == 0){
 					   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
@@ -98,7 +100,7 @@ import zirix.zxcc.server.dao.PkList;
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
 								   + " 											                 FROM " + ZXMain.DB_NAME_ + "CLIENTE "
-								   + "                                                          WHERE NOME = " + NOME );
+								   + "                                                          WHERE NOME = '" + NOME + "'");
 
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];

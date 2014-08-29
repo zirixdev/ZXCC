@@ -83,6 +83,8 @@ public class ChipServiceServlet extends HttpServlet {
 				   
 				   String NUMERO_CHIP = request.getParameter("NUMERO");
 				   daoChip.setAttValueFor("NUMERO_CHIP", NUMERO_CHIP);
+				   
+				   daoChip.setAttValueFor("DELETED", 0);
 
 				   if (OP_CODE.compareTo("UPDATE") == 0){
 

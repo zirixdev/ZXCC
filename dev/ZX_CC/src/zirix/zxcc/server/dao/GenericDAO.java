@@ -36,8 +36,18 @@ public abstract class GenericDAO<T> {
 		PreparedStatement stmt = null;
         Connection con = DAOManager.getInstance().getConnection();
 
-        String query = "INSERT INTO " + getTableName() + " VALUES(";
+        String query = "INSERT INTO " + getTableName() + " (";
+    	
+        Iterator<String> kit = getAttList().keySet().iterator();
+    	while (kit.hasNext()) {
+    		Object key = kit.next();
+    		query = query.concat(key.toString());
+    		if (kit.hasNext())
+    			query = query.concat(",");        		
+    	}	    	
 
+    	query = query.concat(") VALUES(");
+    	
     	int valuesCount = 0;
 
     	if (!autoIncrement_) {
@@ -66,6 +76,7 @@ public abstract class GenericDAO<T> {
     	}
 
     	query = query.concat(")");
+    	System.err.println("\n QUERY = "+ query);
 
         try
         {

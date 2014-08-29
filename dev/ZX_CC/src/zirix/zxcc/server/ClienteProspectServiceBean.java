@@ -65,12 +65,12 @@ public class ClienteProspectServiceBean {
 		Vector<String[]> contatoClienteList = new Vector<String[]>();
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "TIPO_CONTATO.NOME_TIPO "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.DDD "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.NUMERO "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_PAIS "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO.DDD "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO.NUMERO "
+					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO.COD_PAIS "
 		    		+ "							   FROM " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO "
 					+ "                               , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
-		    		+ "							  WHERE " + ZXMain.DB_NAME_ + "TIPO_CONTATO.COD_CONTATO = " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CONTATO "
+		    		+ "							  WHERE " + ZXMain.DB_NAME_ + "TIPO_CONTATO.COD_CONTATO = " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO.COD_CONTATO "
 		    		+ "                             AND " + ZXMain.DB_NAME_ + "CONTATO_PROSPECCAO.COD_CLIENTE_PROSPECCAO = " + COD_CLIENTE_PROSPECCAO_);
 
 		    for (int i=0;i < values.size();i++) {

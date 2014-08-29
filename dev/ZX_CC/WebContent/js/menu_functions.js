@@ -177,5 +177,4 @@ $('.modal-content').on('click', '#cancel_modal', function(e){
     e.preventDefault();
     $('.modal-content').html('');
     $('.modal').modal('hide');
-    reload();
 });

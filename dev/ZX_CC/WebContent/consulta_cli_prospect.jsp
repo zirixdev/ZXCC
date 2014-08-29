@@ -60,7 +60,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     <legend>Contato:</legend>
                     <div id="div_contato">
 	                    DDD:<input type="text" class="size_5" id="ddd" maxlength="2" onkeypress="javascript: return EntradaNumerico(event);">
-                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="10" onkeypress="javascript: return EntradaNumerico(event);">
+                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="9" onkeypress="javascript: return EntradaNumerico(event);">
                         Tipo do Contato:
                         <select id="tipocont_list" class="size_21">
 	                        <%        	

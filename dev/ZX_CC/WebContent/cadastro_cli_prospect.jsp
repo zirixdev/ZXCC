@@ -26,8 +26,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									Vector<VendedorDAO> list = VendedorDAOService.loadAll();
 									for (int i=0;i < list.size();i++) {
 										VendedorDAO dao = list.elementAt(i);
+										int codVendedor = dao.getPkValueFor("COD_VENDEDOR");
 										String str = String.valueOf(dao.getAttValueFor("NOME_FANTASIA")).trim();%>
-						       			<option value="<%=dao.getPkValueFor("COD_VENDEDOR")%>" name="option_vendedor"><%=str%></option>
+						       			<option value="<%=codVendedor%>" name="option_vendedor"
+						       			<%if(codVendedor==1) {%>selected<%}%>
+										><%=str%></option>
 						       		<%}%>
 							<%
 								   } catch (Exception e) {
@@ -45,7 +48,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 	<legend>Contato:</legend>
                     <div id="div_contato">
                         DDD:<input type="text" class="size_5" id="ddd" maxlength="2" onkeypress="javascript: return EntradaNumerico(event);">
-                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="10" onkeypress="javascript: return EntradaNumerico(event);">
+                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="9" onkeypress="javascript: return EntradaNumerico(event);">
                         Tipo do Contato:
                         <select id="tipocont_list" class="size_21">
                             <%        	
@@ -92,7 +95,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </fieldset>
             </div>
             <div class="div_modal_bt">
-	           <button type="button" id="incluir_modal" onclick="comercial_cadastrar_cli_prospect_cadastrar_function()">Incluir</button>
+	           <button type="button" id="incluir_modal" onclick="comercial_cadastrar_cliente_prospect_cadastrar_function()">Incluir</button>
 	           <button type="button" id="cancel_modal">Cancelar</button>
             </div>
         </div>

@@ -81,6 +81,8 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 	
 				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR").trim();
 				   daoClienteProspeccao.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
+				   
+				   daoClienteProspeccao.setAttValueFor("DELETED", 0);
 	
 				   if (OP_CODE.compareTo("UPDATE") == 0){
 	
@@ -93,13 +95,14 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 				   else
 				   {
 					   daoClienteProspeccao.Create();
+
 					   int pkListValue = 0;
 					   Vector<String[]> CodCliente_ = new Vector<String[]>();
-					   
 					   try {
+
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE_PROSPECCAO "
 								   + " 											                 FROM " + ZXMain.DB_NAME_ + "CLIENTE_PROSPECCAO "
-								   + "                                                          WHERE NOME = " + NOME );
+								   + "                                                          WHERE NOME = '" + NOME + "'");
 	
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];
@@ -111,7 +114,7 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 					   }  finally {
 						   pkListValue = Integer.parseInt(CodCliente_.elementAt(0)[0].trim());
 					   }
-	
+
 					   if(pkListValue != 0){
 						   int arraysize = Integer.parseInt(request.getParameter("QCTO"));
 						   for(int d = 0 ; d < arraysize ; d++){
@@ -121,17 +124,23 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 							   
 							   String DDD_ = request.getParameter("DDD_"+d).trim();
 							   daoContatoProspeccao.setAttValueFor("DDD",DDD_);
+							   System.err.println("\nDDD = " + DDD_);
 							   
 							   String NUMERO_ = request.getParameter("NUMCTO_"+d).trim();
 							   daoContatoProspeccao.setAttValueFor("NUMERO",NUMERO_);
+							   System.err.println("\nNumero = " + NUMERO_);
 							   
 							   String COD_CONTATO_ = request.getParameter("TIPOCTO_"+d).trim();
 							   daoContatoProspeccao.setAttValueFor("COD_CONTATO",COD_CONTATO_);
+							   System.err.println("\nCODIGO = " + COD_CONTATO_);
 							   
 							   String COD_PAIS_ = request.getParameter("PAISCTO_"+d).trim();
 							   daoContatoProspeccao.setAttValueFor("COD_PAIS",COD_PAIS_);
-							   
-							   daoContatoProspeccao.create();
+							   System.err.println("\nPAIS = " + COD_PAIS_);
+
+							   System.err.println("\nWill Create ContatoProspeccao DAO");
+							   daoContatoProspeccao.Create();
+							   System.err.println("\nHad Create ContatoProspeccao DAO?");
 						   }
 	
 						   arraysize = Integer.parseInt(request.getParameter("QMAIL"));
@@ -142,8 +151,11 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 		
 							   String EMAIL_ = request.getParameter("MAIL_"+d).trim();
 							   daoEmailProspeccao.setAttValueFor("EMAIL",EMAIL_);
-	
-							   daoEmailProspeccao.create();
+							   System.err.println("\nEmail_PROSPECCAO = " + EMAIL_);
+
+							   System.err.println("\nWill Create EmailProspeccao DAO");
+							   daoEmailProspeccao.Create();
+							   System.err.println("\nHad Create EmailProspeccao DAO");
 						   }
 					   }else{
 						   out.println("Error on ClienteProspectServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
@@ -151,7 +163,7 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 				   }
 				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(ZXMain.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 	
 			   else if (OP_CODE.compareTo("DELETE") == 0){

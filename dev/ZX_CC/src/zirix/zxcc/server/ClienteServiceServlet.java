@@ -83,6 +83,8 @@ public class ClienteServiceServlet extends HttpServlet {
 	
 				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR").trim();
 				   daoCliente.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
+				   
+				   daoCliente.setAttValueFor("DELETED", 0);
 	
 				   if (OP_CODE.compareTo("UPDATE") == 0){
 	
@@ -101,7 +103,7 @@ public class ClienteServiceServlet extends HttpServlet {
 					   try {
 						   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_CLIENTE "
 								   + " 											                 FROM " + ZXMain.DB_NAME_ + "CLIENTE "
-								   + "                                                          WHERE NOME = " + NOME );
+								   + "                                                          WHERE NOME = '" + NOME + "'");
 	
 						   for (int i=0;i < values.size();i++) {
 							   String[] attList = new String[1];
@@ -133,7 +135,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   String ORGAO_EMISSOR_ = request.getParameter("ORGDOC_"+d).trim();
 							   daoDocumentoCliente.setAttValueFor("ORGAO_EMISSOR",ORGAO_EMISSOR_);
 	
-							   daoDocumentoCliente.create();
+							   daoDocumentoCliente.Create();
 						   }
 	
 						   arraysize = Integer.parseInt(request.getParameter("QEND"));
@@ -166,7 +168,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   String COD_ENDERECO_ = request.getParameter("TIPOEND_"+d).trim();
 							   daoEnderecoCliente.setAttValueFor("COD_ENDERECO",COD_ENDERECO_);
 	
-							   daoEnderecoCliente.create();
+							   daoEnderecoCliente.Create();
 						   }
 	
 						   arraysize = Integer.parseInt(request.getParameter("QCTO"));
@@ -193,7 +195,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   String COD_GRAU_ = request.getParameter("PARENCTO_"+d).trim();
 							   daoContatoCliente.setAttValueFor("COD_GRAU",COD_GRAU_);
 							   
-							   daoContatoCliente.create();
+							   daoContatoCliente.Create();
 						   }
 	
 						   arraysize = Integer.parseInt(request.getParameter("QMAIL"));
@@ -207,7 +209,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   String EMAIL_ = request.getParameter("MAIL_"+d).trim();
 							   daoEmailCliVen.setAttValueFor("EMAIL",EMAIL_);
 	
-							   daoEmailCliVen.create();
+							   daoEmailCliVen.Create();
 						   }
 					   }else{
 						   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
