@@ -3110,6 +3110,13 @@ function contato_prospect_carregado(ddd, numero, tipo_contato, cod_pais){
     this.cod_pais = cod_pais;
 }
 
+function vetor_contato_prospect_inserido(ddd, numero, tipo_contato, cod_pais){
+    this.ddd = ddd;
+    this.numero = numero;
+    this.tipo_contato = tipo_contato;
+    this.cod_pais = cod_pais;
+}
+
 function carregar_dados_consulta_cliente_prospect_function(){
     var i;
     var j;
@@ -3132,7 +3139,7 @@ function carregar_dados_consulta_cliente_prospect_function(){
 
     for(i=0;i<tamanho_contato;i++){
     	control_div_contato_prospect[i] = new div_contato_inseridas_prospect(0, 0);
-    	control_vetor_contato_prospect[i] = new vetor_contato_inserido();
+    	control_vetor_contato_prospect[i] = new vetor_contato_prospect_inserido();
     	control_vetor_contato_prospect[i].ddd = contato_prospect_carregado_array[i].ddd;
     	control_vetor_contato_prospect[i].numero = contato_prospect_carregado_array[i].numero;
         for(j=0;j<tipo_contato_tamanho_tipo;j++){
@@ -3150,10 +3157,10 @@ function carregar_dados_consulta_cliente_prospect_function(){
     for(i=0;i<tamanho_contato;i++){
     	content_div_contato = content_div_contato + '<div id="contato_' + i + '" class="div_inseridos">\n\
         <input type="radio" name="contato_inserido" value="contato_' + i + '" onclick="change_contato_prospect_button_function()">\n\
-        <div id="tipo_contato_' + i + '">' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato) - 1] + '</div>: +\n\
-        <div id="cod_pais_' + i + '">' + control_vetor_contato[i].cod_pais + '</div>\n\
-        (<div id="ddd_contato_' + i + '">' + control_vetor_contato[i].ddd + '</div>)\n\
-        <div id="numero_contato_' + i + '">' + control_vetor_contato[i].numero + '</div> <br> </div>';
+        <div id="tipo_contato_' + i + '">' + control_vetor_contato_prospect_tipo[Number(control_vetor_contato_prospect[i].tipo_contato) - 1] + '</div>: +\n\
+        <div id="cod_pais_' + i + '">' + control_vetor_contato_prospect[i].cod_pais + '</div>\n\
+        (<div id="ddd_contato_' + i + '">' + control_vetor_contato_prospect[i].ddd + '</div>)\n\
+        <div id="numero_contato_' + i + '">' + control_vetor_contato_prospect[i].numero + '</div> <br> </div>';
     }
 
     $('#contato_inserido').html(content_div_contato);
@@ -3184,4 +3191,11 @@ function carregar_dados_consulta_cliente_prospect_function(){
     }
 
     $('#emails_inserido').html(content_div_email);
+}
+
+function TESTE_SCHED_WORK_FUNCTION(){
+	var cod_usuario = document.getElementById("cod_usuario");
+	var adress = "";
+	adress = url_adress + 'services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&PROCESS_ID=1';	
+	document.location.href = adress;
 }

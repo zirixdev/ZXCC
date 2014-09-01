@@ -40,9 +40,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     	</select>
                     </fieldset>
                     <br>Razão Social / Nome:
-                    <input type="text" id="nome_razaosocial" class="size_100">
-                    <br>Nome Fantasia:
-                    <input type="text" id="nomefantasia"  class="size_100">
+                    <input type="text" id="nome_razaosocial" class="size_100" maxlength="49">
+                    <br>Responsável:
+                    <input type="text" id="nomefantasia"  class="size_100" maxlength="49">
                 </fieldset>
                 <fieldset class="field">
                 	<legend>Contato:</legend>

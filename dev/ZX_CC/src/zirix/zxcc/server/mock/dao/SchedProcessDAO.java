@@ -26,6 +26,7 @@ public class SchedProcessDAO extends GenericDAO<SchedProcessDAO> {
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("PROCESS_NAME",res.getString("PROCESS_NAME"));
+    	setAttValueFor("STATE_ID",res.getInt("STATE_ID"));
     }
 
     public Set<String> getPkNamesSet() {

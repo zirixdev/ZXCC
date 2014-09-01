@@ -65,7 +65,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</fieldset>
             </div>
             <div class="div_modal_bt">
-            	<button type="button" id="incluirr_modal" onclick="operacional_cadastrar_chip_function()">Incluir</button>
+            	<button type="button" id="incluir_modal" onclick="operacional_cadastrar_chip_function()">Incluir</button>
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>	
         </div>

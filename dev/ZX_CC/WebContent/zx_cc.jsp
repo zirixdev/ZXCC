@@ -306,6 +306,18 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	                <br>
 	                LOCAL = <%=ZXMain.getLocal()%>
                 <%} %>
+                <br>
+                <br>
+                <br>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="TESTE_SCHED_WORK_FUNCTION()">START PROCESS</button>
+                <br>
+                <br>
+                <button type="button" id="START_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_START_FUNCTION()">START WORK ID1</button>
+                <button type="button" id="END_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_END_FUNCTION()">END WORK ID1</button>
+                <br>
+                <br>
+                <button type="button" id="START_SCHED_WORK_ID2" onclick="TESTE_SCHED_WORK_START_FUNCTION()">START WORK ID2</button>
+                <button type="button" id="END_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_END_FUNCTION()">END WORK ID2</button>
                 </section>
             </div>
             <footer>
