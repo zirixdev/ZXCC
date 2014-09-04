@@ -32,6 +32,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/modal.css">
         <link rel="stylesheet" href="css/sizes.css">
+        <link rel="stylesheet" href="css/button.css">
     </head>  
     <body>    
         <div class="container">        
@@ -56,7 +57,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <ul class="ul-submenu-filho">
                                         <li>
                                             <a <%if(permissionTela[2] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_opr_cad_cli" class="modal_btn">Cliente</a> <%
+                                            id="menu_opr_cad_cli" class="modal_btn" onclick="modal_click(menu_opr_cad_cli)">Cliente</a> <%
  	//TELA = 3
  %>
 											<%
@@ -71,7 +72,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                         </li>
                                         <li>
                                             <a <%if(permissionTela[3] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_opr_cad_eqp" class="modal_btn">Equipamento</a> <%
+                                            id="menu_opr_cad_eqp" class="modal_btn" onclick="modal_click(menu_opr_cad_eqp)">Equipamento</a> <%
  	//TELA = 4
  %>
 											<%
@@ -86,7 +87,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                         </li>
                                         <li class="last">
                                             <a <%if(permissionTela[4] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_opr_cad_chp" class="modal_btn">Sim Card</a> <%
+                                            id="menu_opr_cad_chp" class="modal_btn" onclick="modal_click(menu_opr_cad_chp)">Sim Card</a> <%
  	//TELA = 5
  %>
 											<%
@@ -103,7 +104,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <%
                                     	}else{
                                     %>
-									id="no_permission" class="modal_btn">Cadastro</a> <%
+									id="no_permission" class="modal_btn" onclick="modal_click()">Cadastro</a> <%
  	//TELA = 2
  %>
 									<%
@@ -112,7 +113,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                 </li>
                                 <li class="li-submenu-last">
                                     <a <%if(permissionTela[5] == ZXCCConstantsServlet.READ || permissionTela[5] == ZXCCConstantsServlet.WRITE) {%>
-                                    id="menu_opr_con" class="modal_btn">Consultas</a> <%
+                                    id="menu_opr_con" class="modal_btn" onclick="modal_click(menu_opr_con)">Consultas</a> <%
  	//TELA = 6
  %>
                                     <%
@@ -150,7 +151,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <ul class="ul-submenu-filho">
                                         <li class="last">
                                     	<a <%if(permissionTela[8] == ZXCCConstantsServlet.WRITE){%> 
-                                        id="menu_adm_cad_ven" class="modal_btn">Vendedor</a> <%
+                                        id="menu_adm_cad_ven" class="modal_btn" onclick="modal_click(menu_adm_cad_ven)">Vendedor</a> <%
  	//TELA = 9
  %>
 	                                    <%
@@ -176,7 +177,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                 </li>
                                 <li class="li-submenu-last">
                                     <a <%if(permissionTela[9] == ZXCCConstantsServlet.READ || permissionTela[9] == ZXCCConstantsServlet.WRITE) {%>
-                                    id="menu_adm_con" class="modal_btn">Consultas</a> <%
+                                    id="menu_adm_con" class="modal_btn" onclick="modal_click(menu_adm_con)">Consultas</a> <%
  	//TELA = 10
  %>
                                     <%
@@ -214,7 +215,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <ul class="ul-submenu-filho">
                                     	<li>
                                             <a <%if(permissionTela[18] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_com_cad_cli" class="modal_btn">Prospecção</a> <%
+                                            id="menu_com_cad_cli" class="modal_btn" onclick="modal_click(menu_com_cad_cli)">Prospecção</a> <%
  	//TELA = 19
  %>
 											<%
@@ -229,7 +230,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                         </li>
                                 		<li class="last">
 		                                    <a <%if(permissionTela[11] == ZXCCConstantsServlet.WRITE) {%>
-                                    		id="menu_com_cad_ped" class="modal_btn">Novo Pedido</a> <%
+                                    		id="menu_com_cad_ped" class="modal_btn" onclick="modal_click(menu_com_cad_ped)">Novo Pedido</a> <%
  	//TELA = 12
  %>
                                     		<%
@@ -255,7 +256,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                 </li>
                                 <li class="last">
                                     <a <%if(permissionTela[16] == ZXCCConstantsServlet.READ || permissionTela[16] == ZXCCConstantsServlet.WRITE) {%>
-                                    id="menu_com_con" class="modal_btn">Consultas</a> <%
+                                    id="menu_com_con" class="modal_btn" onclick="modal_click(menu_com_con)">Consultas</a> <%
     //TELA = 17
 %>
                                     <%}else{%>
@@ -272,34 +273,39 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                             <%}%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_rel" class="modal_btn">Relatórios</a> <%
+                            <a id="menu_rel" class="modal_btn" onclick="modal_click(menu_rel)">Relatórios</a> <%
     //TELA = 13
 %>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_cfg" class="modal_btn">Configurações</a> <%
+                            <a id="menu_cfg" class="modal_btn" onclick="modal_click(menu_cfg)">Configurações</a> <%
     //TELA = 14
 %>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_sos" class="modal_btn">Ajuda</a> <%
+                            <a id="menu_sos" class="modal_btn" onclick="modal_click(menu_sos)">Ajuda</a> <%
     //TELA = 15
 %>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_ext" class="modal_btn">Sair</a> <%
+                            <a id="menu_ext" class="modal_btn" onclick="modal_click(menu_ext)">Sair</a> <%
     //TELA = 16
 %>
                         </li>
                     </ul>
                 </nav>
                 <section class="tarefas">
-                	<iframe src="tarefas.jsp" name="tarefasIFrame">
+                	<iframe src="tarefas.jsp?COD_USUARIO=<%=pkVal[0]%>" name="tarefasIFrame" frameborder="0" width="515px" height="100%">
 
                 	</iframe>
                 </section>
                 <section class="conteudo">
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
+                	<div class="checkboxConfirm">
+				  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome">
+					  	<label for="checkboxConfirmInput"></label>
+					</div>
+					<br><br><br>
                 	URL_ADRESS = <%=ZXMain.getAdress()%>
 	                <br>
 	                DB_NAME = <%=ZXMain.getDbName()%>
@@ -308,16 +314,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <%} %>
                 <br>
                 <br>
-                <br>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="TESTE_SCHED_WORK_FUNCTION()">START PROCESS</button>
-                <br>
-                <br>
-                <button type="button" id="START_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_START_FUNCTION()">START WORK ID1</button>
-                <button type="button" id="END_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_END_FUNCTION()">END WORK ID1</button>
-                <br>
-                <br>
-                <button type="button" id="START_SCHED_WORK_ID2" onclick="TESTE_SCHED_WORK_START_FUNCTION()">START WORK ID2</button>
-                <button type="button" id="END_SCHED_WORK_ID1" onclick="TESTE_SCHED_WORK_END_FUNCTION()">END WORK ID2</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION()">START PROCESS</button>
                 </section>
             </div>
             <footer>
@@ -337,7 +334,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <script src="js/bootstrap.min.js"></script>
         <script src="js/menu_functions.js"></script>
         <script src="js/page_functions.js"></script>
-        <script>window.setInterval("reloadIFrame();", 60000); </script>
+        <script>window.setInterval("reloadIFrame(<%=pkVal[0]%>);", 30000); </script>
   </body>
 
 </html>

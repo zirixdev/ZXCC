@@ -23,6 +23,7 @@ import zirix.zxcc.server.dao.ContatoProspeccaoDAO;
 import zirix.zxcc.server.dao.DAOManager;
 import zirix.zxcc.server.dao.EmailProspeccaoDAO;
 import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.mock.*;
 
 /**
  * Servlet implementation class ClienteService
@@ -58,7 +59,9 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 		   PrintWriter out = response.getWriter();
 	
 		   String OP_CODE = request.getParameter("OP_CODE");
-	
+		   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
+
+		   String WORK_ID = request.getParameter("WORK_ID");	
 		   try {
 			   ClienteProspeccaoDAO daoClienteProspeccao = new ClienteProspeccaoDAO();
 			   PkList pkList;
@@ -161,22 +164,27 @@ public class ClienteProspectServiceServlet extends HttpServlet {
 						   out.println("Error on ClienteProspectServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
 					   }
 				   }
-				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
-				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-				   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+				   if(WORK_ID.compareTo("0") != 0){
+					   MockEvaluator eval = new MockEvaluator(Integer.parseInt(WORK_ID));
+					   if(eval.endWork()){
+						   
+					   }
+				   }
 			   }
-	
+
 			   else if (OP_CODE.compareTo("DELETE") == 0){
-	
+
 				   String COD_CLIENTE = request.getParameter("COD_CLIENTE");
 				   pkList = ClienteProspeccaoDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-	
+
 				   daoClienteProspeccao.setPkList(pkList);
 				   daoClienteProspeccao.delete();
 			   }
 		   } catch (Exception e) {
 				   out.println("Error on ClienteProspectServiceServlet... " + ' ' + e.getMessage());
 		   }
+
+		   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 	}
 	
 	/**

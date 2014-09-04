@@ -23,7 +23,7 @@ TECNOLOGIAS UTILIZADAS: CSS
 #modal .tab-content{
     float: none;
     width: 100%;
-    background: #eeeeee url("../images/u_bg_dddddd_1x100.png") 50% repeat;
+    background: #eeeeee url("../imagens/u_bg_dddddd_1x100.png") 50% repeat;
 }
 
 #modal ul.nav.nav-tabs{

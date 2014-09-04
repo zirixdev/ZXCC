@@ -2679,8 +2679,8 @@ function operacional_consultar_equipamento_salvar_function(){
 		return 0;
 }
 
-function reloadIFrame() {
-	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp";
+function reloadIFrame(codUsuario) {
+	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp?COD_USUARIO=" + codUsuario;
 }
 
 var clean_contato_prospect;
@@ -2948,7 +2948,7 @@ function ajustar_vetor_contato_prospect_function(){
 	control_vetor_contato_prospect_json.length = i;
 }
 
-function comercial_cadastrar_cliente_prospect_cadastrar_function(){
+function comercial_cadastrar_cliente_prospect_cadastrar_function(work_id){
 	ajustar_vetor_contato_prospect_function();
 	ajustar_vetor_email_function();
 	if(confirm('Deseja realizar o ingresso do Cliente?')){
@@ -3016,7 +3016,7 @@ function comercial_cadastrar_cliente_prospect_cadastrar_function(){
 
 		d = new Date();
 		var adress = url_adress + 'services/prospect?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
-		adress = adress + '&DATA_INGRESSO=' + d.yyyymmdd() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + '&DATA_INGRESSO=' + d.yyyymmdd() + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&WORK_ID=' + work_id;
 		adress = adress + adress_aux;
 		document.location.href = adress;
 	}
@@ -3191,11 +3191,4 @@ function carregar_dados_consulta_cliente_prospect_function(){
     }
 
     $('#emails_inserido').html(content_div_email);
-}
-
-function TESTE_SCHED_WORK_FUNCTION(){
-	var cod_usuario = document.getElementById("cod_usuario");
-	var adress = "";
-	adress = url_adress + 'services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&PROCESS_ID=1';	
-	document.location.href = adress;
 }

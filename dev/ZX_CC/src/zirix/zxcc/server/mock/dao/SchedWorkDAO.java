@@ -31,10 +31,12 @@ public class SchedWorkDAO extends GenericDAO<SchedWorkDAO> {
     	setAttValueFor("PROCESS_STATE_ID",res.getInt("PROCESS_STATE_ID"));
     	setAttValueFor("DEPENDENCY_WORK_ID",res.getInt("DEPENDENCY_WORK_ID"));
     	setAttValueFor("WORK_ALERT_ID",res.getInt("WORK_ALERT_ID"));
-    	setAttValueFor("SCHED_TIMESTAMP",res.getString("SCHED_TIMESTAMP"));
+    	setAttValueFor("SCHED_TIMESTAMP",res.getTimestamp("SCHED_TIMESTAMP"));
     	setAttValueFor("START_TIMESTAMP",res.getTimestamp("START_TIMESTAMP"));
     	setAttValueFor("END_TIMESTAMP",res.getTimestamp("END_TIMESTAMP"));
     	setAttValueFor("WORK_GROUP_ID",res.getInt("WORK_GROUP_ID"));
+    	setAttValueFor("COD_USUARIO",res.getInt("COD_USUARIO"));
+    	setAttValueFor("DEFINED_PROCESS_ID",res.getInt("DEFINED_PROCESS_ID"));
     }
 
     public Set<String> getPkNamesSet() {

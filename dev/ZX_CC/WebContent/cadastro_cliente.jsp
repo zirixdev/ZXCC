@@ -28,8 +28,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									Vector<VendedorDAO> list = VendedorDAOService.loadAll();
 									for (int i=0;i < list.size();i++) {
 										VendedorDAO dao = list.elementAt(i);
+										int codVendedor = dao.getPkValueFor("COD_VENDEDOR");
 										String str = String.valueOf(dao.getAttValueFor("NOME_FANTASIA")).trim();%>
-						       			<option value="<%=dao.getPkValueFor("COD_VENDEDOR")%>" name="option_vendedor"><%=str%></option>
+						       			<option value="<%=codVendedor%>" name="option_vendedor"
+						       			<%if(codVendedor==1) {%>selected<%}%>
+										><%=str%></option>
 						       		<%}%>
 							<%
 								   } catch (Exception e) {

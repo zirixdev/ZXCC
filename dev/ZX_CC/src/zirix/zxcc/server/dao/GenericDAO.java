@@ -76,7 +76,6 @@ public abstract class GenericDAO<T> {
     	}
 
     	query = query.concat(")");
-    	System.err.println(query);
 
         try
         {
@@ -98,7 +97,6 @@ public abstract class GenericDAO<T> {
 	    	while (vit2.hasNext()) {
 	    		Object value = vit2.next();
 	    		stmt.setObject(i++, value);
-	        	System.err.println("\nvalue = " +value);
 	    	}
 	        stmt.executeUpdate();
 	        db_sync_ = true;

@@ -27,6 +27,7 @@ public class DefinedProcessStateDAO extends GenericDAO<DefinedProcessStateDAO> {
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("STATE_NAME",res.getString("ESTATE_NAMEMAIL"));
     	setAttValueFor("NEXT_STATE_ID",res.getInt("NEXT_STATE_ID"));
+    	setAttValueFor("STATE_NUM",res.getInt("STATE_NUM"));
     }
 
     public Set<String> getPkNamesSet() {

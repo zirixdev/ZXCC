@@ -6,8 +6,15 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
-
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
+<%
+	String WORK_ID = request.getParameter("WORK_ID");
+	String[] pkVal = {request.getParameter("COD_USUARIO")};
+	if(WORK_ID.compareTo("0") != 0){
+		MockScheduleBean bean = new MockScheduleBean(pkVal);
+		bean.setStartTimestamp(WORK_ID);
+	}
+%>
 <div id="comercial-cadastro-prospeccao-content">
     <form class="outer_form">
         <ul class="nav nav-tabs">
@@ -95,8 +102,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </fieldset>
             </div>
             <div class="div_modal_bt">
-	           <button type="button" id="incluir_modal" onclick="comercial_cadastrar_cliente_prospect_cadastrar_function()">Incluir</button>
-	           <button type="button" id="cancel_modal">Cancelar</button>
+				<button type="button" id="incluir_modal" onclick="comercial_cadastrar_cliente_prospect_cadastrar_function('<%=WORK_ID%>')">Incluir</button>
+				<button type="button" id="cancel_modal">Cancelar</button>
             </div>
         </div>
     </form>

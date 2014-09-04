@@ -8,6 +8,7 @@ TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 
 xmlDoc=loadXMLDoc("js/VariaveisZXCC.xml");
 var url_adress = xmlDoc.getElementsByTagName("adress")[0].textContent;
+var cod_usuario_;
 
 var nav = $("#topNav");
 nav.find("li").each(function(){
@@ -56,9 +57,11 @@ nav.find(".li-submenu-last").each(function(){
     }
 });
 
-$('.modal_btn').on("click", function(){
-    var id = $(this).attr('id');
-    switch(id) {
+function modal_click(id){
+	cod_usuario = document.getElementById("cod_usuario");
+	cod_usuario_ = cod_usuario.innerHTML.trim();
+    this.menu_option = id.id;
+    switch(menu_option) {
         case "menu_opr_cad_cli":
             $.ajax({
                 url: url_adress + "cadastro_cliente.jsp",
@@ -123,7 +126,7 @@ $('.modal_btn').on("click", function(){
             break;
         case "menu_com_cad_cli":
             $.ajax({
-                url: url_adress + "cadastro_cli_prospect.jsp",
+                url: url_adress + "cadastro_cli_prospect.jsp?WORK_ID=0&COD_USUARIO="+cod_usuario_,
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -171,10 +174,83 @@ $('.modal_btn').on("click", function(){
             });
             break;
     }
-});
+}
 
 $('.modal-content').on('click', '#cancel_modal', function(e){
     e.preventDefault();
     $('.modal-content').html('');
     $('.modal').modal('hide');
 });
+
+window.addEventListener("message", callModalTarefas, false);
+
+function SCHED_WORK_FUNCTION(){
+	cod_usuario = document.getElementById("cod_usuario");
+	cod_usuario_ = cod_usuario.innerHTML.trim();
+	var adress = "";
+	adress = url_adress + 'services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=' + cod_usuario_ + '&PROCESS_ID=1';	
+	document.location.href = adress;
+}
+
+function SCHED_WORK_START_FUNCTION(work_id,service_name){
+	var message = work_id + "//" + service_name;
+	window.parent.postMessage(message,'*');
+}
+
+function SCHED_WORK_END_FUNCTION(work_id){
+	cod_usuario = document.getElementById("cod_usuario");
+	cod_usuario_ = cod_usuario.innerHTML.trim();
+	//TODO VERIFICAR SE FOI REALIZADO TODOS OS ITENS DA TAREFA PROPOSTA AQUI?
+	var adress = "";
+	adress = url_adress + 'services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=' + cod_usuario_ + '&WORK_ID=' + work_id;
+	document.location.href = adress;
+}
+
+function callModalTarefas(event){
+	cod_usuario = document.getElementById("cod_usuario");
+	cod_usuario_ = cod_usuario.innerHTML.trim();
+	var data = event.data;
+	var work_id = "";
+	var service_name = "";
+	var stringSize = data.length;
+	
+	if(stringSize > 0){
+		for(var i=0; i<stringSize; i++){
+			if(data.charAt(i+1) == "/" && data.charAt(i+2) == "/"){
+				work_id = data.slice(Number(0), Number(i+1));
+				service_name = data.slice(Number(i+3),Number(stringSize));
+				break;
+			}
+		}	
+	    switch(service_name) {
+	    case "cli_cad_prospect":
+	        $.ajax({
+	            url: url_adress + "cadastro_cli_prospect.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	        break;
+	    default:
+	        $.ajax({
+	            url: url_adress + "pop_up.html",
+	            success: function(result) {
+	                var html = jQuery('<div>').html(result);
+	                var content = html.find("div#em-construcao-content").html();
+	                $('.modal-content').html(content);
+	                $('.modal').modal({backdrop:'static'});
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	        break;
+	    } 
+	}else{
+		alert("Serviço não encontrado!");
+	} 
+}
