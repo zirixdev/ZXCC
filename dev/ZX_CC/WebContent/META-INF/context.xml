@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/APP_NAME">
+    <Resource name="jdbc/poolConn"
+            auth="Container"
+            driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            maxactive="100"
+            maxidle="30"
+            maxwait="10000"            
+            type="javax.sql.DataSource"
+            url="jdbc:sqlserver://localhost:1433;integratedSecurity=true">
+    </Resource>
+</Context>
