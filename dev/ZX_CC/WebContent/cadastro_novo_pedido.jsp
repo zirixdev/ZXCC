@@ -393,7 +393,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							TipoPedidoDAO dao = list.elementAt(i);
 							int codTipo = dao.getPkValueFor("COD_TIPO");
 							String str = String.valueOf(dao.getAttValueFor("NOME_TIPO")).trim();%>
-							<input type="radio" name="servico" value="<%=codTipo%>" onchange="libera_div('<%=str%>')"><%=str%>
+							<input type="radio" name="servico" value="<%=codTipo%>" onchange="libera_div('<%=str%>')"<%if(str.compareTo("Compra") == 0){%> checked="checked"<%}%>><%=str%>
 							<%if(str.compareTo("Teste") == 0){%>
 								<div style="display: inline-block;" id="div_teste_dias">
 								</div>
@@ -431,13 +431,13 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	                    <input class="size_5" type="text" id="quant_equip_acess" onkeypress="javascript: return EntradaNumerico(event);" onchange="valor_total_function('equip_acessorio')" placeholder="0">Valor Unitário:
 	                    <input class="size_11" type="text" id="valor_unit_equip_acess" maxlength="8" onchange="valor_total_function('equip_acessorio')" onkeypress="javascript: return EntradaNumerico(event);" placeholder="0.00">
 	                    Valor Total:<div id="valor_total_equip_acessorio" style="display: inline-block; height:24px; width:75px;"><input class="size_100" type="text" id="valor_total_equip_acess" disabled="disabled" placeholder="0.00"></div>
-	                   <fieldset class="fieldinner">
-	                   <legend>Inseridos:</legend>
-	                       <div id="equip_acessorio_inserido">
-	
-	                       </div>
-	                   </fieldset>
 					</div>
+                   <fieldset class="fieldinner">
+                   <legend>Inseridos:</legend>
+                       <div id="equip_acessorio_inserido">
+
+                       </div>
+                   </fieldset>
                   	<div id="div_equip_acessorio_bt">
                    		<button type="button" id="incluir_equip_acess" onclick="insert_equip_acessorio_function()">Incluir</button>
 					</div>
@@ -450,30 +450,34 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </fieldset>
                 <fieldset class="field">
 				<legend>Serviços:</legend>
-                    Item:<select id="serv_monit_list" class="size_20">
-						<%try {
-							Vector<TipoServicoDAO> list = TipoServicoDAOService.loadAll();
-							for (int i=0;i < list.size();i++) {
-								TipoServicoDAO dao = list.elementAt(i);
-								int codServico = dao.getPkValueFor("COD_SERVICO");
-								String str = String.valueOf(dao.getAttValueFor("NOME_SERVICO")).trim();%>
-								<option value="<%=codServico%>"
-								<%if(codServico == 1){%> selected<%}%>><%=str%></option>
-							<%}
-						}catch (Exception e){
-							out.println("Error... " + e.getMessage());
-						}%>
-                    </select>Quantidade:
-                    <input class="size_5" type="text" id="quant_serv_monit" onkeypress="javascript: return EntradaNumerico(event);" onchange="valor_total_function('servico')" placeholder="0">Valor Unitário:
-                    <input class="size_11" type="text" id="valor_assin_serv_monit" maxlength="8" onchange="valor_total_function('servico')" onkeypress="javascript: return EntradaNumerico(event);" placeholder="0.00">
-                    Valor Total:<div id="valor_total_servico" style="display: inline-block; height:24px; width:75px;"><input class="size_100" type="text" id="valor_total_serv_monit" disabled="disabled" placeholder="0.00"></div>
+	                <div id="div_servico">
+	                    Item:<select id="serv_monit_list" class="size_20">
+							<%try {
+								Vector<TipoServicoDAO> list = TipoServicoDAOService.loadAll();
+								for (int i=0;i < list.size();i++) {
+									TipoServicoDAO dao = list.elementAt(i);
+									int codServico = dao.getPkValueFor("COD_SERVICO");
+									String str = String.valueOf(dao.getAttValueFor("NOME_SERVICO")).trim();%>
+									<option value="<%=codServico%>"
+									<%if(codServico == 1){%> selected<%}%>><%=str%></option>
+								<%}
+							}catch (Exception e){
+								out.println("Error... " + e.getMessage());
+							}%>
+	                    </select>Quantidade:
+	                    <input class="size_5" type="text" id="quant_serv_monit" onkeypress="javascript: return EntradaNumerico(event);" onchange="valor_total_function('servico')" placeholder="0">Valor Unitário:
+	                    <input class="size_11" type="text" id="valor_assin_serv_monit" maxlength="8" onchange="valor_total_function('servico')" onkeypress="javascript: return EntradaNumerico(event);" placeholder="0.00">
+	                    Valor Total:<div id="valor_total_servico" style="display: inline-block; height:24px; width:75px;"><input class="size_100" type="text" id="valor_total_serv_monit" disabled="disabled" placeholder="0.00"></div>
+                    </div>
                     <fieldset class="fieldinner">
                     <legend>Inseridos:</legend>
                         <div id="serv_monit_inserido">
                             
                         </div>
                     </fieldset>
-                    <button type="button" id="incluir_serv_monit">Incluir</button>
+                  	<div id="div_servico_bt">
+	                    <button type="button" id="incluir_servico" onclick="insert_servico_function()">Incluir</button>
+					</div>
                 </fieldset>
             </div>
             <div class="tab-pane" id="aba_observacoes">

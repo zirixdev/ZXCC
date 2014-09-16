@@ -1,9 +1,3 @@
-/*ZIRIX CONTROL CENTER - CLIENTE SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
-
-DESENVOLVEDOR: RAPHAEL B. MARQUES
-TECNOLOGIAS UTILIZADAS: JAVA*/
-
 package zirix.zxcc.server;
 
 import java.io.IOException;
@@ -18,46 +12,32 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import zirix.zxcc.server.dao.ClienteDAO;
-import zirix.zxcc.server.dao.ContatoClienteDAO;
-import zirix.zxcc.server.dao.DAOManager;
-import zirix.zxcc.server.dao.DocumentoClienteDAO;
-import zirix.zxcc.server.dao.EmailCliVenDAO;
-import zirix.zxcc.server.dao.EnderecoClienteDAO;
-import zirix.zxcc.server.dao.PkList;
+import zirix.zxcc.server.dao.*;
 
 /**
- * Servlet implementation class ClienteService
+ * Servlet implementation class NovoPedidoServlet
  */
-@WebServlet( name="ClienteService", urlPatterns = {"/services/cliente"}, loadOnStartup=1)
-public class ClienteServiceServlet extends HttpServlet {
-	
+@WebServlet("/NovoPedidoServlet")
+public class NovoPedidoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ClienteServiceServlet() {
-	    super();
-	    // TODO Auto-generated constructor stub
-	}
-	
-	/**
-	 * @see Servlet#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
-	
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public NovoPedidoServlet() {
+        super();
+    }
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		   response.setContentType("text/html");
-	
+		response.setContentType("text/html");
+		
 		   PrintWriter out = response.getWriter();
 	
 		   String OP_CODE = request.getParameter("OP_CODE");
+		   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 	
 		   try {
 			   ClienteDAO daoCliente = new ClienteDAO();
@@ -80,11 +60,9 @@ public class ClienteServiceServlet extends HttpServlet {
 				   String DATA_NASCIMENTO = request.getParameter("DATA_NASCIMENTO").trim();
 				   daoCliente.setAttValueFor("DATA_NASCIMENTO", DATA_NASCIMENTO);
 	
-				   if (OP_CODE.compareTo("CREATE") == 0){
-					   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
-					   daoCliente.setAttValueFor("DATA_INGRESSO", DATA_INGRESSO);
-				   }
-	
+				   String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
+				   daoCliente.setAttValueFor("DATA_INGRESSO", DATA_INGRESSO);
+
 				   String COD_VENDEDOR = request.getParameter("COD_VENDEDOR").trim();
 				   daoCliente.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
 				   
@@ -201,7 +179,6 @@ public class ClienteServiceServlet extends HttpServlet {
 							   
 							   daoContatoCliente.Create();
 						   }
-	
 						   arraysize = Integer.parseInt(request.getParameter("QMAIL"));
 						   for(int d = 0 ; d < arraysize ; d++){
 							   EmailCliVenDAO daoEmailCliVen = new EmailCliVenDAO();
@@ -215,11 +192,36 @@ public class ClienteServiceServlet extends HttpServlet {
 	
 							   daoEmailCliVen.Create();
 						   }
+
+						   int pkNumPedido = 0;
+
+						   NumeroPedidoDAO daoNumeroPedido = new NumeroPedidoDAO();
+						   daoNumeroPedido.setAttValueFor("COD_USUARIO", COD_USUARIO);
+						   daoNumeroPedido.setAttValueFor("DATA_GERACAO", DATA_INGRESSO);
+						   daoNumeroPedido.setAttValueFor("DELETED", 0);
+						   daoNumeroPedido.Create();
+
+						   Vector<String[]> NumeroPedido_ = new Vector<String[]>();
+						   try {
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(NUM_PEDIDO) "
+									   + " 											                 FROM " + ZXMain.DB_NAME_ + "NUMERO_PEDIDO "
+									   + "                                                          WHERE COD_USUARIO = " + COD_USUARIO
+									   + "                                                            AND DATA_INGRESSO = " + DATA_INGRESSO);
+							   for (int i=0;i < values.size();i++) {
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();
+								   NumeroPedido_.add(attList);
+							   }
+						   }catch (SQLException ex) {
+							   ex.printStackTrace();
+						   }  finally {
+							   pkNumPedido = Integer.parseInt(NumeroPedido_.elementAt(0)[0].trim());
+						   }
+						   
 					   }else{
 						   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
 					   }
 				   }
-				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 				   response.sendRedirect(ZXMain.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
 	
@@ -235,11 +237,11 @@ public class ClienteServiceServlet extends HttpServlet {
 				   out.println("Error on ClienteServiceServlet... " + ' ' + e.getMessage());
 		   }
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 	}
+
 }

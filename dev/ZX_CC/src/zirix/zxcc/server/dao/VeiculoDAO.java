@@ -43,12 +43,13 @@ public class VeiculoDAO extends GenericDAO<VeiculoDAO> {
     	setAttValueFor("COR",res.getString("COR"));
     	setAttValueFor("CHASSI",res.getString("CHASSI"));
     	setAttValueFor("RENAVAN",res.getString("RENAVAN"));
-    	setAttValueFor("DATA_INGRESSO",res.getDate("DATA_INGRESSO")); //TODO verificar
+    	setAttValueFor("DATA_INGRESSO",res.getDate("DATA_INGRESSO"));
     	setAttValueFor("COD_COMBUSTIVEL", res.getInt("COD_COMBUSTIVEL")); 
     	setAttValueFor("VOLT", res.getInt("VOLT")); 
     	setAttValueFor("KM",res.getString("KM"));
-    	setAttValueFor("DATA_ULT_VISTORIA",res.getDate("DATA_ULT_VISTORIA")); //TODO verificar
+    	setAttValueFor("DATA_ULT_VISTORIA",res.getDate("DATA_ULT_VISTORIA"));
     	setAttValueFor("COD_INSTALACAO", res.getInt("COD_INSTALACAO"));
+    	setAttValueFor("COD_PEDIDO", res.getInt("COD_PEDIDO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
 

@@ -3762,6 +3762,12 @@ function valor_total_function(val){
 		var valor_unitario = Number(document.getElementById("valor_assin_serv_monit").value.trim());
 		content = '<input class="size_100" type="text" id="valor_total_serv_monit" disabled="disabled" value="' + Number(quantidade * valor_unitario).toFixed(2) + '">';
 		$('#valor_total_servico').html(content);
+	}else if(val == "zerar_equip"){
+		content = '<input class="size_100" type="text" id="valor_total_equip_acess" disabled="disabled" placeholder="0.00">';
+		$('#valor_total_equip_acessorio').html(content);
+	}else if(val == "zerar_servico"){
+		content = '<input class="size_100" type="text" id="valor_total_serv_monit" disabled="disabled" placeholder="0.00">';
+		$('#valor_total_servico').html(content);
 	}
 }
 
@@ -3789,14 +3795,14 @@ function insert_equip_acessorio_function(){
 
     var quantidade = document.getElementById("quant_equip_acess").value.trim();
     if (quantidade === ""){
-        alert('Favor inserir a QUANTIDADE para o ' + equip_acessorio_nome + '.');
+        alert('Favor inserir a QUANTIDADE para o item: ' + equip_acessorio_nome + '.');
         document.getElementById("quant_equip_acess").focus();
         return 0;
     }
 
     var valor_unit = document.getElementById("valor_unit_equip_acess").value.trim();
     if (valor_unit === ""){
-        alert('Favor inserir o VALOR UNITÁRIO para o ' + equip_acessorio_nome + '.');
+        alert('Favor inserir o VALOR UNITÁRIO para o item: ' + equip_acessorio_nome + '.');
         document.getElementById("valor_unit_equip_acess").focus();
         return 0;
     }
@@ -3846,39 +3852,297 @@ function insert_equip_acessorio_function(){
         control_div_equip_acessorio_inserido[j].excluida = 0;
         control_vetor_equip_acessorio_inserido[j] = new vetor_equip_acessorio_inserido(equip_acessorio, quantidade, valor_unit);
     }
-    
+
     limpa_campos_equip_acessorio_function();
-    var content_div_bt = '<button type="button" id="incluir_unidade" onclick="insert_equip_acessorio_function()">Incluir</button>';
+    var content_div_bt = '<button type="button" id="incluir_equip_acessorio" onclick="insert_equip_acessorio_function()">Incluir</button>';
     $('#div_equip_acessorio_bt').html(content_div_bt);
     document.getElementById("quant_equip_acess").focus();
+}
+
+function limpa_campos_equip_acessorio_function(){
+    var content_div_equip_acessorio = clean_equip_acessorio_inserido;
+    $('#div_equipamentos_acessorios').html("");
+    $('#div_equipamentos_acessorios').html(content_div_equip_acessorio);
+    valor_total_function("zerar_equip");
+}
+
+function change_equip_acessorio_button_function(){
+    var content_div_bt = '<button type="button" id="incluir_equip_acessorio" onclick="insert_equip_acessorio_function()">Incluir</button>\n\
+    						<button type="button" id="delete_equip_acessorio" onclick="delete_equip_acessorio_function()">Excluir</button>';
+    $('#div_equip_acessorio_bt').html(content_div_bt);
+}
+
+function delete_equip_acessorio_function() {
+    var div_select = $("input[type='radio'][name='equip_acessorio_inserido']:checked").val();
+    var length = div_select.length;
+    var div_deletar = div_select.slice(Number(16),Number(length));
+
+    var equip_acessorio_nome = $('#equip_acessorio_nome_' + div_select).html();
+    var quantidade = vetor_equip_acessorio_inserido[div_select].quantidade;
     
+    var content_div_equip_acessorio = $('#' + div_select).html();
+
+	if (confirm('O item ' + equip_acessorio_nome.trim() + ' quantidade: ' + quantidade.trim() + ' será apagado.')) {
+        $('#' + div_select).html("");
+        control_div_equip_acessorio_inserido[div_deletar].excluida = 1;
+        control_vetor_equip_acessorio_inserido[div_deletar] = 0;
+    } else {
+        $('#' + div_select).html(content_div_equip_acessorio);
+    }
+
+    var content_div_bt = '<button type="button" id="incluir_equip_acessorio" onclick="insert_equip_acessorio_function()">Incluir</button>';
+    $('#div_equip_acessorio_bt').html(content_div_bt);
+    limpa_campos_equip_acessorio_function();
+}
+
+var clean_servico_inserido;
+var control_div_servico_inserido = new Array();
+function div_servico_inserido (cod, excluida){
+    this.cod = cod;
+    this.excluida = excluida;
+}
+
+var control_vetor_servico_inserido = new Array();
+control_vetor_servico_inserido[0] = 0;
+
+function vetor_servico_inserido(servico, quantidade, valor_unitario){
+    this.servico = servico;
+    this.quantidade = quantidade;
+    this.valor_unitario = valor_unitario;
+}
+
+function insert_servico_function(){
+	clean_servico_inserido = $('#div_servico').html();
+
+	var servico = $('#serv_monit_list').val();
+    var servico_nome = $('#serv_monit_list :selected').text();
+
+    var quantidade = document.getElementById("quant_serv_monit").value.trim();
+    if (quantidade === ""){
+        alert('Favor inserir a QUANTIDADE para o serviço: ' + servico_nome + '.');
+        document.getElementById("quant_serv_monit").focus();
+        return 0;
+    }
+
+    var valor_unit = document.getElementById("valor_assin_serv_monit").value.trim();
+    if (valor_unit === ""){
+        alert('Favor inserir o VALOR UNITÁRIO para o serviço: ' + servico_nome + '.');
+        document.getElementById("valor_assin_serv_monit").focus();
+        return 0;
+    }
+    var insert = "X";
+
+    var i = control_div_servico_inserido.length;
+    var j = 0;
+
+    if (i !== 0){
+        while (j < i && insert === "X"){
+            if (control_div_servico_inserido[j].excluida === 1){
+                insert = j;
+            }
+            else{
+                j++;
+            }
+        }
+        if (insert === "X"){
+        	control_div_servico_inserido[i] = new div_servico_inserido(i,0);
+        	control_vetor_servico_inserido[i] = new vetor_servico_inserido(servico, quantidade, valor_unit);
+        }
+    }
+    else{
+    	control_div_servico_inserido[0] = new div_servico_inserido(0,0);
+    	control_vetor_servico_inserido[0] = new vetor_servico_inserido(servico, quantidade, valor_unit);
+    }
+
+    var content_div_servico = "";
+    if (insert === "X"){
+    	content_div_servico = $('#serv_monit_inserido').html();
+        content_div_servico = content_div_servico + '<div id="servico_' + control_div_servico_inserido[i].cod + '" class="div_inseridos">\n\
+                                                  <input type="radio" name="servico_inserido" value="servico_' + control_div_servico_inserido[i].cod + '" onclick="change_servico_button_function()">\n\
+                                                  <div id="servico_nome_' + control_div_servico_inserido[i].cod + '">' + servico_nome + '</div> - \n\
+                                                  <div id="quantidade_equip_acessirio_' + control_div_servico_inserido[i].cod + '">' + quantidade + '</div>\n\
+                                                  <div id="total_equip_acessirio_' + control_div_servico_inserido[i].cod + '"> Total: R$'+ Number(quantidade * valor_unit).toFixed(2) +'</div>\n\
+                                                  <br> </div>';
+
+        $('#serv_monit_inserido').html(content_div_servico);
+    }else{
+    	content_div_servico = '<input type="radio" name="servico_inserido" value="servico_' + control_div_servico_inserido[j].cod + '" onclick="change_servico_button_function()">\n\
+        							<div id="servico_nome_' + control_div_servico_inserido[j].cod + '">' + servico_nome + '</div> - \n\
+                                    <div id="quantidade_equip_acessirio_' + control_div_servico_inserido[i].cod + '">' + quantidade + '</div>\n\
+                                    <div id="total_equip_acessirio_' + control_div_servico_inserido[j].cod + '"> Total: R$'+ Number(quantidade * valor_unit).toFixed(2) +'</div>\n\
+        							<br>';
+
+        $('#servico_' + control_div_servico_inserido[j].cod).html(content_div_servico);
+        control_div_servico_inserido[j].excluida = 0;
+        control_vetor_servico_inserido[j] = new vetor_servico_inserido(servico, quantidade, valor_unit);
+    }
+
+    limpa_campos_servico_function();
+    var content_div_bt = '<button type="button" id="incluir_servico" onclick="insert_servico_function()">Incluir</button>';
+    $('#div_servico_bt').html(content_div_bt);
+    document.getElementById("quant_serv_monit").focus();
+}
+
+function limpa_campos_servico_function(){
+    var content_div_servico = clean_servico_inserido;
+    $('#div_servico').html("");
+    $('#div_servico').html(content_div_servico);
+    valor_total_function("zerar_servico");
+}
+
+function change_servico_button_function(){
+    var content_div_bt = '<button type="button" id="incluir_servico" onclick="insert_servico_function()">Incluir</button>\n\
+    						<button type="button" id="delete_servico" onclick="delete_servico_function()">Excluir</button>';
+    $('#div_servico_bt').html(content_div_bt);
+}
+
+function delete_servico_function() {
+    var div_select = $("input[type='radio'][name='servico_inserido']:checked").val();
+    var length = div_select.length;
+    var div_deletar = div_select.slice(Number(8),Number(length));
+
+    var servico_nome = $('#servico_nome_' + div_select).html();
+    var quantidade = vetor_servico_inserido[div_select].quantidade;
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    var content_div_servico = $('#' + div_select).html();
+
+	if (confirm('O item ' + servico_nome.trim() + ' quantidade: ' + quantidade.trim() + ' será apagado.')) {
+        $('#' + div_select).html("");
+        control_div_servico_inserido[div_deletar].excluida = 1;
+        control_vetor_servico_inserido[div_deletar] = 0;
+    } else {
+        $('#' + div_select).html(content_div_servico);
+    }
+
+    var content_div_bt = '<button type="button" id="incluir_servico" onclick="insert_servico_function()">Incluir</button>';
+    $('#div_servico_bt').html(content_div_bt);
+    limpa_campos_servico_function();
+}
+
+function comercial_cadastrar_novo_pedido_function(){
+	ajustar_vetor_doc_function();
+	ajustar_vetor_end_function();
+	ajustar_vetor_contato_function();
+	ajustar_vetor_email_function();
+	if(confirm('Deseja realizar o ingresso do Cliente?')){
+		var values = $("input[type='radio'][name='pessoa']:checked").val();
+		var tipo_pessoa;
+		if(values === "pessoafisica"){
+			tipo_pessoa = 0;
+		}else{
+			tipo_pessoa = 1;
+		}
+		var nome = document.getElementById("nome_razaosocial");
+		var apelido  = document.getElementById("nomefantasia");
+		var dt_nascimento = document.getElementById("data_nasc");
+		var site = document.getElementById("url_site");
+		var cod_usuario = document.getElementById("cod_usuario");
+		var cod_vendedor = cod_usuario;
+
+		if(nome.value.trim() === ""){
+			alert("Favor inserir NOME ou RAZÃO SOCIAL do Cliente.");
+			document.getElementById("nome_razaosocial").focus();
+			return 0;
+		}
+		if(apelido.value.trim() === ""){
+			if(tipo_pessoa === 1){
+				alert("Favor inserir NOME FANTASIA do Cliente.");
+				document.getElementById("nomefantasia").focus();
+				return 0;
+			}else{
+				apelido.value = "";
+			}
+		}
+		if(dt_nascimento.value.trim() === ""){
+			alert("Favor inserir DATA DE NASCIMENTO do Cliente");
+			document.getElementById("data_nasc").focus();
+			return 0;
+		}
+		if(site.value.trim() === ""){
+			site.value = "";
+		}
+
+		if(control_vetor_doc_json[0] === 0){
+			alert("Favor inserir DOCUMENTO do Cliente");
+			document.getElementById("numero_documento").focus();
+			return 0;
+		}
+
+		var adress_aux;
+		var documentoLength = control_vetor_doc_json.length;
+		adress_aux = '&QDOC=' + documentoLength;
+		for(var i=0;i<documentoLength;i++){
+			if(control_vetor_doc_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPODOC_'+ i + '=' + control_vetor_doc_json[i].tipo_doc.trim();
+				adress_aux = adress_aux + '&NUMDOC_'+ i + '=' + control_vetor_doc_json[i].numero.trim();
+				adress_aux = adress_aux + '&DTDOC_'+ i + '=' + control_vetor_doc_json[i].dt_emiss.trim();
+				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
+			}
+		}
+
+		if(control_vetor_end_json[0] === 0){
+			alert("Favor inserir ENDEREÇO do Cliente");
+			document.getElementById("endereco").focus();
+			return 0;
+		}
+
+		var enderecoLength = control_vetor_end_json.length;
+		adress_aux = adress_aux + '&QEND=' + enderecoLength;
+		for(i=0;i<enderecoLength;i++){
+			if(control_vetor_end_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&END_'+ i + '=' + control_vetor_end_json[i].endereco.trim();
+				adress_aux = adress_aux + '&BAIRRO_'+ i + '=' + control_vetor_end_json[i].bairro.trim();
+				adress_aux = adress_aux + '&CIDADE_'+ i + '=' + control_vetor_end_json[i].cidade.trim();
+				adress_aux = adress_aux + '&UF_'+ i + '=' + control_vetor_end_json[i].uf.trim();
+				adress_aux = adress_aux + '&PAIS_'+ i + '=' + control_vetor_end_json[i].pais.trim();
+				adress_aux = adress_aux + '&COMP_'+ i + '=' + control_vetor_end_json[i].complemento.trim();
+				adress_aux = adress_aux + '&CEP_'+ i + '=' + control_vetor_end_json[i].cep.trim();
+				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
+			}
+		}
+
+		if(control_vetor_contato_json[0] === 0){
+			alert("Favor inserir CONTATO do Cliente");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+
+		var contatoLength = control_vetor_contato_json.length;
+		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		for(i=0;i<contatoLength;i++){
+			if(control_vetor_contato_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&TIPOCTO_'+ i + '=' + control_vetor_contato_json[i].tipo_contato.trim();
+				adress_aux = adress_aux + '&DDD_'+ i + '=' + control_vetor_contato_json[i].ddd.trim();
+				adress_aux = adress_aux + '&NUMCTO_'+ i + '=' + control_vetor_contato_json[i].numero.trim();
+				adress_aux = adress_aux + '&PAISCTO_'+ i + '=' + control_vetor_contato_json[i].cod_pais.trim();
+				adress_aux = adress_aux + '&NOMECTO_'+ i + '=' + control_vetor_contato_json[i].nome.trim();
+				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
+			}
+		}
+
+		if(control_vetor_email_json[0] === 0){
+			alert("Favor inserir EMAIL do Cliente");
+			document.getElementById("email").focus();
+			return 0;
+		}
+
+		var emailLength = control_vetor_email_json.length;
+		adress_aux = adress_aux + '&QMAIL=' + emailLength;
+		for(i=0;i<emailLength;i++){
+			if(control_vetor_email_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
+			}
+		}
+
+		dia = new Date();
+		
+	}
 }
