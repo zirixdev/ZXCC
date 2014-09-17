@@ -33,8 +33,6 @@ public class PerguntaProcedimentoDAO extends GenericDAO<PerguntaProcedimentoDAO>
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
 
     	setAttValueFor("COD_UNIDADE",res.getInt("COD_UNIDADE"));
-    	setAttValueFor("PERGUNTA",res.getString("PERGUNTA"));
-    	setAttValueFor("RESPOSTA",res.getString("RESPOSTA"));
     	setAttValueFor("SENHA",res.getString("SENHA"));
     	setAttValueFor("COD_UNIDADE_CADASTRADA",res.getInt("COD_UNIDADE_CADASTRADA"));
     	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));

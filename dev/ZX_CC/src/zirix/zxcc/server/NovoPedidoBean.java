@@ -7,8 +7,6 @@ TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Vector;
 
 import zirix.zxcc.server.dao.*;
 
