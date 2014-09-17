@@ -37,6 +37,7 @@ public class EmailCliVenDAO extends GenericDAO<EmailCliVenDAO> {
     	setAttValueFor("COD_CLI_VEN",res.getInt("COD_CLI_VEN"));
     	setAttValueFor("TIPO_CLI_VEN",res.getInt("TIPO_CLI_VEN"));
     	setAttValueFor("EMAIL",res.getString("EMAIL"));
+    	setAttValueFor("DELETED",res.getString("DELETED"));
     }
 
     public Set<String> getPkNamesSet() {

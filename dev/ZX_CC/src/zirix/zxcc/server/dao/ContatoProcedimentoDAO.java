@@ -33,9 +33,14 @@ public class ContatoProcedimentoDAO extends GenericDAO<ContatoProcedimentoDAO> {
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
 
     	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));
-    	setAttValueFor("COD_CONTATO",res.getInt("COD_CONTATO"));
     	setAttValueFor("COD_UNIDADE_CADASTRADA",res.getInt("COD_UNIDADE_CADASTRADA"));
     	setAttValueFor("COD_UNIDADE",res.getInt("COD_UNIDADE"));
+    	setAttValueFor("COD_CONTATO",res.getInt("COD_CONTATO"));
+    	setAttValueFor("DDD",res.getString("DDD"));
+    	setAttValueFor("NUMERO",res.getString("NUMERO"));
+    	setAttValueFor("COD_PAIS",res.getInt("COD_PAIS"));
+    	setAttValueFor("NOME",res.getString("NOME"));
+    	setAttValueFor("COD_GRAU",res.getInt("COD_GRAU"));
     }
     
     public Set<String> getPkNamesSet() {    	

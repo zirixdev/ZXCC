@@ -37,6 +37,7 @@ public class PerguntaProcedimentoDAO extends GenericDAO<PerguntaProcedimentoDAO>
     	setAttValueFor("COD_UNIDADE_CADASTRADA",res.getInt("COD_UNIDADE_CADASTRADA"));
     	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
+    	setAttValueFor("COD_CLIENTE",res.getInt("COD_CLIENTE"));
     }
     
     public Set<String> getPkNamesSet() {    	

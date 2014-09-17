@@ -12,10 +12,10 @@ TECNOLOGIAS UTILIZADAS: HTML5 E JSP
         <legend>Veículo:</legend>
         Placa: <input type="text" id="placa" class="size_15" maxlength="8">
         Chassi: <input type="text" id="chassi" class="size_20" maxlength="23">
-        Renavan: <input type="text" id="renavan" class="size_20" maxlength="23">
+        Renavan: <input type="text" id="renavan" class="size_20" maxlength="23" onkeypress="javascript: return EntradaNumerico(event);">
         <br>
-        Ano de Fabricação:<input type="number" id="ano_fab" class="size_11" min="1930" >
-        Ano do Modelo:<input type="number" id="ano_mod" class="size_11" min="1930" >
+        Ano de Fabricação:<input type="number" id="ano_fab" class="size_11" min="1930" onkeypress="javascript: return EntradaNumerico(event);">
+        Ano do Modelo:<input type="number" id="ano_mod" class="size_11" min="1930" onkeypress="javascript: return EntradaNumerico(event);">
         Marca:<select id="marca_list" class="size_31">
 		<%try {
 			Vector<VeiculoMarcaDAO> list = VeiculoMarcaDAOService.loadAll();
@@ -46,8 +46,8 @@ TECNOLOGIAS UTILIZADAS: HTML5 E JSP
 		}%>
         </select>
         <br>
-        Voltagem: <input type="text" id="voltagem" class="size_8" maxlength="2">
-        KM: <input type="text" id="km" class="size_15">
-        Data da Última Vistoria: <input type="date" id="data_vist">
+        Voltagem: <input type="text" id="voltagem" class="size_8" maxlength="2" onkeypress="javascript: return EntradaNumerico(event);">
+        KM: <input type="text" id="km" class="size_15" onkeypress="javascript: return EntradaNumerico(event);">
+        Data da Última Vistoria: <input type="date" id="data_vist" onkeypress="javascript: return EntradaNumerico(event);">
     </fieldset>
 </div>

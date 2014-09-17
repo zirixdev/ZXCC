@@ -199,7 +199,7 @@ $('.modal-content').on('click', '#cancel_modal', function(e){
 
 window.addEventListener("message", callModalTarefas, false);
 
-function SCHED_WORK_FUNCTION(){
+function SCHED_WORK_FUNCTION(){	
 	cod_usuario = document.getElementById("cod_usuario");
 	cod_usuario_ = cod_usuario.innerHTML.trim();
 	var adress = "";

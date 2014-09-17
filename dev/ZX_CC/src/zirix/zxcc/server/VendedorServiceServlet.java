@@ -123,21 +123,22 @@ import zirix.zxcc.server.dao.PkList;
 						   int arraysize = Integer.parseInt(request.getParameter("QDOC"));
 						   for(int d = 0 ; d < arraysize ; d++){
 							   DocumentoVendedorDAO daoDocumentoVendedor = new DocumentoVendedorDAO();
-	
+
 							   daoDocumentoVendedor.setAttValueFor("COD_VENDEDOR",pkListValue);
-	
+
 							   String COD_DOCUMENTO_ = request.getParameter("TIPODOC_"+d).trim();
 							   daoDocumentoVendedor.setAttValueFor("COD_DOCUMENTO",COD_DOCUMENTO_);
-	
+
 							   String NUMERO_ = request.getParameter("NUMDOC_"+d).trim();
 							   daoDocumentoVendedor.setAttValueFor("NUMERO",NUMERO_);
-	
+
 							   String DATA_EMISSAO_ = request.getParameter("DTDOC_"+d).trim();
 							   daoDocumentoVendedor.setAttValueFor("DATA_EMISSAO",DATA_EMISSAO_);
-	
+
 							   String ORGAO_EMISSOR_ = request.getParameter("ORGDOC_"+d).trim();
 							   daoDocumentoVendedor.setAttValueFor("ORGAO_EMISSOR",ORGAO_EMISSOR_);
-	
+
+							   daoDocumentoVendedor.setAttValueFor("DELETED",0);
 							   daoDocumentoVendedor.Create();
 						   }
 	
@@ -211,6 +212,7 @@ import zirix.zxcc.server.dao.PkList;
 	
 							   String EMAIL_ = request.getParameter("MAIL_"+d).trim();
 							   daoEmailCliVen.setAttValueFor("EMAIL",EMAIL_);
+							   daoEmailCliVen.setAttValueFor("DELETED",0);
 	
 							   daoEmailCliVen.Create();
 						   }

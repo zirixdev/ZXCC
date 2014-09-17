@@ -10,7 +10,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 
 <%
 	String[] pkVal = {request.getParameter("COD_CLIENTE")};
-	ClienteServiceBean bean = new ClienteServiceBean(pkVal);
+	ClienteServiceBean beanCliente = new ClienteServiceBean(pkVal);
 %>
 
 <div id="operacional-consulta-cliente-content">
@@ -22,7 +22,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <div class="tab-content"> 
             <div class="tab-pane active" id="aba_cliente">
                 <fieldset class="field">
-                <%if(bean.getTipo() == 0){%>
+                <%if(beanCliente.getTipo() == 0){%>
                 	<input type="radio" name="pessoa" value="pessoafisica" checked="checked">Pessoa Física
                     <input type="radio" name="pessoa" value="pessoajuridica">Pessoa Jurídica
                 <%}else{%>
@@ -38,7 +38,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									for (int i=0;i < list.size();i++) {
 										VendedorDAO dao = list.elementAt(i);
 										String str = String.valueOf(dao.getAttValueFor("NOME_FANTASIA")).trim();
-										int codVendedor = bean.getCodVendedor();%>				   	
+										int codVendedor = beanCliente.getCodVendedor();%>				   	
 						       			   <option value="<%=dao.getPkValueFor("COD_VENDEDOR")%>" name="option_vendedor"<% 
 											if(dao.getPkValueFor("COD_VENDEDOR") == codVendedor){%> selected
 											<%}%>
@@ -52,12 +52,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     	</select>
                     </fieldset>
                     <br>Razão Social / Nome:
-                    <input type="text" id="nome_razaosocial" class="size_100" value="<%=bean.getNome().trim()%>">
+                    <input type="text" id="nome_razaosocial" class="size_100" value="<%=beanCliente.getNome().trim()%>">
                     <br>Nome Fantasia / Apelido:
-                    <input type="text" id="nomefantasia"  class="size_100" value="<%=bean.getNomeFantasia().trim()%>">
+                    <input type="text" id="nomefantasia"  class="size_100" value="<%=beanCliente.getNomeFantasia().trim()%>">
                     <br>
-                    Data de Nascimento: <input type="date" id="data_nasc" value="<%=bean.getDtNascimento().trim()%>">
-                    Site:<input type="text" id="url_site" class="size_50" value="<%=bean.getSite().trim()%>">
+                    Data de Nascimento: <input type="date" id="data_nasc" value="<%=beanCliente.getDtNascimento().trim()%>">
+                    Site:<input type="text" id="url_site" class="size_50" value="<%=beanCliente.getSite().trim()%>">
                 </fieldset>
                 <fieldset class="field">
                     <legend>Documentos:</legend>
@@ -85,7 +85,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					<fieldset class="fieldinner">
                         <legend>Inseridos:</legend>
                         <div id="docs_inserido">
-                        <%Vector<String[]> docList = bean.getDocumento();
+                        <%Vector<String[]> docList = beanCliente.getDocumento();
 							for (int i=0;i < docList.size();i++) {%>
 		                        <div id="doc_oculta_<%=i%>" class="class_oculta">
 									<div id="num_doc_oculta_<%=i%>"><%=docList.elementAt(i)[0].trim()%></div>
@@ -177,20 +177,20 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     <fieldset class="fieldinner">
                         <legend>Inseridos:</legend>
                         <div id="endereco_inserido">
-						<%Vector<String[]> endList = bean.getEnd();
-							for (int i=0;i < endList.size();i++) {%>
-		                        <div id="end_oculta_<%=i%>" class="class_oculta">
-									<div id="endereco_oculta_<%=i%>"><%=endList.elementAt(i)[0].trim()%></div>
-									<div id="bairro_oculta_<%=i%>"><%=endList.elementAt(i)[1].trim()%></div>
-									<div id="cidade_oculta_<%=i%>"><%=endList.elementAt(i)[2].trim()%></div>
-									<div id="uf_oculta_<%=i%>"><%=endList.elementAt(i)[3].trim()%></div>
-									<div id="pais_oculta_<%=i%>"><%=endList.elementAt(i)[4].trim()%></div>
-									<div id="complemento_oculta_<%=i%>"><%=endList.elementAt(i)[5].trim()%></div>
-									<div id="cep_oculta_<%=i%>"><%=endList.elementAt(i)[6].trim()%></div>
-									<div id="tipo_end_oculta_<%=i%>"><%=endList.elementAt(i)[7].trim()%></div>
-									<br>
-								</div>
-							<%}%>
+							<%Vector<String[]> endList = beanCliente.getEnd();
+								for (int i=0;i < endList.size();i++) {%>
+			                        <div id="end_oculta_<%=i%>" class="class_oculta">
+										<div id="endereco_oculta_<%=i%>"><%=endList.elementAt(i)[0].trim()%></div>
+										<div id="bairro_oculta_<%=i%>"><%=endList.elementAt(i)[1].trim()%></div>
+										<div id="cidade_oculta_<%=i%>"><%=endList.elementAt(i)[2].trim()%></div>
+										<div id="uf_oculta_<%=i%>"><%=endList.elementAt(i)[3].trim()%></div>
+										<div id="pais_oculta_<%=i%>"><%=endList.elementAt(i)[4].trim()%></div>
+										<div id="complemento_oculta_<%=i%>"><%=endList.elementAt(i)[5].trim()%></div>
+										<div id="cep_oculta_<%=i%>"><%=endList.elementAt(i)[6].trim()%></div>
+										<div id="tipo_end_oculta_<%=i%>"><%=endList.elementAt(i)[7].trim()%></div>
+										<br>
+									</div>
+								<%}%>
                         </div>
                     </fieldset>
                     <div id="div_end_bt">
@@ -243,18 +243,18 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     <fieldset class="fieldinner">
                         <legend>Inseridos:</legend>
                         <div id="contato_inserido">
-                        	<%Vector<String[]> contatoList = bean.getContato();
-							for (int i=0;i < contatoList.size();i++) {%>
-		                        <div id="contato_oculta_<%=i%>" class="class_oculta">
-									<div id="tipo_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[0].trim()%></div>
-									<div id="ddd_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[1].trim()%></div>
-									<div id="numero_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[2].trim()%></div>
-									<div id="cod_pais_oculta_<%=i%>"><%=contatoList.elementAt(i)[3].trim()%></div>
-									<div id="nome_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[4].trim()%></div>
-									<div id="grau_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[5].trim()%></div>
-									<br>
-								</div>
-							<%}%>
+	                       	<%Vector<String[]> contatoList = beanCliente.getContato();
+								for (int i=0;i < contatoList.size();i++) {%>
+			                        <div id="contato_oculta_<%=i%>" class="class_oculta">
+										<div id="tipo_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[0].trim()%></div>
+										<div id="ddd_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[1].trim()%></div>
+										<div id="numero_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[2].trim()%></div>
+										<div id="cod_pais_oculta_<%=i%>"><%=contatoList.elementAt(i)[3].trim()%></div>
+										<div id="nome_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[4].trim()%></div>
+										<div id="grau_contato_oculta_<%=i%>"><%=contatoList.elementAt(i)[5].trim()%></div>
+										<br>
+									</div>
+								<%}%>
                         </div>
                     </fieldset>
                     <div id="div_contato_bt">
@@ -269,13 +269,13 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     <fieldset class="fieldinner">
                         <legend>Inseridos:</legend>
                         <div id="emails_inserido">
-                            <%Vector<String[]> emailList = bean.getEmail();
-							for (int i=0;i < emailList.size();i++) {%>
-		                        <div id="email_oculta_<%=i%>" class="class_oculta">
-									<div id="nome_email_oculta_<%=i%>"><%=emailList.elementAt(i)[0].trim()%></div>
-									<br>
-								</div>
-							<%}%>
+                            <%Vector<String[]> emailList = beanCliente.getEmail();
+								for (int i=0;i < emailList.size();i++) {%>
+			                        <div id="email_oculta_<%=i%>" class="class_oculta">
+										<div id="nome_email_oculta_<%=i%>"><%=emailList.elementAt(i)[0].trim()%></div>
+										<br>
+									</div>
+								<%}%>
                         </div>
                     </fieldset>
                     <div id="div_email_bt">
