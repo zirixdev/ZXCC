@@ -29,14 +29,14 @@ function unit_function(){
         	fild_content = "div#unid_veiculo";
             break;
         default:
-        $('.tipo_unidade').html('');
+        $('#tipo_unidade').html('');
     }
     $.ajax({
         url: url_adress + "tipo_unidade.jsp",
         success: function(result) {
             var html = jQuery('<div>').html(result);
             var content = html.find(fild_content).html();
-            $('.tipo_unidade').html(content);
+            $('#tipo_unidade').html(content);
         },
         error: function(e){
             alert('error');
@@ -3709,6 +3709,7 @@ function insert_unidades_function(){
     limpa_campos_unidade_function();
     var content_div_bt = '<button type="button" id="incluir_unidade" onclick="insert_unidades_function()">Incluir</button>';
     $('#div_unidade_bt').html(content_div_bt);
+    $('#tipo_unidade').html('');
     document.getElementById("ddd_procedimento").focus();
 }
 
@@ -3877,8 +3878,8 @@ function delete_equip_acessorio_function() {
     var length = div_select.length;
     var div_deletar = div_select.slice(Number(16),Number(length));
 
-    var equip_acessorio_nome = $('#equip_acessorio_nome_' + div_select).html();
-    var quantidade = vetor_equip_acessorio_inserido[div_select].quantidade;
+    var equip_acessorio_nome = $('#equip_acessorio_nome_' + div_deletar).html();
+    var quantidade = vetor_equip_acessorio_inserido[div_deletar].quantidade;
     
     var content_div_equip_acessorio = $('#' + div_select).html();
 
@@ -4001,8 +4002,8 @@ function delete_servico_function() {
     var length = div_select.length;
     var div_deletar = div_select.slice(Number(8),Number(length));
 
-    var servico_nome = $('#servico_nome_' + div_select).html();
-    var quantidade = vetor_servico_inserido[div_select].quantidade;
+    var servico_nome = $('#servico_nome_' + div_deletar).html();
+    var quantidade = vetor_servico_inserido[div_deletar].quantidade;
     
     var content_div_servico = $('#' + div_select).html();
 
@@ -4019,11 +4020,101 @@ function delete_servico_function() {
     limpa_campos_servico_function();
 }
 
+var control_vetor_equip_acessorio_json = new Array();
+function ajustar_vetor_equip_acessorio_inserido(){
+	var length = control_vetor_equip_acessorio_inserido.length;
+	var flag;
+	var j;
+	for(var x=0; x<length; x++)
+		control_vetor_equip_acessorio_json[x] = control_vetor_equip_acessorio_inserido[x];
+
+	for(var i=0; i<length; i++){
+		if(control_vetor_equip_acessorio_json[i] === 0){
+			flag = true;
+			j = i + 1;
+			while(flag && j<length){
+				if(control_vetor_equip_acessorio_json[j] !== 0){
+					control_vetor_equip_acessorio_json[i] = control_vetor_equip_acessorio_json[j];
+					control_vetor_equip_acessorio_json[j] = 0;
+					flag = false;
+				}
+				j++;
+			}
+		}
+	}
+	for(i=0;i<length;i++){
+		if(control_vetor_equip_acessorio_json[i] === 0)
+			break;
+	}
+	control_vetor_equip_acessorio_json.length = i;
+}
+
+var control_vetor_servico_json = new Array();
+function ajustar_vetor_servico_inserido(){
+	var length = control_vetor_servico_inserido.length;
+	var flag;
+	var j;
+	for(var x=0; x<length; x++)
+		control_vetor_servico_json[x] = control_vetor_servico_inserido[x];
+
+	for(var i=0; i<length; i++){
+		if(control_vetor_servico_json[i] === 0){
+			flag = true;
+			j = i + 1;
+			while(flag && j<length){
+				if(control_vetor_servico_json[j] !== 0){
+					control_vetor_servico_json[i] = control_vetor_servico_json[j];
+					control_vetor_servico_json[j] = 0;
+					flag = false;
+				}
+				j++;
+			}
+		}
+	}
+	for(i=0;i<length;i++){
+		if(control_vetor_servico_json[i] === 0)
+			break;
+	}
+	control_vetor_servico_json.length = i;
+}
+
+var control_vetor_unidade_json = new Array();
+function ajustar_vetor_unidade_inserido(){
+	var length = control_vetor_unidade_inserido.length;
+	var flag;
+	var j;
+	for(var x=0; x<length; x++)
+		control_vetor_unidade_json[x] = control_vetor_unidade_inserido[x];
+
+	for(var i=0; i<length; i++){
+		if(control_vetor_unidade_json[i] === 0){
+			flag = true;
+			j = i + 1;
+			while(flag && j<length){
+				if(control_vetor_unidade_json[j] !== 0){
+					control_vetor_unidade_json[i] = control_vetor_unidade_json[j];
+					control_vetor_unidade_json[j] = 0;
+					flag = false;
+				}
+				j++;
+			}
+		}
+	}
+	for(i=0;i<length;i++){
+		if(control_vetor_unidade_json[i] === 0)
+			break;
+	}
+	control_vetor_unidade_json.length = i;
+}
+
 function comercial_cadastrar_novo_pedido_function(){
 	ajustar_vetor_doc_function();
 	ajustar_vetor_end_function();
 	ajustar_vetor_contato_function();
 	ajustar_vetor_email_function();
+	ajustar_vetor_unidade_inserido();
+	ajustar_vetor_equip_acessorio_inserido();
+	ajustar_vetor_servico_inserido();
 	if(confirm('Deseja realizar o ingresso do Cliente?')){
 		var values = $("input[type='radio'][name='pessoa']:checked").val();
 		var tipo_pessoa;
@@ -4038,7 +4129,8 @@ function comercial_cadastrar_novo_pedido_function(){
 		var site = document.getElementById("url_site");
 		var cod_usuario = document.getElementById("cod_usuario");
 		var cod_vendedor = cod_usuario;
-
+		var i=0;
+		
 		if(nome.value.trim() === ""){
 			alert("Favor inserir NOME ou RAZÃO SOCIAL do Cliente.");
 			document.getElementById("nome_razaosocial").focus();
@@ -4068,10 +4160,10 @@ function comercial_cadastrar_novo_pedido_function(){
 			return 0;
 		}
 
-		var adress_aux;
+		var adress_aux = '';
 		var documentoLength = control_vetor_doc_json.length;
 		adress_aux = '&QDOC=' + documentoLength;
-		for(var i=0;i<documentoLength;i++){
+		for(i=0;i<documentoLength;i++){
 			if(control_vetor_doc_json[i]===0){
 				break;
 			}else{
@@ -4141,8 +4233,383 @@ function comercial_cadastrar_novo_pedido_function(){
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
 			}
 		}
-
-		dia = new Date();
 		
+		var enderero_inst = document.getElementById("endereco_inst");
+		if(enderero_inst.value.trim() === ""){
+			alert("Favor inserir ENDEREÇO para instalação");
+			document.getElementById("endereco_inst").focus();
+			return 0;
+		}
+		
+		var complemento_inst = document.getElementById("complemento_inst");
+		if(complemento_inst.value.trim() === ""){
+			complemento_inst.value = "";
+		}
+		
+		var bairro_inst = document.getElementById("bairro_inst");
+		if(bairro_inst.value.trim() === ""){
+			alert("Favor inserir BAIRRO do endereço de instalação");
+			document.getElementById("bairro_inst").focus();
+			return 0;
+		}
+		
+		var cidade_inst = document.getElementById("cidade_inst");
+		if(cidade_inst.value.trim() === ""){
+			alert("Favor inserir CIDADE do endereço de instalação");
+			document.getElementById("cidade_inst").focus();
+			return 0;
+		}
+		
+		var uf_inst = $('#uf_list_inst').val();
+		var pais_inst = $('#pais_list_inst').val();
+		
+		var cep_inst = document.getElementById("cep_inst");
+		if(cep_inst.value.trim() === ""){
+			alert("Favor inserir CEP do endereço de instalação");
+			document.getElementById("cep_inst").focus();
+			return 0;
+		}
+		
+		var referencia_inst = document.getElementById("referencia_inst");
+		if(referencia_inst.value.trim() === ""){
+			alert("Favor inserir REFERENCIA do endereço de instalação");
+			document.getElementById("referencia_inst").focus();
+			return 0;
+		}
+		
+		var ddd_inst = document.getElementById("ddd_inst");
+		if(ddd_inst.value.trim() === ""){
+			alert("Favor inserir DDD do contato para instalação");
+			document.getElementById("ddd_inst").focus();
+			return 0;
+		}
+		
+		var numero_inst = document.getElementById("numero_inst");
+		if(numero_inst.value.trim() === ""){
+			alert("Favor inserir NÚMERO do contato para instalação");
+			document.getElementById("numero_inst").focus();
+			return 0;
+		}
+		
+		var nome_inst = document.getElementById("contato_inst");
+		if(nome_inst.value.trim() === ""){
+			alert("Favor inserir NOME DO RESPONSÁVEL do contato para instalação");
+			document.getElementById("contato_inst").focus();
+			return 0;
+		}
+		adress_aux = adress_aux + '&ENDINST=' + enderero_inst.value.trim();
+		adress_aux = adress_aux + '&COMPINST=' + complemento_inst.value.trim();
+		adress_aux = adress_aux + '&BAIRROINST=' + bairro_inst.value.trim();
+		adress_aux = adress_aux + '&CIDADEINST=' + cidade_inst.value.trim();
+		adress_aux = adress_aux + '&UFINST=' + uf_inst + '&PAISINST=' + pais_inst;
+		adress_aux = adress_aux + '&CEPINST=' + cep_inst.value.trim();
+		adress_aux = adress_aux + '&REFINST=' + referencia_inst.value.trim();
+		adress_aux = adress_aux + '&DDDINST=' + ddd_inst.value.trim();
+		adress_aux = adress_aux + '&NUMEROINST=' + numero_inst.value.trim();
+		adress_aux = adress_aux + '&NOMEINST=' + nome_inst.value.trim();
+		
+		if(control_vetor_unidade_json[0] === 0){
+			alert("Favor inserir ao menos uma UNIDADE no PEDIDO");
+			return 0;
+		}
+		
+		var unidadeLength = control_vetor_unidade_json.length;
+		adress_aux = adress_aux + '&QUNIDADE=' + unidadeLength;
+		for(i=0;i<unidadeLength;i++){
+			if(control_vetor_unidade_json[i]===0){
+				break;
+			}else{
+				adress_aux = adress_aux + '&QCTOUNID_'+ i + '=' + control_vetor_unidade_json[i].contato.length;
+				for(var j=0;j<control_vetor_unidade_json[i].contato.length;j++){
+					adress_aux = adress_aux + '&TIPOCTOUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].tipo_contato.trim();
+					adress_aux = adress_aux + '&DDDUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].ddd.trim();
+					adress_aux = adress_aux + '&NUMCTOUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].numero.trim();
+					adress_aux = adress_aux + '&PAISCTOUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].cod_pais.trim();
+					adress_aux = adress_aux + '&NOMECTOUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].nome.trim();
+					adress_aux = adress_aux + '&PARENCTOUNID_'+ i + '_' + j + '=' + control_vetor_unidade_json[i].contato[j].parentesco.trim();
+				}
+				adress_aux = adress_aux + '&SENHA_ATENDIMENTO_' + i + '=' + control_vetor_unidade_json[i].senha;
+				adress_aux = adress_aux + '&TIPO_UNIDADE_' + i + '=' + control_vetor_unidade_json[i].tipo_unidade;
+				switch(Number(control_vetor_unidade_json[i].tipo_unidade)){
+				case 2:
+					adress_aux = adress_aux + '&PLACA_' + i + '=' + control_vetor_unidade_json[i].unidade.placa;
+					adress_aux = adress_aux + '&CHASSI_' + i + '=' + control_vetor_unidade_json[i].unidade.chassi;
+					adress_aux = adress_aux + '&RENAVAN_' + i + '=' + control_vetor_unidade_json[i].unidade.renavan;
+					adress_aux = adress_aux + '&ANO_FAB_' + i + '=' + control_vetor_unidade_json[i].unidade.ano_fab;
+					adress_aux = adress_aux + '&ANO_MOD_' + i + '=' + control_vetor_unidade_json[i].unidade.ano_mod;
+					adress_aux = adress_aux + '&MARCA_' + i + '=' + control_vetor_unidade_json[i].unidade.marca;
+					adress_aux = adress_aux + '&MODELO_' + i + '=' + control_vetor_unidade_json[i].unidade.modelo;
+					adress_aux = adress_aux + '&COR_' + i + '=' + control_vetor_unidade_json[i].unidade.cor;
+					adress_aux = adress_aux + '&COMBUSTIVEL_' + i + '=' + control_vetor_unidade_json[i].unidade.combustivel;
+					adress_aux = adress_aux + '&VOLTAGEM_' + i + '=' + control_vetor_unidade_json[i].unidade.voltagem;
+					adress_aux = adress_aux + '&KM_' + i + '=' + control_vetor_unidade_json[i].unidade.km;
+					adress_aux = adress_aux + '&DATA_VISTORIA_' + i + '=' + control_vetor_unidade_json[i].unidade.data_vistoria;
+				}
+			}
+		}
+
+		var tipoPedido = $("input[type='radio'][name='servico']:checked").val();
+		
+		if((Number(tipoPedido) == 1) || (Number(tipoPedido) == 2) || (Number(tipoPedido) == 3)){
+			if(control_vetor_equip_acessorio_json[0] === 0){
+				alert("Favor inserir ao menos uma EQUIPAMENTO OU ACESSÓRIO no PEDIDO");
+				return 0;
+			}
+		}
+
+		var equipAcessorioLength = control_vetor_equip_acessorio_json.length;
+		adress_aux = adress_aux + '&QEQUIP_ACESSORIO=' + equipAcessorioLength;
+		for(i=0;i<equipAcessorioLength;i++){
+			adress_aux = adress_aux + '&ITEMEQUIP_' + i + '=' + control_vetor_equip_acessorio_json[i].equip_acessorio;
+			adress_aux = adress_aux + '&QTDEQUIP_' + i + '=' + control_vetor_equip_acessorio_json[i].quantidade;
+			adress_aux = adress_aux + '&VALOREQUIP_' + i + '=' + control_vetor_equip_acessorio_json[i].valor_unitario;
+		}
+
+		if(control_vetor_servico_json[0] === 0){
+			alert("Favor inserir ao menos uma SERVIÇO no PEDIDO");
+			return 0;
+		}
+		var servicoLength = control_vetor_servico_json.length;
+		adress_aux = adress_aux + '&QSERVICO=' + servicoLength;
+		for(i=0;i<servicoLength;i++){
+			adress_aux = adress_aux + '&ITEMSERVICO_' + i + '=' + control_vetor_servico_json[i].servico;
+			adress_aux = adress_aux + '&QTDSERVICO_' + i + '=' + control_vetor_servico_json[i].quantidade;
+			adress_aux = adress_aux + '&VALORSERVICO_' + i + '=' + control_vetor_servico_json[i].valor_unitario;
+		}
+		
+		var observacoes = document.getElementById("observacoes");
+		var obsLength = observacoes.textLength;
+		if(Number(obsLength)< 200){
+			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
+		}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
+			adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+		}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
+			adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+		}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
+			adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+			adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
+		}else{
+			adress_aux = adress_aux + '&QOBS=0';
+		}
+
+		var dt_vencimento = $("input[type='radio'][name='vencimento']:checked").val();
+		
+		dia = new Date();
+
+		var adress = url_adress + 'services/novoPedido?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
+		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + dia.yyyymmdd();
+		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.innerHTML.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&TIPO_PEDIDO=' + tipoPedido.trim();
+		adress = adress + '&DATA_VENCIMENTO=' + dt_vencimento.trim();
+		adress = adress + adress_aux;
+		document.location.href = adress;
 	}
+}
+
+function carregar_dados_confirmacao_pedido_function(){
+    var i;
+    var j;
+    /*Carregar documentos*/
+    var div_doc_inserido_obj = $("#docs_inserido");
+    var tamanho_doc = div_doc_inserido_obj[0].childElementCount;
+    for(i=0;i<tamanho_doc;i++){
+        doc_carregado_array[i] = new doc_carregado();
+        doc_carregado_array[i].num_doc = $('#num_doc_oculta_' + i).html().trim();
+        doc_carregado_array[i].tipo_doc = $('#tipo_doc_oculta_' + i).html().trim();
+        doc_carregado_array[i].dt_emiss = $('#dt_emiss_doc_oculta_' + i).html().trim();
+        doc_carregado_array[i].org_emiss = $('#org_emiss_doc_oculta_' + i).html().trim();
+    }
+    var tipo_doc_tipo_obj = $('#tipodoc_list');
+    var tipo_doc_tamanho_tipo = tipo_doc_tipo_obj[0].length;
+    for (i=0; i<tipo_doc_tamanho_tipo;i++){
+        control_vetor_doc_tipo[i] = document.getElementsByName("option_documento_tipo")[i].text;
+    }
+    for(i=0;i<tamanho_doc;i++){
+    	control_div_doc[i] = new div_doc_inseridas(0, 0);
+    	control_vetor_doc[i] = new vetor_doc_inserido();
+        control_vetor_doc[i].numero = doc_carregado_array[i].num_doc;
+        for(j=0;j<tipo_doc_tamanho_tipo;j++){
+            if(control_vetor_doc_tipo[j] === doc_carregado_array[i].tipo_doc){
+                control_vetor_doc[i].tipo_doc = Number(j+1);
+                break;
+            }
+        }
+        if(doc_carregado_array[i].dt_emiss !== "5000-12-31"){
+        	control_vetor_doc[i].dt_emiss = doc_carregado_array[i].dt_emiss;
+        }else{
+        	control_vetor_doc[i].dt_emiss = "";
+        }
+        if(doc_carregado_array[i].org_emiss !== "VAZIO"){
+        	control_vetor_doc[i].org_emiss = doc_carregado_array[i].org_emiss;
+        }else{
+        	control_vetor_doc[i].org_emiss = "";
+        }
+    }
+
+    var content_div_doc = "";
+
+    for(i=0;i<tamanho_doc;i++){
+    	content_div_doc = content_div_doc + 'Numero: '+ control_vetor_doc[i].numero;
+    	content_div_doc = content_div_doc + '<br>Tipo do Documento: ' + control_vetor_doc_tipo[Number(control_vetor_doc[i].tipo_doc) - 1];
+		if (control_vetor_doc[i].dt_emiss !== ""){
+			content_div_doc = content_div_doc + '<br>Data de Emissão: ' + control_vetor_doc[i].dt_emiss;
+		}
+		if (control_vetor_doc[i].org_emiss !== ""){
+			content_div_doc = content_div_doc + '<br>Orgão Emissor: ' + control_vetor_doc[i].org_emiss;
+		}
+		content_div_doc = content_div_doc + '<canvas id="myCanvasDoc_<%=workList.elementAt(i)[0].trim()%>" width="495" height="1" style="border:0px;"></canvas>\n\
+		<script>var c = document.getElementById("myCanvasDoc_<%=workList.elementAt(i)[0].trim()%>");\n\
+		var ctx = c.getContext("2d");\n\
+		ctx.moveTo(0,0);\n\
+		ctx.lineTo(495,0);\n\
+		ctx.stroke();</script><br>';
+    }
+    $('#documentos').html(content_div_doc);
+    
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+    /*Carregar endereços*/
+    var div_end_inserido_obj = $("#endereco_inserido");
+    var tamanho_end = div_end_inserido_obj[0].childElementCount;
+    for(i=0;i<tamanho_end;i++){
+        end_carregado_array[i] = new end_carregado();
+        end_carregado_array[i].logradouro = $('#endereco_oculta_' + i).html().trim();
+        end_carregado_array[i].complemento = $('#complemento_oculta_' + i).html().trim();
+        end_carregado_array[i].bairro = $('#bairro_oculta_' + i).html().trim();
+        end_carregado_array[i].cidade = $('#cidade_oculta_' + i).html().trim();
+        end_carregado_array[i].uf = $('#uf_oculta_' + i).html().trim();
+        end_carregado_array[i].pais = $('#pais_oculta_' + i).html().trim();
+        end_carregado_array[i].cep = $('#cep_oculta_' + i).html().trim();
+        end_carregado_array[i].tipo_end = $('#tipo_end_oculta_' + i).html().trim();
+    }
+    var tipo_endereco_tipo_obj = $('#tipo_end_list');
+    var tipo_endereco_tamanho_tipo = tipo_endereco_tipo_obj[0].length;
+    for (var i=0; i<tipo_endereco_tamanho_tipo;i++){
+        control_vetor_end_tipo[i] = document.getElementsByName("option_endereco_tipo")[i].text;
+    }
+    var tipo_endereco_pais_obj = $('#pais_list');
+    var tipo_endereco_tamanho_pais = tipo_endereco_pais_obj[0].length;
+    for (i=0; i<tipo_endereco_tamanho_pais;i++){
+        control_vetor_end_pais[i] = document.getElementsByName("option_endereco_pais")[i].text;
+    }
+    var tipo_endereco_uf_obj = $('#uf_list');
+    var tipo_endereco_tamanho_uf = tipo_endereco_uf_obj[0].length;
+    for (i=0; i<tipo_endereco_tamanho_uf;i++){
+        control_vetor_end_uf[i] = document.getElementsByName("option_endereco_uf")[i].text;
+    }
+    for(i=0;i<tamanho_end;i++){
+    	control_div_end[i] = new div_end_inseridas(0, 0);
+    	control_vetor_end[i] = new vetor_end_inserido();
+        control_vetor_end[i].endereco = end_carregado_array[i].logradouro;
+        control_vetor_end[i].complemento = end_carregado_array[i].complemento;
+        control_vetor_end[i].bairro = end_carregado_array[i].bairro;
+        control_vetor_end[i].cidade = end_carregado_array[i].cidade;
+        control_vetor_end[i].uf = end_carregado_array[i].uf;
+        control_vetor_end[i].pais = end_carregado_array[i].pais;
+        control_vetor_end[i].cep = end_carregado_array[i].cep;
+        control_vetor_end[i].tipo_end = end_carregado_array[i].tipo_end;
+    }
+    var content_div_end = "";
+    for(i=0;i<tamanho_end;i++){
+    	content_div_end = content_div_end + 'Tipo do Endereço: ' + control_vetor_end_tipo[Number(control_vetor_end[i].tipo_end) - 1];
+    	content_div_end = content_div_end + '<br>Endereço: ' + control_vetor_end[i].endereco;
+    	content_div_end = content_div_end + '<br>Complemento: ' + control_vetor_end[i].complemento;
+    	content_div_end = content_div_end + '<br>Bairro: ' + control_vetor_end[i].bairro;
+    	content_div_end = content_div_end + '<br>Cidade: ' + control_vetor_end[i].cidade;
+    	content_div_end = content_div_end + '<br>UF: ' + control_vetor_end_uf[Number(control_vetor_end[i].uf) - 1];
+    	content_div_end = content_div_end + '<br>Pais: ' + control_vetor_end_pais[Number(control_vetor_end[i].pais) - 1];
+    	content_div_end = content_div_end + '<br>CEP.: ' + control_vetor_end[i].cep;
+    }
+    $('#endereco_inserido').html(content_div_end);
+        
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+    /*Carregar contatos*/
+    var div_contato_inserido_obj = $("#contato_inserido");
+    var tamanho_contato = div_contato_inserido_obj[0].childElementCount;
+    clean_contato = $('#div_contato').html();
+    for(i=0;i<tamanho_contato;i++){
+        contato_carregado_array[i] = new contato_carregado();
+        contato_carregado_array[i].ddd = $('#ddd_contato_oculta_' + i).html().trim();
+        contato_carregado_array[i].numero = $('#numero_contato_oculta_' + i).html().trim();
+        contato_carregado_array[i].tipo_contato = $('#tipo_contato_oculta_' + i).html().trim();
+        contato_carregado_array[i].cod_pais = $('#cod_pais_oculta_' + i).html().trim();
+        contato_carregado_array[i].nome = $('#nome_contato_oculta_' + i).html().trim();
+        contato_carregado_array[i].grau_contato = $('#grau_contato_oculta_' + i).html().trim();
+    }
+    var tipo_contato_tipo_obj = $('#tipocont_list');
+    var tipo_contato_tamanho_tipo = tipo_contato_tipo_obj[0].length;
+    for (i=0; i<tipo_contato_tamanho_tipo;i++){
+        control_vetor_contato_tipo[i] = document.getElementsByName("option_contato_tipo")[i].text;
+    }
+    var tipo_contato_parentesco_obj = $('#info_contato_list');
+    var tipo_contato_tamanho_parentesco = tipo_contato_parentesco_obj[0].length;
+    for (i=0; i<tipo_contato_tamanho_parentesco;i++){
+        control_vetor_contato_parentesco[i] = document.getElementsByName("option_parentesco_cargo")[i].text;
+    }
+    for(i=0;i<tamanho_contato;i++){
+    	control_div_contato[i] = new div_contato_inseridas(0, 0);
+    	control_vetor_contato[i] = new vetor_contato_inserido();
+        control_vetor_contato[i].ddd = contato_carregado_array[i].ddd;
+        control_vetor_contato[i].numero = contato_carregado_array[i].numero;
+        for(j=0;j<tipo_contato_tamanho_tipo;j++){
+            if(control_vetor_contato_tipo[j] === contato_carregado_array[i].tipo_contato){
+                control_vetor_contato[i].tipo_contato = Number(j+1);
+                break;
+            }
+        }
+        control_vetor_contato[i].cod_pais = contato_carregado_array[i].cod_pais;
+        control_vetor_contato[i].nome = contato_carregado_array[i].nome;
+        for(j=0;j<tipo_contato_tamanho_parentesco;j++){
+            if(control_vetor_contato_parentesco[j] === contato_carregado_array[i].grau_contato){
+                control_vetor_contato[i].parentesco = Number(j+1);
+                break;
+            }
+        }
+    }
+    var content_div_contato = "";
+
+    for(i=0;i<tamanho_contato;i++){
+    	content_div_contato = content_div_contato + '<div id="contato_' + i + '" class="div_inseridos">\n\
+        <input type="radio" name="contato_inserido" value="contato_' + i + '" onclick="change_contato_button_function(false)">\n\
+        <div id="tipo_contato_' + i + '">' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato) - 1] + '</div>: \n\
+        <div id="nome_contato_' + i + '">' + control_vetor_contato[i].nome + '</div>&nbsp;+\n\
+        <div id="cod_pais_' + i + '">' + control_vetor_contato[i].cod_pais + '</div>\n\
+        (<div id="ddd_contato_' + i + '">' + control_vetor_contato[i].ddd + '</div>)\n\
+        <div id="numero_contato_' + i + '">' + control_vetor_contato[i].numero + '</div>&nbsp;-\n\
+        <div id="grau_contato_' + i + '">' + control_vetor_contato_parentesco[Number(control_vetor_contato[i].parentesco) - 1] + '</div> <br> </div>';
+    }
+
+    $('#contato_inserido').html(content_div_contato);
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+    /*Carregar emails*/
+    var div_email_inserido_obj = $("#emails_inserido");
+    var tamanho_email = div_email_inserido_obj[0].childElementCount;
+    clean_email = $('#div_email').html();
+    for(i=0;i<tamanho_email;i++){
+        email_carregado_array[i] = new email_carregado();
+        email_carregado_array[i].email = $('#nome_email_oculta_' + i).html().trim();
+    }
+    for(i=0;i<tamanho_email;i++){
+    	control_div_email[i] = new div_email_inseridas(0, 0);
+    	control_vetor_email[i] = new vetor_email_inserido();
+        control_vetor_email[i].email = email_carregado_array[i].email;
+    }
+    $('#emails_inserido').html("");
+
+    var content_div_email = "";
+
+    for(i=0;i<tamanho_email;i++){
+    	content_div_email = content_div_email + '<div id="email_' + i + '" class="div_inseridos">\n\
+        <input type="radio" name="email_inserido" value="email_' + i + '" onclick="change_email_button_function()">\n\
+        <div id="nome_email_' + i + '">' + control_vetor_email[i].email + '</div> <br> </div>';
+    }
+
+    $('#emails_inserido').html(content_div_email);
 }

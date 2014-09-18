@@ -138,7 +138,8 @@ public class ClienteServiceServlet extends HttpServlet {
 	
 							   String ORGAO_EMISSOR_ = request.getParameter("ORGDOC_"+d).trim();
 							   daoDocumentoCliente.setAttValueFor("ORGAO_EMISSOR",ORGAO_EMISSOR_);
-	
+
+							   daoDocumentoCliente.setAttValueFor("DELETED",0);
 							   daoDocumentoCliente.Create();
 						   }
 	
