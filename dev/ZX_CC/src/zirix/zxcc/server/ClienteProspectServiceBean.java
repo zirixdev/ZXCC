@@ -23,9 +23,6 @@ public class ClienteProspectServiceBean {
 		setPk(pkVal);
 	}
 
-	public ClienteProspectServiceBean() {
-	}
-
 	public void setPk(Object[] pkVal) {
 
 		COD_CLIENTE_PROSPECCAO_ = new Integer((String)pkVal[0]);

@@ -24,10 +24,6 @@ public class ChipServiceBean {
 		setPk(pkVal);
 	}
 
-	public ChipServiceBean() {
-
-	}
-
 	public void setPk(Object[] pkVal) {
 
 		COD_CHIP_ = new Integer((String)pkVal[0]);

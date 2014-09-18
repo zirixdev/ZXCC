@@ -200,11 +200,29 @@ $('.modal-content').on('click', '#cancel_modal', function(e){
 window.addEventListener("message", callModalTarefas, false);
 
 function SCHED_WORK_FUNCTION(){	
-	cod_usuario = document.getElementById("cod_usuario");
+	
+	$.ajax({
+        url: url_adress + "confirmacao_novo_pedido.jsp?&COD_PEDIDO="+1,
+        success: function(result) {
+            $('.modal-content').html(result);
+            $('.modal').modal({backdrop:'static'});
+            carregar_dados_confirmacao_pedido_function();
+        },
+        error: function(e){
+            alert('error' + e.responseText);
+        }
+    });
+	
+	
+	
+	
+	
+	
+	/*cod_usuario = document.getElementById("cod_usuario");
 	cod_usuario_ = cod_usuario.innerHTML.trim();
 	var adress = "";
 	adress = url_adress + 'services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=' + cod_usuario_ + '&PROCESS_ID=1';	
-	document.location.href = adress;
+	document.location.href = adress;*/
 }
 
 function SCHED_WORK_START_FUNCTION(work_id,service_name){
@@ -240,30 +258,19 @@ function callModalTarefas(event){
 			}
 		}	
 	    switch(service_name) {
-	    case "cli_cad_prospect":
+	    case "adm_verifica_novo_pedido":
 	        $.ajax({
-	            url: url_adress + "cadastro_cli_prospect.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_,
+	            url: url_adress + "comfirmacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
 	            },
 	            error: function(e){
 	                alert('error');
 	            }
 	        });
 	        break;
-	    case "cli_verif_cad_prospect":
-	    	$.ajax({
-	            url: url_adress + "form_cli_prospect_verifica.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_,
-	            success: function(result) {
-	                $('.modal-content').html(result);
-	                $('.modal').modal({backdrop:'static'});
-	            },
-	            error: function(e){
-	                alert('error');
-	            }
-	        });
-	    	break;
 	    default:
 	        $.ajax({
 	            url: url_adress + "pop_up.html",

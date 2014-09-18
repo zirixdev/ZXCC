@@ -22,9 +22,6 @@ public class VendedorServiceBean {
 		setPk(pkVal);
 	}
 
-	public VendedorServiceBean() {
-	}
-
 	public void setPk(Object[] pkVal) {
 
 		COD_VENDEDOR_ = new Integer((String)pkVal[0]);

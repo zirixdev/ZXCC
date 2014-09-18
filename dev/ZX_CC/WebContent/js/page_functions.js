@@ -4423,7 +4423,7 @@ function carregar_dados_confirmacao_pedido_function(){
         doc_carregado_array[i].dt_emiss = $('#dt_emiss_doc_oculta_' + i).html().trim();
         doc_carregado_array[i].org_emiss = $('#org_emiss_doc_oculta_' + i).html().trim();
     }
-    var tipo_doc_tipo_obj = $('#tipodoc_list');
+    var tipo_doc_tipo_obj = $('#tipodoc_list');/******************************/
     var tipo_doc_tamanho_tipo = tipo_doc_tipo_obj[0].length;
     for (i=0; i<tipo_doc_tamanho_tipo;i++){
         control_vetor_doc_tipo[i] = document.getElementsByName("option_documento_tipo")[i].text;
@@ -4449,9 +4449,7 @@ function carregar_dados_confirmacao_pedido_function(){
         	control_vetor_doc[i].org_emiss = "";
         }
     }
-
     var content_div_doc = "";
-
     for(i=0;i<tamanho_doc;i++){
     	content_div_doc = content_div_doc + 'Numero: '+ control_vetor_doc[i].numero;
     	content_div_doc = content_div_doc + '<br>Tipo do Documento: ' + control_vetor_doc_tipo[Number(control_vetor_doc[i].tipo_doc) - 1];
@@ -4461,13 +4459,14 @@ function carregar_dados_confirmacao_pedido_function(){
 		if (control_vetor_doc[i].org_emiss !== ""){
 			content_div_doc = content_div_doc + '<br>Orgão Emissor: ' + control_vetor_doc[i].org_emiss;
 		}
-		content_div_doc = content_div_doc + '<canvas id="myCanvasDoc_<%=workList.elementAt(i)[0].trim()%>" width="495" height="1" style="border:0px;"></canvas>\n\
-		<script>var c = document.getElementById("myCanvasDoc_<%=workList.elementAt(i)[0].trim()%>");\n\
+		content_div_doc = content_div_doc + '<canvas id="myCanvasDoc_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+		<script>var c = document.getElementById("myCanvasDoc_' + i + '");\n\
 		var ctx = c.getContext("2d");\n\
 		ctx.moveTo(0,0);\n\
-		ctx.lineTo(495,0);\n\
+		ctx.lineTo(650,0);\n\
 		ctx.stroke();</script><br>';
     }
+    $('#docs_inserido').html("");
     $('#documentos').html(content_div_doc);
     
 /*----------------------------------------------------------------------------*/
@@ -4486,17 +4485,17 @@ function carregar_dados_confirmacao_pedido_function(){
         end_carregado_array[i].cep = $('#cep_oculta_' + i).html().trim();
         end_carregado_array[i].tipo_end = $('#tipo_end_oculta_' + i).html().trim();
     }
-    var tipo_endereco_tipo_obj = $('#tipo_end_list');
+    var tipo_endereco_tipo_obj = $('#tipo_end_list');/******************************/
     var tipo_endereco_tamanho_tipo = tipo_endereco_tipo_obj[0].length;
     for (var i=0; i<tipo_endereco_tamanho_tipo;i++){
         control_vetor_end_tipo[i] = document.getElementsByName("option_endereco_tipo")[i].text;
     }
-    var tipo_endereco_pais_obj = $('#pais_list');
+    var tipo_endereco_pais_obj = $('#pais_list');/******************************/
     var tipo_endereco_tamanho_pais = tipo_endereco_pais_obj[0].length;
     for (i=0; i<tipo_endereco_tamanho_pais;i++){
         control_vetor_end_pais[i] = document.getElementsByName("option_endereco_pais")[i].text;
     }
-    var tipo_endereco_uf_obj = $('#uf_list');
+    var tipo_endereco_uf_obj = $('#uf_list');/******************************/
     var tipo_endereco_tamanho_uf = tipo_endereco_uf_obj[0].length;
     for (i=0; i<tipo_endereco_tamanho_uf;i++){
         control_vetor_end_uf[i] = document.getElementsByName("option_endereco_uf")[i].text;
@@ -4518,13 +4517,20 @@ function carregar_dados_confirmacao_pedido_function(){
     	content_div_end = content_div_end + 'Tipo do Endereço: ' + control_vetor_end_tipo[Number(control_vetor_end[i].tipo_end) - 1];
     	content_div_end = content_div_end + '<br>Endereço: ' + control_vetor_end[i].endereco;
     	content_div_end = content_div_end + '<br>Complemento: ' + control_vetor_end[i].complemento;
-    	content_div_end = content_div_end + '<br>Bairro: ' + control_vetor_end[i].bairro;
-    	content_div_end = content_div_end + '<br>Cidade: ' + control_vetor_end[i].cidade;
-    	content_div_end = content_div_end + '<br>UF: ' + control_vetor_end_uf[Number(control_vetor_end[i].uf) - 1];
-    	content_div_end = content_div_end + '<br>Pais: ' + control_vetor_end_pais[Number(control_vetor_end[i].pais) - 1];
-    	content_div_end = content_div_end + '<br>CEP.: ' + control_vetor_end[i].cep;
+    	content_div_end = content_div_end + '  Bairro: ' + control_vetor_end[i].bairro;
+    	content_div_end = content_div_end + '  Cidade: ' + control_vetor_end[i].cidade;
+    	content_div_end = content_div_end + '  UF: ' + control_vetor_end_uf[Number(control_vetor_end[i].uf) - 1];
+    	content_div_end = content_div_end + '<br>País: ' + control_vetor_end_pais[Number(control_vetor_end[i].pais) - 1];
+    	content_div_end = content_div_end + '  CEP.: ' + control_vetor_end[i].cep;
+    	content_div_end = content_div_end + '<canvas id="myCanvasEnd_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+		<script>var c = document.getElementById("myCanvasEnd_' + i + '");\n\
+		var ctx = c.getContext("2d");\n\
+		ctx.moveTo(0,0);\n\
+		ctx.lineTo(650,0);\n\
+		ctx.stroke();</script><br>';
     }
-    $('#endereco_inserido').html(content_div_end);
+    $('#endereco_inserido').html("");
+    $('#endereco').html(content_div_end);
         
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -4541,12 +4547,12 @@ function carregar_dados_confirmacao_pedido_function(){
         contato_carregado_array[i].nome = $('#nome_contato_oculta_' + i).html().trim();
         contato_carregado_array[i].grau_contato = $('#grau_contato_oculta_' + i).html().trim();
     }
-    var tipo_contato_tipo_obj = $('#tipocont_list');
+    var tipo_contato_tipo_obj = $('#tipocont_list');/******************************/
     var tipo_contato_tamanho_tipo = tipo_contato_tipo_obj[0].length;
     for (i=0; i<tipo_contato_tamanho_tipo;i++){
         control_vetor_contato_tipo[i] = document.getElementsByName("option_contato_tipo")[i].text;
     }
-    var tipo_contato_parentesco_obj = $('#info_contato_list');
+    var tipo_contato_parentesco_obj = $('#info_contato_list');/******************************/
     var tipo_contato_tamanho_parentesco = tipo_contato_parentesco_obj[0].length;
     for (i=0; i<tipo_contato_tamanho_parentesco;i++){
         control_vetor_contato_parentesco[i] = document.getElementsByName("option_parentesco_cargo")[i].text;
@@ -4572,19 +4578,22 @@ function carregar_dados_confirmacao_pedido_function(){
         }
     }
     var content_div_contato = "";
-
     for(i=0;i<tamanho_contato;i++){
-    	content_div_contato = content_div_contato + '<div id="contato_' + i + '" class="div_inseridos">\n\
-        <input type="radio" name="contato_inserido" value="contato_' + i + '" onclick="change_contato_button_function(false)">\n\
-        <div id="tipo_contato_' + i + '">' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato) - 1] + '</div>: \n\
-        <div id="nome_contato_' + i + '">' + control_vetor_contato[i].nome + '</div>&nbsp;+\n\
-        <div id="cod_pais_' + i + '">' + control_vetor_contato[i].cod_pais + '</div>\n\
-        (<div id="ddd_contato_' + i + '">' + control_vetor_contato[i].ddd + '</div>)\n\
-        <div id="numero_contato_' + i + '">' + control_vetor_contato[i].numero + '</div>&nbsp;-\n\
-        <div id="grau_contato_' + i + '">' + control_vetor_contato_parentesco[Number(control_vetor_contato[i].parentesco) - 1] + '</div> <br> </div>';
+    	content_div_contato = content_div_contato + 'Nome: ' + control_vetor_contato[i].nome;
+    	content_div_contato = content_div_contato + '  Parentesco/Cargo: ' + control_vetor_contato_parentesco[Number(control_vetor_contato[i].parentesco)-1] + '';
+    	content_div_contato = content_div_contato + '<br>' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato)-1];
+    	content_div_contato = content_div_contato + ': +' + control_vetor_contato[i].cod_pais;
+    	content_div_contato = content_div_contato + '(' + control_vetor_contato[i].ddd + ')';
+    	content_div_contato = content_div_contato + ' - ' + control_vetor_contato[i].numero;
+    	content_div_contato = content_div_contato + '<canvas id="myCanvasCto_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+		<script>var c = document.getElementById("myCanvasCto_' + i + '");\n\
+		var ctx = c.getContext("2d");\n\
+		ctx.moveTo(0,0);\n\
+		ctx.lineTo(650,0);\n\
+		ctx.stroke();</script><br>';
     }
-
-    $('#contato_inserido').html(content_div_contato);
+    $('#contato_inserido').html("");
+    $('#contato').html(content_div_contato);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -4601,15 +4610,16 @@ function carregar_dados_confirmacao_pedido_function(){
     	control_vetor_email[i] = new vetor_email_inserido();
         control_vetor_email[i].email = email_carregado_array[i].email;
     }
-    $('#emails_inserido').html("");
-
     var content_div_email = "";
-
     for(i=0;i<tamanho_email;i++){
-    	content_div_email = content_div_email + '<div id="email_' + i + '" class="div_inseridos">\n\
-        <input type="radio" name="email_inserido" value="email_' + i + '" onclick="change_email_button_function()">\n\
-        <div id="nome_email_' + i + '">' + control_vetor_email[i].email + '</div> <br> </div>';
+    	content_div_email = content_div_email + 'E-mail: ' + control_vetor_email[i].email;
+    	content_div_email = content_div_email + '<canvas id="myCanvasMail_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+		<script>var c = document.getElementById("myCanvasMail_' + i + '");\n\
+		var ctx = c.getContext("2d");\n\
+		ctx.moveTo(0,0);\n\
+		ctx.lineTo(650,0);\n\
+		ctx.stroke();</script><br>';
     }
-
-    $('#emails_inserido').html(content_div_email);
+    $('#emails_inserido').html("");
+    $('#email').html(content_div_email);
 }
