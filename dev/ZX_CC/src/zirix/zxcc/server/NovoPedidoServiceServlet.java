@@ -141,6 +141,7 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 
 							   String UF_ = request.getParameter("UF_"+d).trim();
 							   daoEnderecoCliente.setAttValueFor("UF",UF_);
+							   System.err.println("\nUF = " + UF_);
 
 							   String COD_PAIS_ = request.getParameter("PAIS_"+d).trim();
 							   daoEnderecoCliente.setAttValueFor("COD_PAIS",COD_PAIS_);
@@ -449,7 +450,6 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 				   }
 				   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }
-	
 			   else if (OP_CODE.compareTo("DELETE") == 0){
 	
 				   String COD_CLIENTE = request.getParameter("COD_CLIENTE");

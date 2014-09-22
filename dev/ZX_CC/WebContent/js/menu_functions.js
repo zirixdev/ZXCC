@@ -127,7 +127,7 @@ function modal_click(id){
             break;
         case "menu_com_cad_cli":
             $.ajax({
-                url: url_adress + "cadastro_cli_prospect.jsp?WORK_ID=0&COD_USUARIO="+cod_usuario_,
+                url: url_adress + "cadastro_cli_prospect.jsp",
                 success: function(result) {
                     $('.modal-content').html(result);
                     $('.modal').modal({backdrop:'static'});
@@ -199,25 +199,36 @@ $('.modal-content').on('click', '#cancel_modal', function(e){
 
 window.addEventListener("message", callModalTarefas, false);
 
-function SCHED_WORK_FUNCTION(){	
-	
-	$.ajax({
-        url: url_adress + "confirmacao_novo_pedido.jsp?&COD_PEDIDO="+1,
-        success: function(result) {
-            $('.modal-content').html(result);
-            $('.modal').modal({backdrop:'static'});
-            carregar_dados_confirmacao_pedido_function();
-        },
-        error: function(e){
-            alert('error' + e.responseText);
-        }
-    });
-	
-	
-	
-	
-	
-	
+function SCHED_WORK_FUNCTION(tela){	
+	switch(tela){
+	case "agend":
+		$.ajax({
+	        url: url_adress + "agendamento.jsp?WORK_ID=0&COD_USUARIO=1&AREA=AGEND&PK_OBJ=1",
+	        success: function(result) {
+	            $('.modal-content').html(result);
+	            $('.modal').modal({backdrop:'static'});
+	            carregar_dados_confirmacao_pedido_function();
+	        },
+	        error: function(e){
+	            alert('error');
+	        }
+	    });
+		break;
+	case "visualiza":
+		$.ajax({
+	        url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID=0&COD_USUARIO=1&AREA=CAD_GS&PK_OBJ=1",
+	        success: function(result) {
+	            $('.modal-content').html(result);
+	            $('.modal').modal({backdrop:'static'});
+	            carregar_dados_confirmacao_pedido_function();
+	        },
+	        error: function(e){
+	            alert('error');
+	        }
+	    });
+		break;
+	}
+
 	/*cod_usuario = document.getElementById("cod_usuario");
 	cod_usuario_ = cod_usuario.innerHTML.trim();
 	var adress = "";
@@ -248,19 +259,28 @@ function callModalTarefas(event){
 	var work_id = "";
 	var service_name = "";
 	var stringSize = data.length;
+	var selectedPK = "";
 	
 	if(stringSize > 0){
 		for(var i=0; i<stringSize; i++){
 			if(data.charAt(i+1) == "/" && data.charAt(i+2) == "/"){
 				work_id = data.slice(Number(0), Number(i+1));
-				service_name = data.slice(Number(i+3),Number(stringSize));
+				restData = data.slice(Number(i+3),Number(stringSize));
 				break;
 			}
-		}	
+		}
+		stringSize = restData.length;
+		for(var i=0; i<stringSize; i++){
+			if(data.charAt(i+1) == "/" && data.charAt(i+2) == "/"){
+				service_name = restData.slice(Number(0),Number(i+1));
+				selectedPK = restData.slice(Number(i+3),Number(stringSize));
+				break;
+			}
+		}
 	    switch(service_name) {
 	    case "adm_verifica_novo_pedido":
 	        $.ajax({
-	            url: url_adress + "comfirmacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_,
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ADM&PK_OBJ="+selectedPK,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});
@@ -271,6 +291,71 @@ function callModalTarefas(event){
 	            }
 	        });
 	        break;
+	    case "opr_cad_globalsearch":
+	        $.ajax({
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=CAD_GS&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
+	    case "opr_cad_syscom":
+	        $.ajax({
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=CAD_SYSCOM&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
+	    case "opr_cad_zxlog":
+	        $.ajax({
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=CAD_ZXLOG&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
+	    case "opr_separacao_equipamento":
+	        $.ajax({
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=SEP_EQUIP&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
+	    case "opr_agendamento":
+	        $.ajax({
+	            url: url_adress + "agendamento.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=SEP_EQUIP&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
 	    default:
 	        $.ajax({
 	            url: url_adress + "pop_up.html",

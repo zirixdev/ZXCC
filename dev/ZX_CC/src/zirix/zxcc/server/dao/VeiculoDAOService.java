@@ -20,7 +20,7 @@ public class VeiculoDAOService {
 
 		COD_VEICULO_ = pkVal;
 
-		String query = "SELECT * FROM " + TipoContatoDAO.TABLENAME + " WHERE COD_VEICULO = " + COD_VEICULO_;
+		String query = "SELECT * FROM " + VeiculoDAO.TABLENAME + " WHERE COD_VEICULO = " + COD_VEICULO_;
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
@@ -33,10 +33,10 @@ public class VeiculoDAOService {
 
 			while (res.next()) {
 
-				int COD_CONTATO = res.getInt("COD_CONTATO");							
+				int COD_VEICULO = res.getInt("COD_VEICULO");							
 
 				PkList pkList = new PkList();				
-				pkList.put("COD_CONTATO",COD_CONTATO);
+				pkList.put("COD_VEICULO",COD_VEICULO);
 				VeiculoDAO dao = new VeiculoDAO(pkList);
 				
 				dao.read();

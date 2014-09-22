@@ -3659,6 +3659,10 @@ function insert_unidades_function(){
 
     var i = control_div_unidade_inserido.length;
     var j = 0;
+    var arrayContatoProcedimento = new Array();
+    for(i=0;i<control_vetor_contato_procedimento_json.length;i++){
+    	arrayContatoProcedimento[i] = new vetor_contato_procedimento_inserido(control_vetor_contato_procedimento_json[i].ddd,control_vetor_contato_procedimento_json[i].numero,control_vetor_contato_procedimento_json[i].tipo_contato,control_vetor_contato_procedimento_json[i].cod_pais,control_vetor_contato_procedimento_json[i].nome,control_vetor_contato_procedimento_json[i].parentesco);
+    }
 
     if (i !== 0){
         while (j < i && insert === "X"){
@@ -3671,12 +3675,12 @@ function insert_unidades_function(){
         }
         if (insert === "X"){
         	control_div_unidade_inserido[i] = new div_unidade_inserido(i,0);
-        	control_vetor_unidade_inserido[i] = new vetor_unidade_inserido(control_vetor_contato_procedimento_json, senha, tipo_unidade, control_vetor_unidade);
+        	control_vetor_unidade_inserido[i] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
         }
     }
     else{
     	control_div_unidade_inserido[0] = new div_unidade_inserido(0,0);
-    	control_vetor_unidade_inserido[0] = new vetor_unidade_inserido(control_vetor_contato_procedimento_json, senha, tipo_unidade, control_vetor_unidade);
+    	control_vetor_unidade_inserido[0] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
     }
 
     var content_div_unidade = "";
@@ -3704,7 +3708,7 @@ function insert_unidades_function(){
         content_div_unidade = content_div_unidade + '<br>';
         $('#unidade_' + control_div_unidade_inserido[j].cod).html(content_div_unidade);
         control_div_unidade_inserido[j].excluida = 0;
-        control_vetor_unidade_inserido[j] = new vetor_unidade_inserido(control_vetor_contato_procedimento_json, senha, tipo_unidade, control_vetor_unidade);
+        control_vetor_unidade_inserido[j] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
     }
     limpa_campos_unidade_function();
     var content_div_bt = '<button type="button" id="incluir_unidade" onclick="insert_unidades_function()">Incluir</button>';
@@ -4423,7 +4427,7 @@ function carregar_dados_confirmacao_pedido_function(){
         doc_carregado_array[i].dt_emiss = $('#dt_emiss_doc_oculta_' + i).html().trim();
         doc_carregado_array[i].org_emiss = $('#org_emiss_doc_oculta_' + i).html().trim();
     }
-    var tipo_doc_tipo_obj = $('#tipodoc_list');/******************************/
+    var tipo_doc_tipo_obj = $('#tipodoc_list');
     var tipo_doc_tamanho_tipo = tipo_doc_tipo_obj[0].length;
     for (i=0; i<tipo_doc_tamanho_tipo;i++){
         control_vetor_doc_tipo[i] = document.getElementsByName("option_documento_tipo")[i].text;
@@ -4451,22 +4455,24 @@ function carregar_dados_confirmacao_pedido_function(){
     }
     var content_div_doc = "";
     for(i=0;i<tamanho_doc;i++){
-    	content_div_doc = content_div_doc + 'Numero: '+ control_vetor_doc[i].numero;
-    	content_div_doc = content_div_doc + '<br>Tipo do Documento: ' + control_vetor_doc_tipo[Number(control_vetor_doc[i].tipo_doc) - 1];
+    	content_div_doc = content_div_doc + '<b>Numero:</b> '+ control_vetor_doc[i].numero;
+    	content_div_doc = content_div_doc + '<br><b>Tipo do Documento:</b> ' + control_vetor_doc_tipo[Number(control_vetor_doc[i].tipo_doc) - 1];
 		if (control_vetor_doc[i].dt_emiss !== ""){
-			content_div_doc = content_div_doc + '<br>Data de Emissão: ' + control_vetor_doc[i].dt_emiss;
+			content_div_doc = content_div_doc + '<br><b>Data de Emissão:</b> ' + control_vetor_doc[i].dt_emiss;
 		}
 		if (control_vetor_doc[i].org_emiss !== ""){
-			content_div_doc = content_div_doc + '<br>Orgão Emissor: ' + control_vetor_doc[i].org_emiss;
+			content_div_doc = content_div_doc + '&nbsp;&nbsp;&nbsp;<b>Orgão Emissor:</b> ' + control_vetor_doc[i].org_emiss;
 		}
-		content_div_doc = content_div_doc + '<canvas id="myCanvasDoc_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
-		<script>var c = document.getElementById("myCanvasDoc_' + i + '");\n\
-		var ctx = c.getContext("2d");\n\
-		ctx.moveTo(0,0);\n\
-		ctx.lineTo(650,0);\n\
-		ctx.stroke();</script><br>';
+		if(tamanho_doc > Number(1)){
+			content_div_doc = content_div_doc + '<canvas id="myCanvasDoc_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+			<script>var c = document.getElementById("myCanvasDoc_' + i + '");\n\
+			var ctx = c.getContext("2d");\n\
+			ctx.moveTo(0,0);\n\
+			ctx.lineTo(650,0);\n\
+			ctx.stroke();</script><br>';
+		}
     }
-    $('#docs_inserido').html("");
+    $('#documentos').html("");
     $('#documentos').html(content_div_doc);
     
 /*----------------------------------------------------------------------------*/
@@ -4485,17 +4491,17 @@ function carregar_dados_confirmacao_pedido_function(){
         end_carregado_array[i].cep = $('#cep_oculta_' + i).html().trim();
         end_carregado_array[i].tipo_end = $('#tipo_end_oculta_' + i).html().trim();
     }
-    var tipo_endereco_tipo_obj = $('#tipo_end_list');/******************************/
+    var tipo_endereco_tipo_obj = $('#tipo_end_list');
     var tipo_endereco_tamanho_tipo = tipo_endereco_tipo_obj[0].length;
     for (var i=0; i<tipo_endereco_tamanho_tipo;i++){
         control_vetor_end_tipo[i] = document.getElementsByName("option_endereco_tipo")[i].text;
     }
-    var tipo_endereco_pais_obj = $('#pais_list');/******************************/
+    var tipo_endereco_pais_obj = $('#pais_list');
     var tipo_endereco_tamanho_pais = tipo_endereco_pais_obj[0].length;
     for (i=0; i<tipo_endereco_tamanho_pais;i++){
         control_vetor_end_pais[i] = document.getElementsByName("option_endereco_pais")[i].text;
     }
-    var tipo_endereco_uf_obj = $('#uf_list');/******************************/
+    var tipo_endereco_uf_obj = $('#uf_list');
     var tipo_endereco_tamanho_uf = tipo_endereco_uf_obj[0].length;
     for (i=0; i<tipo_endereco_tamanho_uf;i++){
         control_vetor_end_uf[i] = document.getElementsByName("option_endereco_uf")[i].text;
@@ -4514,22 +4520,26 @@ function carregar_dados_confirmacao_pedido_function(){
     }
     var content_div_end = "";
     for(i=0;i<tamanho_end;i++){
-    	content_div_end = content_div_end + 'Tipo do Endereço: ' + control_vetor_end_tipo[Number(control_vetor_end[i].tipo_end) - 1];
-    	content_div_end = content_div_end + '<br>Endereço: ' + control_vetor_end[i].endereco;
-    	content_div_end = content_div_end + '<br>Complemento: ' + control_vetor_end[i].complemento;
-    	content_div_end = content_div_end + '  Bairro: ' + control_vetor_end[i].bairro;
-    	content_div_end = content_div_end + '  Cidade: ' + control_vetor_end[i].cidade;
-    	content_div_end = content_div_end + '  UF: ' + control_vetor_end_uf[Number(control_vetor_end[i].uf) - 1];
-    	content_div_end = content_div_end + '<br>País: ' + control_vetor_end_pais[Number(control_vetor_end[i].pais) - 1];
-    	content_div_end = content_div_end + '  CEP.: ' + control_vetor_end[i].cep;
-    	content_div_end = content_div_end + '<canvas id="myCanvasEnd_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
-		<script>var c = document.getElementById("myCanvasEnd_' + i + '");\n\
-		var ctx = c.getContext("2d");\n\
-		ctx.moveTo(0,0);\n\
-		ctx.lineTo(650,0);\n\
-		ctx.stroke();</script><br>';
+    	content_div_end = content_div_end + '<b>Tipo do Endereço:</b>&nbsp;' + control_vetor_end_tipo[Number(control_vetor_end[i].tipo_end) - 1];
+    	content_div_end = content_div_end + '<br><b>Endereço:</b>&nbsp;' + control_vetor_end[i].endereco;
+    	if(control_vetor_end[i].complemento.trim() != ""){
+    		content_div_end = content_div_end + '<br><b>Complemento:</b>&nbsp;' + control_vetor_end[i].complemento;
+    	}
+    	content_div_end = content_div_end + '&nbsp;&nbsp;&nbsp;<b>Bairro:</b>&nbsp;' + control_vetor_end[i].bairro;
+    	content_div_end = content_div_end + '&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;' + control_vetor_end[i].cidade;
+    	content_div_end = content_div_end + '&nbsp;&nbsp;&nbsp;<b>UF:</b>&nbsp;' + control_vetor_end_uf[Number(control_vetor_end[i].uf) - 1];
+    	content_div_end = content_div_end + '<br><b>País:</b>&nbsp;' + control_vetor_end_pais[Number(control_vetor_end[i].pais) - 1];
+    	content_div_end = content_div_end + '&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;' + control_vetor_end[i].cep;
+		if(tamanho_end > Number(1)){
+	    	content_div_end = content_div_end + '<canvas id="myCanvasEnd_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+			<script>var c = document.getElementById("myCanvasEnd_' + i + '");\n\
+			var ctx = c.getContext("2d");\n\
+			ctx.moveTo(0,0);\n\
+			ctx.lineTo(650,0);\n\
+			ctx.stroke();</script><br>';
+		}
     }
-    $('#endereco_inserido').html("");
+    $('#endereco').html("");
     $('#endereco').html(content_div_end);
         
 /*----------------------------------------------------------------------------*/
@@ -4547,12 +4557,12 @@ function carregar_dados_confirmacao_pedido_function(){
         contato_carregado_array[i].nome = $('#nome_contato_oculta_' + i).html().trim();
         contato_carregado_array[i].grau_contato = $('#grau_contato_oculta_' + i).html().trim();
     }
-    var tipo_contato_tipo_obj = $('#tipocont_list');/******************************/
+    var tipo_contato_tipo_obj = $('#tipocont_list');
     var tipo_contato_tamanho_tipo = tipo_contato_tipo_obj[0].length;
     for (i=0; i<tipo_contato_tamanho_tipo;i++){
         control_vetor_contato_tipo[i] = document.getElementsByName("option_contato_tipo")[i].text;
     }
-    var tipo_contato_parentesco_obj = $('#info_contato_list');/******************************/
+    var tipo_contato_parentesco_obj = $('#info_contato_list');
     var tipo_contato_tamanho_parentesco = tipo_contato_parentesco_obj[0].length;
     for (i=0; i<tipo_contato_tamanho_parentesco;i++){
         control_vetor_contato_parentesco[i] = document.getElementsByName("option_parentesco_cargo")[i].text;
@@ -4579,20 +4589,22 @@ function carregar_dados_confirmacao_pedido_function(){
     }
     var content_div_contato = "";
     for(i=0;i<tamanho_contato;i++){
-    	content_div_contato = content_div_contato + 'Nome: ' + control_vetor_contato[i].nome;
-    	content_div_contato = content_div_contato + '  Parentesco/Cargo: ' + control_vetor_contato_parentesco[Number(control_vetor_contato[i].parentesco)-1] + '';
-    	content_div_contato = content_div_contato + '<br>' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato)-1];
-    	content_div_contato = content_div_contato + ': +' + control_vetor_contato[i].cod_pais;
-    	content_div_contato = content_div_contato + '(' + control_vetor_contato[i].ddd + ')';
-    	content_div_contato = content_div_contato + ' - ' + control_vetor_contato[i].numero;
-    	content_div_contato = content_div_contato + '<canvas id="myCanvasCto_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
-		<script>var c = document.getElementById("myCanvasCto_' + i + '");\n\
-		var ctx = c.getContext("2d");\n\
-		ctx.moveTo(0,0);\n\
-		ctx.lineTo(650,0);\n\
-		ctx.stroke();</script><br>';
+    	content_div_contato = content_div_contato + '<b>Nome:</b>&nbsp;' + control_vetor_contato[i].nome;
+    	content_div_contato = content_div_contato + '&nbsp;&nbsp;&nbsp;<b>Parentesco/Cargo:</b>&nbsp;' + control_vetor_contato_parentesco[Number(control_vetor_contato[i].parentesco)-1] + '';
+    	content_div_contato = content_div_contato + '<br><b>' + control_vetor_contato_tipo[Number(control_vetor_contato[i].tipo_contato)-1];
+    	content_div_contato = content_div_contato + '</b>:&nbsp;+' + control_vetor_contato[i].cod_pais;
+    	content_div_contato = content_div_contato + '&nbsp;(' + control_vetor_contato[i].ddd + ')';
+    	content_div_contato = content_div_contato + '&nbsp;' + control_vetor_contato[i].numero;
+		if(tamanho_contato > Number(1)){
+	    	content_div_contato = content_div_contato + '<canvas id="myCanvasCto_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+			<script>var c = document.getElementById("myCanvasCto_' + i + '");\n\
+			var ctx = c.getContext("2d");\n\
+			ctx.moveTo(0,0);\n\
+			ctx.lineTo(650,0);\n\
+			ctx.stroke();</script><br>';
+		}
     }
-    $('#contato_inserido').html("");
+    $('#contato').html("");
     $('#contato').html(content_div_contato);
 
 /*----------------------------------------------------------------------------*/
@@ -4612,14 +4624,68 @@ function carregar_dados_confirmacao_pedido_function(){
     }
     var content_div_email = "";
     for(i=0;i<tamanho_email;i++){
-    	content_div_email = content_div_email + 'E-mail: ' + control_vetor_email[i].email;
-    	content_div_email = content_div_email + '<canvas id="myCanvasMail_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
-		<script>var c = document.getElementById("myCanvasMail_' + i + '");\n\
-		var ctx = c.getContext("2d");\n\
-		ctx.moveTo(0,0);\n\
-		ctx.lineTo(650,0);\n\
-		ctx.stroke();</script><br>';
+    	content_div_email = content_div_email + '<b>E-mail:</b>&nbsp;' + control_vetor_email[i].email;
+		if(tamanho_email > Number(1)){
+	    	content_div_email = content_div_email + '<canvas id="myCanvasMail_' + i + '" width="650" height="1" style="border:0px;"></canvas>\n\
+			<script>var c = document.getElementById("myCanvasMail_' + i + '");\n\
+			var ctx = c.getContext("2d");\n\
+			ctx.moveTo(0,0);\n\
+			ctx.lineTo(650,0);\n\
+			ctx.stroke();</script><br>';
+		}
     }
-    $('#emails_inserido').html("");
+    $('#email').html("");
     $('#email').html(content_div_email);
+}
+
+function form_novo_pedido_function(area){
+	switch (area){
+	case "ADM":
+		if(!document.getElementById("dadosCorretos").checked){
+			if(confirm('Existe algum erro no formulário?')){
+				//todo - VOLTAR PARA COMERCIAL CORRIGIR ERRO
+			}
+			alert("Favor confirmar se os dados do pedido estão corretos.");
+			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		if(!document.getElementById("scpSerasa").checked){
+			if(confirm('Existe alguma pendencia no SPC ou Serasa?')){
+				//todo - ENVIAR PARA DIRETORIA DAR OK
+			}
+			alert("Favor confirmar se o cliente possui pendencia no SPC ou Serasa.");
+			document.getElementById("scpSerasa").focus();
+			return 0;
+		}
+		break;
+	case "CAD_GS":
+		if(!document.getElementById("dadosCorretos").checked){
+			alert("Favor marcar a box caso tenha realizado o cadastro no Global Search.");
+			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		break;
+	case "CAD_SYSCOM":
+		if(!document.getElementById("dadosCorretos").checked){
+			alert("Favor marcar a box caso tenha realizado o cadastro no Syscom.");
+			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		break;
+	case "CAD_ZXLOG":
+		if(!document.getElementById("dadosCorretos").checked){
+			alert("Favor marcar a box caso tenha realizado o cadastro no ZX Log.");
+			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		break;
+	case "SEP_EQUIP":
+		if(!document.getElementById("dadosCorretos").checked){
+			alert("Favor marcar a box caso tenha realizado a separação dos equipamentos necessários para a instalação.");
+			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		break;
+	}
+	//TODO - OK NO WORK, passar adiante
 }

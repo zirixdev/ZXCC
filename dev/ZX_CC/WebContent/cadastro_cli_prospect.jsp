@@ -7,14 +7,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
-<%
-	String WORK_ID = request.getParameter("WORK_ID");
-	String[] pkVal = {request.getParameter("COD_USUARIO")};
-	if(WORK_ID.compareTo("0") != 0){
-		MockScheduleBean bean = new MockScheduleBean(pkVal);
-		bean.setStartTimestamp(WORK_ID);
-	}
-%>
+
 <div id="comercial-cadastro-prospeccao-content">
     <form class="outer_form">
         <ul class="nav nav-tabs">

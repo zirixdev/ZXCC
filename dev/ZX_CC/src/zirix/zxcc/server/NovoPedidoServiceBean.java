@@ -120,15 +120,15 @@ public class NovoPedidoServiceBean {
 	}
 
 	@SuppressWarnings("finally")
-	public Vector<int[]> getCountUnidadesVeículo(){
-		Vector<int[]> countUnidades = new Vector<int[]>();
+	public Vector<String[]> getCountUnidadesVeículo(){
+		Vector<String[]> countUnidades = new Vector<String[]>();
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_VEICULO "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
 			for (int i=0;i<values.size();i++) {
-				int[] attList = new int[1];
-				attList[0] = Integer.parseInt((String) values.get(i)[0]);
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
 				countUnidades.add(attList);
 			}
 		}catch (SQLException ex) {
@@ -218,12 +218,12 @@ public class NovoPedidoServiceBean {
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[6];
-				attList[0] = (String) values.get(i)[0];
-				attList[1] = (String) values.get(i)[1];
-				attList[2] = (String) values.get(i)[2];
-				attList[3] = (String) values.get(i)[3];
-				attList[4] = (String) values.get(i)[4];
-				attList[5] = (String) values.get(i)[5];
+				attList[0] = (String) values.get(i)[0].toString();
+				attList[1] = (String) values.get(i)[1].toString();
+				attList[2] = (String) values.get(i)[2].toString();
+				attList[3] = (String) values.get(i)[3].toString();
+				attList[4] = (String) values.get(i)[4].toString();
+				attList[5] = (String) values.get(i)[5].toString();
 				contatoProcedimento.add(attList);
 			}
 
@@ -299,11 +299,9 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SERVICO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[1];
-				attList[0] = (String) values.get(i)[0];
-				valorTotal = attList[0];
-			}
+			System.err.println("\n values.size() = " + values.size());
+			valorTotal = values.get(0)[0].toString();
+			System.err.println("\n getValorTotalServico valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{
@@ -318,11 +316,9 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "EQUIP_ACESSORIO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[1];
-				attList[0] = (String) values.get(i)[0];
-				valorTotal = attList[0];
-			}
+			System.err.println("\n values.size() = " + values.size());
+			valorTotal = values.get(0)[0].toString();
+			System.err.println("\n getValorTotalEquipamento valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{
