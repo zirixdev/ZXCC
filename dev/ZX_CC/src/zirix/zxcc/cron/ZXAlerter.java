@@ -25,14 +25,27 @@ public class ZXAlerter {
 
 	public static String SCHEDED_WORK_FLAG = "0";
 	public static String STARTED_WORK_FLAG = "1";
-	public static String FINISHED_WORK_FLAG_ = "2";
+	public static String FINISHED_WORK_FLAG = "2";
+
+	private String username_; 
+	private String password_; 
 
 
-	public ZXAlerter() {}
+	public ZXAlerter(String username,String password) {
+
+		username_ = username.toString();
+		password_ = password.toString();
+	}
 
 	public static void main(String[] args) {
 
 	  try {
+
+		validateInput(args);
+
+		ZXAlerter alerter = new ZXAlerter(args[0],args[1]);
+
+
 		// This will load the MySQL driver, each DB has its own driver
 		Class.forName("com.mysql.jdbc.Driver");
 		// Setup the connection with the DB
@@ -45,7 +58,6 @@ public class ZXAlerter {
 		// STARTED_WORKs
 		PreparedStatement stmt1 = con.prepareStatement("SELECT NOW(),sched_time_stamp,restriction_id,work_id,work_name,cod_usuario from sched_work where work_state_id = " + STARTED_WORK_FLAG);
 		ResultSet res1 = stmt1.executeQuery();
-
 
 		while (res0.next()) {
 
@@ -65,8 +77,14 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-			if (eval0(now_time,sched_time,restriction_val)) 
-				notify(work_id,work_name,cod_usuario,RISK_SUBJECT);
+			if (alerter.eval0(now_time,sched_time,restriction_val)) {
+
+				alerter.notify(work_id,work_name,cod_usuario,RISK_SUBJECT);
+				
+				PreparedStatement stmt3 = con.prepareStatement("UPDATE sched_work set alert_status = 1 where work_id =?");
+				stmt3.setInt(1,work_id);
+				stmt3.executeUpdate();
+			}
 		}
 
 		while (res1.next()) {
@@ -87,9 +105,17 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-			if (eval1(now_time,sched_time,restriction_val)) 
-				notify(work_id,work_name,cod_usuario,OVERTIME_SUBJECT);
+			if (alerter.eval1(now_time,sched_time,restriction_val)) {
+
+				alerter.notify(work_id,work_name,cod_usuario,OVERTIME_SUBJECT);
+
+				PreparedStatement stmt3 = con.prepareStatement("UPDATE sched_work set alert_status = 1 where work_id =?");
+				stmt3.setInt(1,work_id);
+				stmt3.executeUpdate();
+			}
 		}
+
+
 
 	  } catch(Exception ex) {
 
@@ -97,10 +123,18 @@ public class ZXAlerter {
 	  }
 	}
 
+	public static void validateInput(String[] args) throws IllegalArgumentException {
+
+		// USERNAME and PASSWORD
+		if (args.length != 2)
+			throw new IllegalArgumentException("Usage : ZXMailer [USERNAME] [PASSWORD] ... ");
+
+	}
+
 	/*
 	 * avalia o cenario onde a tarefa se aproxima de 75% do tempo limite e ainda nao foi iniciada
 	 */
-	private static boolean eval0(Timestamp now,Timestamp sched,Time rest) {
+	public boolean eval0(Timestamp now,Timestamp sched,Time rest) {
 
 		long sched_millis = sched.getTime();
 
@@ -110,9 +144,6 @@ public class ZXAlerter {
 		cal.add(Calendar.HOUR,rest.getHours());
 		cal.add(Calendar.MINUTE,rest.getMinutes());
 
-		System.out.println(new Timestamp(cal.getTimeInMillis()).toString());
-
-
 
 		// somente um teste...
 		if (now.after(new Timestamp(cal.getTimeInMillis())))
@@ -120,10 +151,8 @@ public class ZXAlerter {
 
 		double diff_res = new Double(now.getTime()).doubleValue()/new Double(cal.getTimeInMillis()).doubleValue();
 
-		System.out.println(diff_res);
-
-		//System.out.println(new Timestamp(diff_millis).toString());
-
+		if (diff_res >= .75)
+			return true;
 
 		return false;
 	}
@@ -131,7 +160,7 @@ public class ZXAlerter {
 	/*
 	 * avalia o cenario onde a tarefa nao foi concluida no tempo limite
 	 */
-	private static boolean eval1(Timestamp now,Timestamp sched,Time rest) {
+	public boolean eval1(Timestamp now,Timestamp sched,Time rest) {
 
 		long sched_millis = sched.getTime();
 		long rest_millis = rest.getTime();
@@ -149,19 +178,12 @@ public class ZXAlerter {
 	/*
 	 * envia e-mail de notificacao com o subject em questao
 	 */
-	private static void notify(Integer work_id,String work_name,Integer cod_usuario,String subject) {
+	public void notify(Integer work_id,String work_name,Integer cod_usuario,String subject) throws MessagingException {
 
-		ADGoogleMailer mailer = new ADGoogleMailer();
+		ADGoogleMailer mailer = new ADGoogleMailer(username_,password_);
 
-		//try {
-
-			//mailer.send();
-			System.out.println("ZXCC MAILER : " + work_id + " | " + work_name + " | " + cod_usuario);
-
-/*		} catch (MessagingException ex) {
-
-			ex.printStackTrace();
-		}*/
+		String msg = "ZXCC MAILER : " + work_id + " | " + work_name + " | " + cod_usuario;
+		mailer.send("desavera@gmail.com",msg,subject);
 
 	}
 }
