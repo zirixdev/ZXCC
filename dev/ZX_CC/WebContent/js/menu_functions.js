@@ -227,6 +227,9 @@ function SCHED_WORK_FUNCTION(tela){
 	        }
 	    });
 		break;
+	case "scheded":
+		alert("Nada para fazer ainda!");
+		break;
 	}
 
 	/*cod_usuario = document.getElementById("cod_usuario");

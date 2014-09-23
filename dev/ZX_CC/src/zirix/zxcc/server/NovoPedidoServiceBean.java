@@ -80,24 +80,25 @@ public class NovoPedidoServiceBean {
 	public Vector<String[]> getDadosInstalacao(){
 		Vector<String[]> dadosInstalacao = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DADOS_INSTALACAO.ENDERECO "		//0
-					+ 														   "     , DADOS_INSTALACAO.BAIRRO "		//1
-					+														   "     , DADOS_INSTALACAO.CIDADE "		//2
-					+ 														   "     , DADOS_INSTALACAO.UF "			//3
-					+														   "     , PAIS.NOME_PAIS "					//4
-					+ 														   "     , DADOS_INSTALACAO.COMPLEMENTO "	//5
-					+														   "     , DADOS_INSTALACAO.CEP "			//6
-					+ 														   "     , DADOS_INSTALACAO.REFERENCIA "	//7
-					+														   "     , DADOS_INSTALACAO.DDD "			//8
-					+ 														   "     , DADOS_INSTALACAO.NUMERO "		//9
-					+														   "     , DADOS_INSTALACAO.NOME "			//10
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DADOS_INSTALACAO.ENDERECO "						//0
+					+ 														   "     , DADOS_INSTALACAO.BAIRRO "						//1
+					+														   "     , DADOS_INSTALACAO.CIDADE "						//2
+					+ 														   "     , DADOS_INSTALACAO.UF "							//3
+					+														   "     , PAIS.NOME_PAIS "									//4
+					+ 														   "     , DADOS_INSTALACAO.COMPLEMENTO "					//5
+					+														   "     , DADOS_INSTALACAO.CEP "							//6
+					+ 														   "     , DADOS_INSTALACAO.REFERENCIA "					//7
+					+														   "     , DADOS_INSTALACAO.DDD "							//8
+					+ 														   "     , DADOS_INSTALACAO.NUMERO "						//9
+					+														   "     , DADOS_INSTALACAO.NOME "							//10
+					+														   "     , DADOS_INSTALACAO.COD_DADOS_INSTALACAO "			//11
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "DADOS_INSTALACAO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "PAIS "
 					+ 														   " WHERE DADOS_INSTALACAO.COD_PAIS = PAIS.COD_PAIS "
 					+														   "   AND DADOS_INSTALACAO.COD_PEDIDO = " + COD_PEDIDO_);
 
 			for (int i=0;i < values.size();i++) {
-				String[] attList = new String[11];
+				String[] attList = new String[12];
 				attList[0] = (String) values.get(i)[0];
 				attList[1] = (String) values.get(i)[1];
 				attList[2] = (String) values.get(i)[2];
@@ -109,6 +110,7 @@ public class NovoPedidoServiceBean {
 				attList[8] = (String) values.get(i)[8];
 				attList[9] = (String) values.get(i)[9];
 				attList[10] = (String) values.get(i)[10];
+				attList[11] = values.get(i)[11].toString();
 				dadosInstalacao.add(attList);
 			}
 
@@ -120,7 +122,7 @@ public class NovoPedidoServiceBean {
 	}
 
 	@SuppressWarnings("finally")
-	public Vector<String[]> getCountUnidadesVeículo(){
+	public Vector<String[]> getCountUnidadesVeiculo(){
 		Vector<String[]> countUnidades = new Vector<String[]>();
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_VEICULO "

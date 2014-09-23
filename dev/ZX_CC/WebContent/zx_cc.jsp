@@ -319,8 +319,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <br>
                 LOCAL = <%=ZXMain.getLocal()%>
                 <br>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('agend')">tela agendamento</button>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('visualiza')">visualizar</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('visualiza')">Pedido</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('agend')">Agendar</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('scheded')">Agendado</button>
                 <%} %>
                 </section>
             </div>

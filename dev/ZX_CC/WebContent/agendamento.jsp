@@ -30,7 +30,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <div class="tab-content"> 
             <div class="tab-pane active" id="aba_agendamento">
 	            <fieldset class="field">
-				<legend><b>Agendamento:</b></legend>
+				<legend><b>Agendamento do Pedido Nº. <%=beanPedido.getNumeroPedido()%>:</b></legend>
 					<b>Cliente:</b> <%=beanCliente.getNome().trim()%>
 					<br><b>Endereço de instalação igual do pedido?</b><select id="end_inst" class="size_15" onchange="muda_endereco_function()">
 						<option value="sim" selected="selected">Sim</option>
@@ -38,17 +38,15 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</select>
 					<fieldset class="fieldinner">
 						<div id="endereco_instalacao">
-							<%Vector<String[]> instalacaoList = beanPedido.getDadosInstalacao();
-							for (int i=0;i < instalacaoList.size();i++) {%>
-								<b>Endereço:</b>&nbsp;<%=instalacaoList.elementAt(i)[0].trim()%>
-								<%if(instalacaoList.elementAt(i)[5].trim().compareTo("") !=0 ){%>
-									<br><b>Complemento:</b>&nbsp;<%=instalacaoList.elementAt(i)[5].trim()%>
-								<%}%>
-								<br><b>Bairro:</b>&nbsp;<%=instalacaoList.elementAt(i)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;<%=instalacaoList.elementAt(i)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>UF.:</b>&nbsp;<div id="uf_agend_div" style="display: inline-block;"><%=instalacaoList.elementAt(i)[3].trim()%></div>
-								<br><b>País:</b>&nbsp;<%=instalacaoList.elementAt(i)[4].trim()%>&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;<%=instalacaoList.elementAt(i)[6].trim()%>
-								<br><b>Ponto de Referência:</b>&nbsp;<%=instalacaoList.elementAt(i)[7].trim()%>
-								<br><b>Contato Responsável:</b>&nbsp;<%=instalacaoList.elementAt(i)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(i)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(i)[9].trim()%>
-							<%} %>
+							<%Vector<String[]> instalacaoList = beanPedido.getDadosInstalacao();%>
+							<b>Endereço:</b>&nbsp;<%=instalacaoList.elementAt(0)[0].trim()%>
+							<%if(instalacaoList.elementAt(0)[5].trim().compareTo("") !=0 ){%>
+								<br><b>Complemento:</b>&nbsp;<%=instalacaoList.elementAt(0)[5].trim()%>
+							<%}%>
+							<br><b>Bairro:</b>&nbsp;<%=instalacaoList.elementAt(0)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;<%=instalacaoList.elementAt(0)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>UF.:</b>&nbsp;<div id="uf_agend_div" style="display: inline-block;"><%=instalacaoList.elementAt(0)[3].trim()%></div>
+							<br><b>País:</b>&nbsp;<%=instalacaoList.elementAt(0)[4].trim()%>&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;<%=instalacaoList.elementAt(0)[6].trim()%>
+							<br><b>Ponto de Referência:</b>&nbsp;<%=instalacaoList.elementAt(0)[7].trim()%>
+							<br><b>Contato Responsável:</b>&nbsp;<%=instalacaoList.elementAt(0)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(0)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(0)[9].trim()%>
 						</div>
 					</fieldset>
 	                <b>Data do Agendamento:</b> <input type="date" id="data_agendamento">
@@ -58,13 +56,22 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <div class="tab-pane" id="aba_unidades">
                 <fieldset class="field">
 				<legend><b>Unidades para o Agendamento:</b></legend>
-				<%Vector<String[]> CountUnidadesVeículo = beanPedido.getCountUnidadesVeículo();
-				for (int i=0;i < CountUnidadesVeículo.size();i++) {
+				<%Vector<String[]> CountUnidadesVeiculo = beanPedido.getCountUnidadesVeiculo();
+				for (int i=0;i < CountUnidadesVeiculo.size();i++) {
 					try{
-						Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CountUnidadesVeículo.elementAt(i)[0]));
-						VeiculoDAO dao = listVeiculo.elementAt(i);
-						if(i!=0){%><br><%}%>
-						<input type="checkbox" value="<%=i%>" id="unidade_check_<%=i%>" name="unidade_name"><b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>
+						Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CountUnidadesVeiculo.elementAt(i)[0]));
+						VeiculoDAO dao = listVeiculo.elementAt(0);
+						if(i!=0){%>
+							<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
+								<script>
+									var c = document.getElementById("myCanvasUnidades_<%=i%>");
+									var ctx = c.getContext("2d");
+									ctx.moveTo(0,0);
+									ctx.lineTo(680,0);
+									ctx.stroke();
+								</script>
+						<%}%>
+						<input type="checkbox" value="<%=CountUnidadesVeiculo.elementAt(i)[0].trim()%>" id="unidade_check_<%=i%>" name="unidade_name">&nbsp;<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>
 						<br><b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
 					<%}catch (Exception e){
 						out.println("Error ao preencher unidades agendamento... " + e.getMessage());
@@ -82,7 +89,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>
            	<div class="tab-pane" id="aba_oculta">
-           		<div id="total_unidades"><%=CountUnidadesVeículo.size()%></div>
+           		<div id="total_unidades"><%=CountUnidadesVeiculo.size()%></div>
+           		<div id="cod_dado_inst"><%=instalacaoList.elementAt(0)[11].trim()%></div>
+           		<div id="cod_pedido"><%=beanPedido.getNumeroPedido()%></div>
 		        <div id="form_end" style="visibility: hidden;">
 			    	<div id="div_end">
 						Endereço: <input type="text" class="size_100" id="endereco_inst" maxlength="99">

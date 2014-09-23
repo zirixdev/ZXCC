@@ -44,6 +44,7 @@ public class SchedWorkDAO extends GenericDAO<SchedWorkDAO> {
     	setAttValueFor("COD_USUARIO",res.getInt("COD_USUARIO"));
     	setAttValueFor("DEFINED_PROCESS_ID",res.getInt("DEFINED_PROCESS_ID"));
     	setAttValueFor("DEFINED_WORK_ID",res.getInt("DEFINED_WORK_ID"));
+    	setAttValueFor("PK_COLUMN",res.getInt("PK_COLUMN"));
     }
 
     public Set<String> getPkNamesSet() {
