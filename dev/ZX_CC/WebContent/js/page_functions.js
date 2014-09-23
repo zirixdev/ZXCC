@@ -2961,7 +2961,7 @@ function ajustar_vetor_contato_prospect_function(){
 	control_vetor_contato_prospect_json.length = i;
 }
 
-function comercial_cadastrar_cliente_prospect_cadastrar_function(work_id){
+function comercial_cadastrar_cliente_prospect_cadastrar_function(){
 	ajustar_vetor_contato_prospect_function();
 	ajustar_vetor_email_function();
 	if(confirm('Deseja realizar o ingresso do Cliente?')){
@@ -4539,6 +4539,11 @@ function carregar_dados_confirmacao_pedido_function(){
 			ctx.stroke();</script><br>';
 		}
     }
+
+    var uf_end = $('#uf_inst_visu').html().trim();
+    $('#uf_inst_visu').html("");
+    $('#uf_inst_visu').html(control_vetor_end_uf[Number(uf_end) - 1]);
+    
     $('#endereco').html("");
     $('#endereco').html(content_div_end);
         
@@ -4688,4 +4693,121 @@ function form_novo_pedido_function(area){
 		break;
 	}
 	//TODO - OK NO WORK, passar adiante
+}
+
+function carregar_dados_agendamento_pedido_function(){
+	var tipo_endereco_uf_obj = $('#uf_list_inst');
+    var tipo_endereco_tamanho_uf = tipo_endereco_uf_obj[0].length;
+    for (var i=0; i<tipo_endereco_tamanho_uf;i++){
+        control_vetor_end_uf[i] = document.getElementsByName("option_endereco_uf")[i].text;
+    }
+    var uf_end = $('#uf_agend_div').html().trim();
+    $('#uf_agend_div').html("");
+    $('#uf_agend_div').html(control_vetor_end_uf[Number(uf_end) - 1]);
+}
+
+function muda_endereco_function(){
+    var end_agend = $('#end_inst').val();
+    if(end_agend == "sim"){
+    	var div_end = $('#label_end').html();
+    	$('#endereco_instalacao').html("");
+    	$('#endereco_instalacao').html(div_end);
+    	carregar_dados_agendamento_pedido_function();
+    }else if (end_agend == "nao"){
+    	var div_end = $('#form_end').html();
+    	$('#endereco_instalacao').html("");
+    	$('#endereco_instalacao').html(div_end);
+    }
+}
+
+function operacional_agendamento_function(){
+	var end_agend = $('#end_inst').val();
+    if(end_agend == "nao"){
+    	var enderero_inst = document.getElementById("endereco_inst").value.trim();
+		if(enderero_inst === ""){
+			alert("Favor inserir ENDEREÇO para instalação");
+			document.getElementById("endereco_inst").focus();
+			return 0;
+		}
+
+		var complemento_inst = document.getElementById("complemento_inst").value.trim();
+		if(complemento_inst === ""){
+			complemento_inst.value = "";
+		}
+
+		var bairro_inst = document.getElementById("bairro_inst").value.trim();
+		if(bairro_inst === ""){
+			alert("Favor inserir BAIRRO do endereço de instalação");
+			document.getElementById("bairro_inst").focus();
+			return 0;
+		}
+
+		var cidade_inst = document.getElementById("cidade_inst").value.trim();
+		if(cidade_inst === ""){
+			alert("Favor inserir CIDADE do endereço de instalação");
+			document.getElementById("cidade_inst").focus();
+			return 0;
+		}
+
+		var uf_inst = $('#uf_list_inst').val();
+		var pais_inst = $('#pais_list_inst').val();
+
+		var cep_inst = document.getElementById("cep_inst").value.trim();
+		if(cep_inst === ""){
+			alert("Favor inserir CEP do endereço de instalação");
+			document.getElementById("cep_inst").focus();
+			return 0;
+		}
+
+		var referencia_inst = document.getElementById("referencia_inst").value.trim();
+		if(referencia_inst === ""){
+			alert("Favor inserir REFERENCIA do endereço de instalação");
+			document.getElementById("referencia_inst").focus();
+			return 0;
+		}
+
+		var ddd_inst = document.getElementById("ddd_inst").value.trim();
+		if(ddd_inst === ""){
+			alert("Favor inserir DDD do contato para instalação");
+			document.getElementById("ddd_inst").focus();
+			return 0;
+		}
+
+		var numero_inst = document.getElementById("numero_inst").value.trim();
+		if(numero_inst === ""){
+			alert("Favor inserir NÚMERO do contato para instalação");
+			document.getElementById("numero_inst").focus();
+			return 0;
+		}
+
+		var nome_inst = document.getElementById("contato_inst").value.trim();
+		if(nome_inst === ""){
+			alert("Favor inserir NOME DO RESPONSÁVEL do contato para instalação");
+			document.getElementById("contato_inst").focus();
+			return 0;
+		}
+    }
+
+    var data_agendamento = document.getElementById("data_agendamento").value.trim();
+    if(data_agendamento === ""){
+    	alert("Favor ingressar a DATA DO AGENDAMENTO.");
+		document.getElementById("data_agendamento").focus();
+		return 0;
+    }
+
+    var hora_agendamento = document.getElementById("hora_agendamento");
+    if(hora_agendamento === ""){
+    	alert("Favor ingressar a HORA DO AGENDAMENTO.");
+		document.getElementById("hora_agendamento").focus();
+		return 0;
+    }
+
+	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
+    var qnt_unidades = document.getElementById("total_unidades").innerHTML.trim();
+
+    var adress_aux = "&QNTUNIDADES=";
+
+    var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario;
+    adress = adress + adress_aux;
+	document.location.href = adress;
 }

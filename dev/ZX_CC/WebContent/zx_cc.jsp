@@ -306,7 +306,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					<br>Let's
 					<br>456
 					<br>Go
-					<br>78
+					<br>7
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">

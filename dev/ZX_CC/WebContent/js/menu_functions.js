@@ -207,7 +207,7 @@ function SCHED_WORK_FUNCTION(tela){
 	        success: function(result) {
 	            $('.modal-content').html(result);
 	            $('.modal').modal({backdrop:'static'});
-	            carregar_dados_confirmacao_pedido_function();
+	            carregar_dados_agendamento_pedido_function();
 	        },
 	        error: function(e){
 	            alert('error');
@@ -349,7 +349,7 @@ function callModalTarefas(event){
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});
-	                carregar_dados_confirmacao_pedido_function();
+	                carregar_dados_agendamento_pedido_function();
 	            },
 	            error: function(e){
 	                alert('error');

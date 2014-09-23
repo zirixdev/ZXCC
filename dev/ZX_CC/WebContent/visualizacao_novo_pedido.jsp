@@ -217,7 +217,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						<%if(instalacaoList.elementAt(i)[5].trim().compareTo("") !=0 ){%>
 							<br><b>Complemento:</b>&nbsp;<%=instalacaoList.elementAt(i)[5].trim()%>
 						<%}%>
-						<br><b>Bairro:</b>&nbsp;<%=instalacaoList.elementAt(i)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;<%=instalacaoList.elementAt(i)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>UF.:</b>&nbsp;<%=instalacaoList.elementAt(i)[3].trim()%>
+						<br><b>Bairro:</b>&nbsp;<%=instalacaoList.elementAt(i)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;<%=instalacaoList.elementAt(i)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>UF.:</b>&nbsp;<div id="uf_inst_visu" style="display: inline-block;"><%=instalacaoList.elementAt(i)[3].trim()%></div>
 						<br><b>País:</b>&nbsp;<%=instalacaoList.elementAt(i)[4].trim()%>&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;<%=instalacaoList.elementAt(i)[6].trim()%>
 						<br><b>Ponto de Referência:</b>&nbsp;<%=instalacaoList.elementAt(i)[7].trim()%>
 						<br><b>Contato Responsável:</b>&nbsp;<%=instalacaoList.elementAt(i)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(i)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(i)[9].trim()%>
