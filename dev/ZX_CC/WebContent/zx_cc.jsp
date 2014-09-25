@@ -6,7 +6,8 @@ DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
@@ -27,6 +28,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <title>ZX CC</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <link rel="stylesheet" href="css/Bootstrap/bootstrap.min.css">   
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/style.css">
@@ -301,10 +303,10 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </section>
                 <section class="conteudo">
 					<br>123
-					<br>let's
-					<br>
-					<br>
-					<br>
+					<br>Let's
+					<br>456
+					<br>Go
+					<br>7
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">
@@ -317,7 +319,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <br>
                 LOCAL = <%=ZXMain.getLocal()%>
                 <br>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION()">START PROCESS</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('visualiza')">Pedido</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('agend')">Agendar</button>
+                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('scheded')">Agendado</button>
                 <%} %>
                 </section>
             </div>

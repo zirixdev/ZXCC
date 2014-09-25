@@ -26,39 +26,22 @@ import zirix.zxcc.server.dao.EmailCliVenDAO;
 import zirix.zxcc.server.dao.EnderecoClienteDAO;
 import zirix.zxcc.server.dao.PkList;
 
-/**
- * Servlet implementation class ClienteService
- */
 @WebServlet( name="ClienteService", urlPatterns = {"/services/cliente"}, loadOnStartup=1)
 public class ClienteServiceServlet extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
+
 	public ClienteServiceServlet() {
 	    super();
-	    // TODO Auto-generated constructor stub
 	}
-	
-	/**
-	 * @see Servlet#destroy()
-	 */
+
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
-	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		   response.setContentType("text/html");
-	
 		   PrintWriter out = response.getWriter();
-	
 		   String OP_CODE = request.getParameter("OP_CODE");
-	
 		   try {
 			   ClienteDAO daoCliente = new ClienteDAO();
 			   PkList pkList;
@@ -222,13 +205,9 @@ public class ClienteServiceServlet extends HttpServlet {
 				   }
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 				   response.sendRedirect(ZXMain.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
-			   }
-	
-			   else if (OP_CODE.compareTo("DELETE") == 0){
-	
+			   }else if (OP_CODE.compareTo("DELETE") == 0){
 				   String COD_CLIENTE = request.getParameter("COD_CLIENTE");
 				   pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-	
 				   daoCliente.setPkList(pkList);
 				   daoCliente.delete();
 			   }

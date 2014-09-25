@@ -61,7 +61,7 @@ public class MockEvaluator {
 	}
 
 	private void startDependencyWorks() throws SQLException{
-		 Vector<String[]> dependencyWorks = new Vector<String[]>();
+		Vector<String[]> dependencyWorks = new Vector<String[]>();
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT count(*), " + ZXMain.DB_NAME_ + "DEFINED_WORK.DEPENDENCY_WORK_ID "
 					+ "                                                           FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "

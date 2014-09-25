@@ -25,10 +25,6 @@ public class EquipamentoServiceBean {
 		setPk(pkVal);
 	}
 
-	public EquipamentoServiceBean() {
-
-	}
-
 	public void setPk(Object[] pkVal) {
 
 		COD_MODULO_ = new Integer((String)pkVal[0]);

@@ -22,9 +22,6 @@ public class ClienteServiceBean {
 		setPk(pkVal);
 	}
 
-	public ClienteServiceBean() {
-	}
-
 	public void setPk(Object[] pkVal) {
 
 		COD_CLIENTE_ = new Integer((String)pkVal[0]);

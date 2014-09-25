@@ -5,7 +5,8 @@ DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <!--Operacional -> Cadastro -> Chip-->
