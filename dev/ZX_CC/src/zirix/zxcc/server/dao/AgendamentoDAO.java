@@ -1,4 +1,4 @@
-/*ZIRIX CONTROL CENTER - ANEXO PEDIDO DAO
+/*ZIRIX CONTROL CENTER - AGENDAMENTO DAO
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
@@ -31,7 +31,6 @@ public class AgendamentoDAO extends GenericDAO<AnexoPedidoDAO> {
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("COD_PEDIDO",res.getInt("COD_PEDIDO"));
-    	setAttValueFor("COD_OBS_AGENDAMENTO",res.getInt("COD_OBS_AGENDAMENTO"));
     	setAttValueFor("DATA_AGENDAMENTO",res.getDate("DATA_AGENDAMENTO"));
     	setAttValueFor("HORA_AGENDAMENTO",res.getTime("HORA_AGENDAMENTO"));
     	setAttValueFor("ESTADO",res.getInt("ESTADO"));

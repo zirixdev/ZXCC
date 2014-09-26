@@ -122,12 +122,34 @@ public class NovoPedidoServiceBean {
 	}
 
 	@SuppressWarnings("finally")
-	public Vector<String[]> getCountUnidadesVeiculo(){
-		Vector<String[]> countUnidades = new Vector<String[]>();
+	public Vector<String[]> getCodUnidadesVeiculo(){
+		Vector<String[]> codUnidades = new Vector<String[]>();
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_VEICULO "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
+				codUnidades.add(attList);
+			}
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}finally{
+			return codUnidades;
+		}
+	}
+
+	@SuppressWarnings("finally")
+	public Vector<String[]> getCountUnidadesVeiculo(){
+		Vector<String[]> countUnidades = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(UNIDADES_AGENDADAS.COD_UNIDADE) as CONTADOR "
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO"
+					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO)"
+					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2"
+					+ 														   "   AND VEICULO.COD_PEDIDO = " + COD_PEDIDO_);
 			for (int i=0;i<values.size();i++) {
 				String[] attList = new String[1];
 				attList[0] = values.get(i)[0].toString();
@@ -137,6 +159,28 @@ public class NovoPedidoServiceBean {
     		ex.printStackTrace();
 		}finally{
 			return countUnidades;
+		}
+	}
+
+	@SuppressWarnings("finally")
+	public Vector<String[]> getCodUnidadesVeiculoToSched(){
+		Vector<String[]> codUnidades = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VEICULO.COD_VEICULO "
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO"
+					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO)"
+					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2"
+					+ 														   "   AND VEICULO.COD_PEDIDO = " + COD_PEDIDO_);
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
+				codUnidades.add(attList);
+			}
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}finally{
+			return codUnidades;
 		}
 	}
 

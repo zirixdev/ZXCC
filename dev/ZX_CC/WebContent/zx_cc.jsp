@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <!--
 ZIRIX CONTROL CENTER - MAIN PAGE
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <%
 	String[] pkVal = {request.getParameter("COD_USUARIO")};
 	ZxAccessControlBean bean = new ZxAccessControlBean(pkVal);
@@ -28,7 +27,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <title>ZX CC</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta charset="utf-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <link rel="stylesheet" href="css/Bootstrap/bootstrap.min.css">   
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/style.css">
@@ -217,13 +215,13 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                                     <ul class="ul-submenu-filho">
                                     	<li>
                                             <a <%if(permissionTela[18] == ZXCCConstantsServlet.WRITE){%> 
-                                            id="menu_com_cad_cli" class="modal_btn" onclick="modal_click(menu_com_cad_cli)">Prospecção</a> <%
+                                            id="menu_com_cad_cli" class="modal_btn" onclick="modal_click(menu_com_cad_cli)">ProspecÃ§Ã£o</a> <%
  	//TELA = 19
  %>
 											<%
 												}else{
 											%>
-											id="no_permission" class="modal_btn">Prospecção</a> <%
+											id="no_permission" class="modal_btn">ProspecÃ§Ã£o</a> <%
  	//TELA = 19
  %>
 											<%
@@ -275,12 +273,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                             <%}%>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_rel" class="modal_btn" onclick="modal_click(menu_rel)">Relatórios</a> <%
+                            <a id="menu_rel" class="modal_btn" onclick="modal_click(menu_rel)">RelatÃ³rios</a> <%
     //TELA = 13
 %>
                         </li>
                         <li class="li-menu">
-                            <a id="menu_cfg" class="modal_btn" onclick="modal_click(menu_cfg)">Configurações</a> <%
+                            <a id="menu_cfg" class="modal_btn" onclick="modal_click(menu_cfg)">ConfiguraÃ§Ãµes</a> <%
     //TELA = 14
 %>
                         </li>
@@ -306,7 +304,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					<br>Let's
 					<br>456
 					<br>Go
-					<br>7
+					<br>789
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">

@@ -1,4 +1,4 @@
-/*ZIRIX CONTROL CENTER - OBS AGENDAMENTO DAO
+/*ZIRIX CONTROL CENTER - UNIDADES AGENDADAS DAO
 DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
@@ -12,14 +12,14 @@ import java.util.Set;
 
 import zirix.zxcc.server.*;
 
-public class ObsAgendamentoDAO extends GenericDAO<ObsPedidoDAO> {
+public class UnidadesAgendadasDAO extends GenericDAO<ObsPedidoDAO> {
 
 
-    public ObsAgendamentoDAO(PkList pkList) {
+    public UnidadesAgendadasDAO(PkList pkList) {
         super(TABLENAME,pkList);
     }
 
-    public ObsAgendamentoDAO(){
+    public UnidadesAgendadasDAO(){
     	super(TABLENAME);
     }
 
@@ -33,16 +33,17 @@ public class ObsAgendamentoDAO extends GenericDAO<ObsPedidoDAO> {
             
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("COD_AGENDAMENTO",res.getInt("COD_AGENDAMENTO"));
-    	setAttValueFor("INDICE",res.getInt("INDICE"));
-    	setAttValueFor("OBSERVACAO",res.getString("OBSERVACAO"));
+    	setAttValueFor("COD_UNIDADE",res.getInt("COD_UNIDADE"));
+    	setAttValueFor("TIPO_UNIDADE",res.getInt("TIPO_UNIDADE"));
+    	setAttValueFor("ESTADO",res.getInt("ESTADO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     
     public Set<String> getPkNamesSet() {    	
-    	return ObsPedidoDAO.createKey("COD_OBS_AGENDAMENTO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
+    	return ObsPedidoDAO.createKey("COD_UNIDADES_AGENDADAS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
-	public final static String TABLENAME = ZXMain.DB_NAME_ + "OBS_AGENDAMENTO";
+	public final static String TABLENAME = ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS";
    
         
 }

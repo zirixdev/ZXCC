@@ -1,11 +1,10 @@
 /*
 ZIRIX CONTROL CENTER - CONTROLE DOS MENUS
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-DESENVOLVEDOR: RAPHAEL B. MARQUES
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
-
 xmlDoc=loadXMLDoc("js/VariaveisZXCC.xml");
 var url_adress = xmlDoc.getElementsByTagName("adress")[0].textContent;
 var ambiente = xmlDoc.getElementsByTagName("local")[0].textContent;
@@ -228,7 +227,17 @@ function SCHED_WORK_FUNCTION(tela){
 	    });
 		break;
 	case "scheded":
-		alert("Nada para fazer ainda!");
+		$.ajax({
+	        url: url_adress + "consulta_agendamento.jsp?WORK_ID=0&COD_USUARIO=1&AREA=CONSULAGEND&PK_OBJ=1",
+	        success: function(result) {
+	            $('.modal-content').html(result);
+	            $('.modal').modal({backdrop:'static'});
+	            carregar_dados_agendamento_pedido_function();
+	        },
+	        error: function(e){
+	            alert('error');
+	        }
+	    });
 		break;
 	}
 

@@ -1,8 +1,8 @@
 /*
 ZIRIX CONTROL CENTER - FUNÇÕES DE CONTROLE DE MENU
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-DESENVOLVEDOR: RAPHAEL B. MARQUES
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 
@@ -4357,7 +4357,9 @@ function comercial_cadastrar_novo_pedido_function(){
 		}
 		var observacoes = document.getElementById("observacoes");
 		var obsLength = observacoes.textLength;
-		if(Number(obsLength)< 200){
+		if(Number(obsLength) == 0){
+			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=Não há observações!';
+		}else if(Number(obsLength)< 200){
 			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
 		}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
 			adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
@@ -4371,9 +4373,8 @@ function comercial_cadastrar_novo_pedido_function(){
 			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
 			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
 			adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
-		}else{
-			adress_aux = adress_aux + '&QOBS=0';
 		}
+
 		var dt_vencimento = $("input[type='radio'][name='vencimento']:checked").val();
 		dia = new Date();
 		var adress = url_adress + 'services/novoPedido?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
@@ -4686,6 +4687,8 @@ function muda_endereco_function(){
     }
 }
 
+var vector_unidades_agendamento = new Array();
+
 function operacional_agendamento_function(){
 	var end_agend = $('#end_inst').val();
 	var adress_aux = "&END_AGEND=" + end_agend;
@@ -4765,7 +4768,7 @@ function operacional_agendamento_function(){
 		document.getElementById("data_agendamento").focus();
 		return 0;
     }
-    var hora_agendamento = document.getElementById("hora_agendamento");
+    var hora_agendamento = document.getElementById("hora_agendamento").value.trim();
     if(hora_agendamento === ""){
     	alert("Favor ingressar a HORA DO AGENDAMENTO.");
 		document.getElementById("hora_agendamento").focus();
@@ -4774,14 +4777,64 @@ function operacional_agendamento_function(){
 	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
 	var cod_pedido = document.getElementById("cod_pedido").innerHTML.trim();
     var total_unidades = document.getElementById("total_unidades").innerHTML.trim();
+    var total_unidades_agendadas = 0;
 
-	adress_aux = adress_aux + "&TOTALUNID=" + total_unidades;
+    for(var i=0;i<total_unidades;i++){
+		if(document.getElementById("unidade_check_"+i).checked){
+			vector_unidades_agendamento[total_unidades_agendadas] = document.getElementById("unidade_check_"+i).value;
+			total_unidades_agendadas++;
+		}
+    }
 
-	
+    total_unidades_agendadas = vector_unidades_agendamento.length;
+    if(total_unidades_agendadas == 0){
+    	alert("Favor selecionar ao menos uma UNIDADE.");
+		return 0;
+    }
+
+	adress_aux = adress_aux + "&TOTALUNID=" + total_unidades + "&TOTALUNIDAGEND=" + total_unidades_agendadas;
+
+	for(i=0;i<total_unidades_agendadas;i++){
+		adress_aux = adress_aux + "&CODVEIC_" + i + "=" + vector_unidades_agendamento[i];
+	}
+
+	var observacoes = document.getElementById("observacoes");
+	var obsLength = observacoes.textLength;
+	if(Number(obsLength) == 0){
+		adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=Não há observações!';
+	}else if(Number(obsLength)< 200){
+		adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
+	}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
+		adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+		adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+	}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
+		adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+		adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+		adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+	}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
+		adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+		adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+		adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+		adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
+	}
 
 	adress_aux = adress_aux + "&DATAAGEND=" + data_agendamento;
 	adress_aux = adress_aux + "&HORAAGEND=" + hora_agendamento;
-	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO" + cod_pedido;
+	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=0";
     adress = adress + adress_aux;
 	document.location.href = adress;
+}
+var obs_frustrada = '<br><textarea placeholder="Observações" cols="30" rows="1" id="obs_frustrada" maxlength="796"></textarea>';
+
+function desbloqueia_unidades_function(){
+    var frustrada = $('#frustrada').val();
+    if(frustrada == "sim"){
+    	$('#obs_frust').html(obs_frustrada);
+    	$('#unidades').html("");
+    }else if (frustrada == "nao"){
+    	var div_unidades = $('#dados_unidades').html();
+    	$('#obs_frust').html("");
+    	$('#unidades').html("");
+    	$('#unidades').html(div_unidades);
+    }	
 }

@@ -226,16 +226,16 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 			<fieldset class="field">
 			<legend><b>Unidades Rastreadas:</b></legend>
 				<ul class="nav nav-tabs">
-					<%Vector<String[]> CountUnidadesVeiculo = beanPedido.getCountUnidadesVeiculo();
-					for (int i=0;i < CountUnidadesVeiculo.size();i++) {%>
+					<%Vector<String[]> CodUnidadesVeiculo = beanPedido.getCodUnidadesVeiculo();
+					for (int i=0;i < CodUnidadesVeiculo.size();i++) {%>
 						<li<%if(i==0){%> class="active"<%}%>><a href="#aba_unidade_<%=i+1%>" data-toggle="tab">Veículo <%=i+1%></a></li>
 					<%}%>
 				</ul>
 				<div class="tab-content" style="background: #eeeeee;">
-					<%for (int i=0;i < CountUnidadesVeiculo.size();i++) {%>
+					<%for (int i=0;i < CodUnidadesVeiculo.size();i++) {%>
 						<div class="tab-pane<%if(i==0){%> active<%}%>" id="aba_unidade_<%=i+1%>">
 						<%try{
-							Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CountUnidadesVeiculo.elementAt(i)[0]));
+							Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]));
 							for(int j=0; j<listVeiculo.size(); j++){
 								VeiculoDAO dao = listVeiculo.elementAt(j);%>
 								<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>&nbsp;&nbsp;&nbsp;<b>Chassi:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("CHASSI")).trim()%>&nbsp;&nbsp;&nbsp;<b>Renavam:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("RENAVAN")).trim()%>
@@ -244,13 +244,13 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								<br><b>Tipo de Combustível:</b>&nbsp;<%=beanPedido.getNomeCombustivel(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_COMBUSTIVEL")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Voltagem:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("VOLT")).trim()%>&nbsp;&nbsp;&nbsp;<b>KM:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("KM")).trim()%>
 								<br><b>Data da Última Vistoria:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("DATA_ULT_VISTORIA")).trim()%>
 								<%if(AREA.compareTo("CAD_GS")==0){%>
-									<br><b>Senha para Atendimento:</b>&nbsp;<%=beanPedido.getSenhaAtendimento(Integer.parseInt(CountUnidadesVeiculo.elementAt(i)[0]))%>
+									<br><b>Senha para Atendimento:</b>&nbsp;<%=beanPedido.getSenhaAtendimento(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]))%>
 								<%}else{%>
 									<br><b>Senha para Atendimento:</b>&nbsp;****
 								<%}%>
 								<fieldset class="fieldinner">
 								<legend><b>Contatos para Procedimento:</b></legend>
-									<%Vector<String[]> contatoProcedimentoList = beanPedido.getContatoProcedimento(Integer.parseInt(CountUnidadesVeiculo.elementAt(i)[0]));
+									<%Vector<String[]> contatoProcedimentoList = beanPedido.getContatoProcedimento(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]));
 									for(int l=0;l<contatoProcedimentoList.size();l++){
 										if(l!=0){%>
 											<canvas id="myCanvasCtoProced_<%=i%>_<%=l%>" width="550" height="1" style="border:0px;"></canvas>

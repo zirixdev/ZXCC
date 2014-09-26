@@ -1,32 +1,32 @@
-package zirix.zxcc.server;
+/*ZIRIX CONTROL CENTER - NOVO PEDIDO SERVICE SERVLET
+DESENVOLVIDO POR RAPHAEL B. MARQUES
 
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+TECNOLOGIAS UTILIZADAS: JAVA*/
+package zirix.zxcc.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import zirix.zxcc.server.dao.*;
-
 @WebServlet( name="NovoPedidoServiceServlet", urlPatterns = {"/services/novoPedido"}, loadOnStartup=1)
 public class NovoPedidoServiceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
     public NovoPedidoServiceServlet() {
         super();
     }
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		String OP_CODE = request.getParameter("OP_CODE");
 		String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
+		int pkCodPedido = 0;
 		try {
 			ClienteDAO daoCliente = new ClienteDAO();
 			PkList pkList;
@@ -136,7 +136,6 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 							daoEmailCliVen.Create();
 						}
 						int pkNumPedido = 0;
-						int pkCodPedido = 0;
 						NumeroPedidoDAO daoNumeroPedido = new NumeroPedidoDAO();
 						daoNumeroPedido.setAttValueFor("COD_USUARIO", COD_USUARIO);
 						daoNumeroPedido.setAttValueFor("DATA_GERACAO", DATA_INGRESSO);
@@ -333,18 +332,11 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO não encontrado! ");
 					}
 				}
-				response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
-			}else if(OP_CODE.compareTo("DELETE") == 0){
-				String COD_CLIENTE = request.getParameter("COD_CLIENTE");
-				pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-				daoCliente.setPkList(pkList);
-				daoCliente.delete();
-			}
+			}response.sendRedirect(ZXMain.URL_ADRESS_ + "services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=" + COD_USUARIO + "&PROCESS_ID=1&PK_COLUMN=" + pkCodPedido);
 		}catch(Exception e){
 			out.println("Error on ClienteServiceServlet... " + ' ' + e.getMessage());
 		}
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
