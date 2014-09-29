@@ -3660,8 +3660,8 @@ function insert_unidades_function(){
     var i = control_div_unidade_inserido.length;
     var j = 0;
     var arrayContatoProcedimento = new Array();
-    for(i=0;i<control_vetor_contato_procedimento_json.length;i++){
-    	arrayContatoProcedimento[i] = new vetor_contato_procedimento_inserido(control_vetor_contato_procedimento_json[i].ddd,control_vetor_contato_procedimento_json[i].numero,control_vetor_contato_procedimento_json[i].tipo_contato,control_vetor_contato_procedimento_json[i].cod_pais,control_vetor_contato_procedimento_json[i].nome,control_vetor_contato_procedimento_json[i].parentesco);
+    for(var p=0;p<control_vetor_contato_procedimento_json.length;p++){
+    	arrayContatoProcedimento[p] = new vetor_contato_procedimento_inserido(control_vetor_contato_procedimento_json[p].ddd,control_vetor_contato_procedimento_json[p].numero,control_vetor_contato_procedimento_json[p].tipo_contato,control_vetor_contato_procedimento_json[p].cod_pais,control_vetor_contato_procedimento_json[p].nome,control_vetor_contato_procedimento_json[p].parentesco);
     }
 
     if (i !== 0){

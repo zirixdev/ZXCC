@@ -248,8 +248,8 @@ function SCHED_WORK_FUNCTION(tela){
 	document.location.href = adress;*/
 }
 
-function SCHED_WORK_START_FUNCTION(work_id,service_name){
-	var message = work_id + "//" + service_name;
+function SCHED_WORK_START_FUNCTION(work_id,service_name,pk_column){
+	var message = work_id + "//" + service_name + "//" + pk_column;
 	window.parent.postMessage(message,'*');
 }
 

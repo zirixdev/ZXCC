@@ -19,5 +19,13 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/admailer_beta-0-2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/javax.annotation.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/javax.mail-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/mysql-connector-java-5.1.32-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/zxccalerter_beta-0-1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/zxccalerter_beta-0-2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zirix/workspace/JAR/zxccalerter_beta-0-3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

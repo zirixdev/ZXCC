@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - MOCK SCHEDULE BEAN
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server.mock;
 import java.sql.SQLException;
@@ -24,6 +24,7 @@ public class MockScheduleBean {
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_NAME "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS.PROCESS_NAME "
 					+ 														   "     , ISNULL(" + ZXMain.DB_NAME_ + "SCHED_WORK.COD_USUARIO,0) "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.PK_COLUMN "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "WORK_USER "
@@ -32,11 +33,12 @@ public class MockScheduleBean {
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.END_TIMESTAMP IS NULL "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "WORK_USER.COD_USUARIO = " + COD_USUARIO_);
 			for (int i=0;i < values.size();i++) {
-				String[] attList = new String[4];
+				String[] attList = new String[5];
 				attList[0] = (String) values.get(i)[0].toString();
 				attList[1] = (String) values.get(i)[1];
 				attList[2] = (String) values.get(i)[2];
 				attList[3] = (String) values.get(i)[3].toString();
+				attList[4] = (String) values.get(i)[4].toString();
 				work.add(attList);
 			}
 		}catch (SQLException ex) {
