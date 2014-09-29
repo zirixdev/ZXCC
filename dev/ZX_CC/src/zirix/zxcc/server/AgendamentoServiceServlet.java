@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - AGENDAMENTO SERVICE SERVLET
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server;
 import java.io.IOException;
@@ -77,6 +77,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoObsAgendamento.setAttValueFor("INDICE",d);
 						   String OBSERVACAO = request.getParameter("OBSERVACAO_"+d);
 						   daoObsAgendamento.setAttValueFor("OBSERVACAO",OBSERVACAO);
+						   daoObsAgendamento.setAttValueFor("CHAVE",0);
 						   daoObsAgendamento.setAttValueFor("DELETED",0);
 						   daoObsAgendamento.Create();
 					   }
@@ -120,7 +121,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoDadosAgendamento.Create();
 					   }
 				   }else{
-					   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
+					   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE nï¿½o encontrado! ");
 				   }
 			   }
 			   if(WORK_ID.compareTo("0") != 0){

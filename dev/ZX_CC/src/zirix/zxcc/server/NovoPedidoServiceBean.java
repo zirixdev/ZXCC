@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - CHIP SERVICE BEAN
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -146,9 +146,10 @@ public class NovoPedidoServiceBean {
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(UNIDADES_AGENDADAS.COD_UNIDADE) as CONTADOR "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO"
-					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO)"
-					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2"
+					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
+					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO) "
+					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2 "
+					+ 														   "   AND UNIDADES_AGENDADAS.ESTADO NOT IN (2) "
 					+ 														   "   AND VEICULO.COD_PEDIDO = " + COD_PEDIDO_);
 			for (int i=0;i<values.size();i++) {
 				String[] attList = new String[1];
@@ -168,9 +169,9 @@ public class NovoPedidoServiceBean {
 		try{
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VEICULO.COD_VEICULO "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO"
-					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO)"
-					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2"
+					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
+					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO) "
+					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2 "
 					+ 														   "   AND VEICULO.COD_PEDIDO = " + COD_PEDIDO_);
 			for (int i=0;i<values.size();i++) {
 				String[] attList = new String[1];

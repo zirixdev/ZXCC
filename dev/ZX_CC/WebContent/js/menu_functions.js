@@ -2,7 +2,7 @@
 ZIRIX CONTROL CENTER - CONTROLE DOS MENUS
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVASCRIPT E AJAX
 */
 xmlDoc=loadXMLDoc("js/VariaveisZXCC.xml");
@@ -171,7 +171,7 @@ function modal_click(id){
         	}
         	break;
         case "no_permission":
-        	alert('Usuário sem permissão para essa função!');
+        	alert('Usuï¿½rio sem permissï¿½o para essa funï¿½ï¿½o!');
         	break;
         default:
             $.ajax({
@@ -357,7 +357,7 @@ function callModalTarefas(event){
 	    	break;
 	    case "opr_agendamento":
 	        $.ajax({
-	            url: url_adress + "agendamento.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=SEP_EQUIP&PK_OBJ="+selectedPK,
+	            url: url_adress + "agendamento.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=AGEND&PK_OBJ="+selectedPK,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});
@@ -367,6 +367,33 @@ function callModalTarefas(event){
 	                alert('error');
 	            }
 	        });
+	    	break;
+	    case "opr_acompanha_inst":
+	        $.ajax({
+	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ACOMP_AGEND&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_agendamento_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	    	break;
+	    case "adm_finaliza_processo":
+	    	//TODO
+	        /*$.ajax({
+	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ACOMP_AGEND&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_agendamento_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });*/
 	    	break;
 	    default:
 	        $.ajax({
@@ -384,6 +411,6 @@ function callModalTarefas(event){
 	        break;
 	    } 
 	}else{
-		alert("Serviço não encontrado!");
+		alert("Serviï¿½o nï¿½o encontrado!");
 	} 
 }

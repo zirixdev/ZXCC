@@ -48,7 +48,19 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <div class="tab-pane" id="aba_unidades">
                 <fieldset class="field">
 				<legend><b>Unidades Agendadas:</b></legend>
-					<b>Técnico:</b><input type="text" class="size_100" id="nome_tecnico">
+					<b>Técnico:</b><input list="nome_list" name="nome_tecnico" id="item_nome_tecnico" class="size_100">
+			        <datalist id="nome_list">      	
+					<%try{
+						Vector<TecnicoDAO> list = TecnicoDAOService.loadAll();
+						for (int i=0;i < list.size();i++) {
+							TecnicoDAO dao = list.elementAt(i);
+							String str = String.valueOf(dao.getAttValueFor("NOME")).trim();%>				   	
+							<option value="<%=str%>" data-label="<%=dao.getPkValueFor("COD_CLIENTE")%>">
+						<%}%>
+					<%}catch(Exception e){
+						out.println("Error... " + e.getMessage());
+					}%>
+			        </datalist>
 					<br><b>Horario de Chegada do Técnico: </b><input type="time" id="chegada_tecnico">
 					<b>Horario de Saída do Técnico: </b><input type="time" id="saida_tecnico">
 					<br><b>Visita Frustrada? </b><select id="frustrada" class="size_15" onchange="desbloqueia_unidades_function()">
@@ -112,7 +124,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</select>
 		    </div>
             <div class="div_modal_bt">
-            	<button type="button" id="incluir_modal" onclick="">Incluir</button>
+            	<button type="button" id="incluir_modal" onclick="operacional_processar_agendamento_function">Incluir</button>
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>
         </div>

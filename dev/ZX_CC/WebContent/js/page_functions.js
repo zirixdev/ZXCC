@@ -4838,3 +4838,7 @@ function desbloqueia_unidades_function(){
     	$('#unidades').html(div_unidades);
     }	
 }
+
+function operacional_processar_agendamento_function(){
+	
+}
