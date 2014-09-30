@@ -14,8 +14,6 @@ public class MockScheduleBean {
 	public MockScheduleBean(String[] pkVal) {
 		COD_USUARIO_ = new Integer(pkVal[0]);
 	}
-	public void setPk(Object pkVal) {
-	}
 	@SuppressWarnings("finally")
 	public Vector<String[]> getWork(){
 		Vector<String[]> work = new Vector<String[]>();

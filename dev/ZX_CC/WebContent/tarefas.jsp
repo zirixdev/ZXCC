@@ -27,7 +27,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		for (int i=0;i < workList.size();i++) {%>
 			<%Vector<String[]> workServiceList = bean.getWorkService(workList.elementAt(i)[1].trim(),workList.elementAt(i)[2].trim());%> 
 			<%=workList.elementAt(i)[2].trim()%><br>
-			<div id="work_<%=workList.elementAt(i)[0].trim()%>" onclick="SCHED_WORK_START_FUNCTION('<%=workList.elementAt(i)[0].trim()%>','<%=workServiceList.elementAt(0)[0].trim()%>','<%=workServiceList.elementAt(i)[4].trim()%>')">
+			<div id="work_<%=workList.elementAt(i)[0].trim()%>" onclick="SCHED_WORK_START_FUNCTION('<%=workList.elementAt(i)[0].trim()%>','<%=workServiceList.elementAt(0)[0].trim()%>','<%=workList.elementAt(i)[4].trim()%>')">
 				<%=workList.elementAt(i)[1].trim()%>
 				<%if(workList.elementAt(i)[3].trim().compareTo("0") != 0) {
 					String[] cod_usuario = new String[1];

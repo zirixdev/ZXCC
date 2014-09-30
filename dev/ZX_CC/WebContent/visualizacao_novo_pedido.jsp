@@ -6,7 +6,7 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
 
 <%
 	String[] PK_OBJ = {request.getParameter("PK_OBJ")};
@@ -16,6 +16,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	NovoPedidoServiceBean beanPedido = new NovoPedidoServiceBean(PK_OBJ);
 	String[] pkCodCliente = {beanPedido.getCodCliente()};
 	ClienteServiceBean beanCliente = new ClienteServiceBean(pkCodCliente);
+	MockScheduleBean bean = new MockScheduleBean(COD_USUARIO);
+	bean.setStartTimestamp(WORK_ID);
 %>
 <!--Comercial -> Novo Pedido-->
 <div id="comercial-novo-pedido-content">
