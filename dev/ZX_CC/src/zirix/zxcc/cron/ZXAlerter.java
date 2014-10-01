@@ -16,6 +16,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.util.logging.*;
 
 
 public class ZXAlerter {
@@ -66,6 +67,7 @@ public class ZXAlerter {
 
 		while (resTOEXPIRE.next()) {
 
+
 			String now = resTOEXPIRE.getString(1);
 			Timestamp now_time = Timestamp.valueOf(now);
 
@@ -81,6 +83,8 @@ public class ZXAlerter {
 
 			res2.next();
 			Time restriction_val = res2.getTime(1);
+
+            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check TOEXPIRE : " + work_id);
 
 			if (alerter.evalTOEXPIRE(now_time,sched_time,restriction_val)) {
 
@@ -119,6 +123,8 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
+            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check EXPIRED : " + work_id);
+
 			if (alerter.evalEXPIRED(now_time,sched_time,restriction_val)) {
 
 				PreparedStatement stmt3 = con.prepareStatement("SELECT email from user_group where user_group_id in (SELECT user_group_id from alert_group where alert_group_id = (SELECT alert_group_id from work_alert where work_alert_id = (SELECT work_alert_id from sched_work where work_id =? )))");
@@ -154,40 +160,59 @@ public class ZXAlerter {
 
 	/*
 	 * avalia o cenario onde a tarefa se aproxima de 75% do tempo limite e ainda nao foi iniciada
+	 * existe um problema de precisao aqui ... alteramos a razao para 60% para refletir os 75% - TODO mvera
 	 */
 	public boolean evalTOEXPIRE(Timestamp now,Timestamp sched,Time rest) {
 
-		long sched_millis = sched.getTime();
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(sched_millis);
+		Calendar cal_sched_plus_rest = Calendar.getInstance();
+		cal_sched_plus_rest.setTimeInMillis(sched.getTime());
+		cal_sched_plus_rest.add(Calendar.HOUR,rest.getHours());
+		cal_sched_plus_rest.add(Calendar.MINUTE,rest.getMinutes());
 
-		cal.add(Calendar.HOUR,rest.getHours());
-		cal.add(Calendar.MINUTE,rest.getMinutes());
+		Calendar cal_now = Calendar.getInstance();
+		cal_now.setTimeInMillis(now.getTime());
+
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + cal_sched_plus_rest.getTime());
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + cal_now.getTime());
+
+		long diff_millis = new Double(new Double(cal_sched_plus_rest.getTimeInMillis()).doubleValue() - new Double(now.getTime()).doubleValue()).longValue(); 
+
+		long diffMinutes = diff_millis / (60 * 1000) % 60;
+		long diffHours = diff_millis / (60 * 60 * 1000) % 24;
+
+		Time diff = new Time(new Double(diffHours).intValue(),new Double(diffMinutes).intValue(),0);
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "diff is : " + diff.toString());
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "rest is : " + rest.toString());
+
+		double time_ratio = 1. - new Double(diff.getTime()).doubleValue()/new Double(rest.getTime()).doubleValue();
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "time_ratio is : " + time_ratio);
 
 
-		// somente um teste...
-		if (now.after(new Timestamp(cal.getTimeInMillis())))
-			return true;
-
-		double diff_res = new Double(now.getTime()).doubleValue()/new Double(cal.getTimeInMillis()).doubleValue();
-
-		if (diff_res >= .75)
+		if (time_ratio > .6)
 			return true;
 
 		return false;
+
 	}
 
 	/*
-	 * avalia o cenario onde a tarefa nao foi concluida no tempo limite
+	 * avalia o cenario onde a tarefa estourou o tempo limite sem ter sido completada
 	 */
 	public boolean evalEXPIRED(Timestamp now,Timestamp sched,Time rest) {
 
 		long sched_millis = sched.getTime();
 		long rest_millis = rest.getTime();
 
+		Calendar cal_sched_plus_rest = Calendar.getInstance();
+		cal_sched_plus_rest.setTimeInMillis(sched.getTime());
+		cal_sched_plus_rest.add(Calendar.HOUR,rest.getHours());
+		cal_sched_plus_rest.add(Calendar.MINUTE,rest.getMinutes());
 
-		Timestamp sched_plus_rest = new Timestamp(sched_millis + rest_millis);
+		Timestamp sched_plus_rest = new Timestamp(cal_sched_plus_rest.getTimeInMillis());
+
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + sched_plus_rest);
+            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + now);
 
 		if (now.after(sched_plus_rest))
 			return true;
