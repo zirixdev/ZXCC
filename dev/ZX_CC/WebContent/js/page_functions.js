@@ -3675,12 +3675,12 @@ function insert_unidades_function(){
         }
         if (insert === "X"){
         	control_div_unidade_inserido[i] = new div_unidade_inserido(i,0);
-        	control_vetor_unidade_inserido[i] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
+        	control_vetor_unidade_inserido[i] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, new vetor_tipo_unidade_veiculo(control_vetor_unidade.placa,control_vetor_unidade.chassi,control_vetor_unidade.renavan,control_vetor_unidade.ano_fab,control_vetor_unidade.ano_mod,control_vetor_unidade.marca,control_vetor_unidade.modelo,control_vetor_unidade.cor,control_vetor_unidade.combustivel,control_vetor_unidade.voltagem,control_vetor_unidade.km,control_vetor_unidade.data_vistoria));
         }
     }
     else{
     	control_div_unidade_inserido[0] = new div_unidade_inserido(0,0);
-    	control_vetor_unidade_inserido[0] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
+    	control_vetor_unidade_inserido[0] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade,  new vetor_tipo_unidade_veiculo(control_vetor_unidade.placa,control_vetor_unidade.chassi,control_vetor_unidade.renavan,control_vetor_unidade.ano_fab,control_vetor_unidade.ano_mod,control_vetor_unidade.marca,control_vetor_unidade.modelo,control_vetor_unidade.cor,control_vetor_unidade.combustivel,control_vetor_unidade.voltagem,control_vetor_unidade.km,control_vetor_unidade.data_vistoria));
     }
 
     var content_div_unidade = "";
@@ -3708,7 +3708,7 @@ function insert_unidades_function(){
         content_div_unidade = content_div_unidade + '<br>';
         $('#unidade_' + control_div_unidade_inserido[j].cod).html(content_div_unidade);
         control_div_unidade_inserido[j].excluida = 0;
-        control_vetor_unidade_inserido[j] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade, control_vetor_unidade);
+        control_vetor_unidade_inserido[j] = new vetor_unidade_inserido(arrayContatoProcedimento, senha, tipo_unidade,  new vetor_tipo_unidade_veiculo(control_vetor_unidade.placa,control_vetor_unidade.chassi,control_vetor_unidade.renavan,control_vetor_unidade.ano_fab,control_vetor_unidade.ano_mod,control_vetor_unidade.marca,control_vetor_unidade.modelo,control_vetor_unidade.cor,control_vetor_unidade.combustivel,control_vetor_unidade.voltagem,control_vetor_unidade.km,control_vetor_unidade.data_vistoria));
     }
     limpa_campos_unidade_function();
     var content_div_bt = '<button type="button" id="incluir_unidade" onclick="insert_unidades_function()">Incluir</button>';
@@ -4132,7 +4132,7 @@ function comercial_cadastrar_novo_pedido_function(){
 		var dt_nascimento = document.getElementById("data_nasc");
 		var site = document.getElementById("url_site");
 		var cod_usuario = document.getElementById("cod_usuario");
-		var cod_vendedor = cod_usuario;
+		var cod_vendedor = $('#vendedor_list :selected').val();
 		var i=0;
 		if(nome.value.trim() === ""){
 			alert("Favor inserir NOME ou RAZÃO SOCIAL do Cliente.");
@@ -4379,7 +4379,7 @@ function comercial_cadastrar_novo_pedido_function(){
 		dia = new Date();
 		var adress = url_adress + 'services/novoPedido?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + dia.yyyymmdd();
-		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.innerHTML.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&TIPO_PEDIDO=' + tipoPedido.trim();
+		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&TIPO_PEDIDO=' + tipoPedido.trim();
 		adress = adress + '&DATA_VENCIMENTO=' + dt_vencimento.trim();
 		adress = adress + adress_aux;
 		document.location.href = adress;
@@ -4610,7 +4610,7 @@ ctx.stroke();</script><br>';
     $('#email').html(content_div_email);
 }
 
-function form_novo_pedido_function(area){
+function form_novo_pedido_function(area,workId,pkObj){
 	switch (area){
 	case "ADM":
 		if(!document.getElementById("dadosCorretos").checked){
@@ -4659,7 +4659,9 @@ function form_novo_pedido_function(area){
 		}
 		break;
 	}
-	//TODO - OK NO WORK, passar adiante
+	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
+	var adress = url_adress + '/services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=' + cod_usuario + '&PK_COLUMN=' + pkObj + '&WORK_ID='+workId;
+	document.location.href = adress;
 }
 
 function carregar_dados_agendamento_pedido_function(){
@@ -4689,7 +4691,7 @@ function muda_endereco_function(){
 
 var vector_unidades_agendamento = new Array();
 
-function operacional_agendamento_function(){
+function operacional_agendamento_function(workId){
 	var end_agend = $('#end_inst').val();
 	var adress_aux = "&END_AGEND=" + end_agend;
     if(end_agend == "nao"){
@@ -4820,11 +4822,12 @@ function operacional_agendamento_function(){
 
 	adress_aux = adress_aux + "&DATAAGEND=" + data_agendamento;
 	adress_aux = adress_aux + "&HORAAGEND=" + hora_agendamento;
-	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=0";
+	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=" + workId;
     adress = adress + adress_aux;
 	document.location.href = adress;
 }
-var obs_frustrada = '<br><textarea placeholder="Observações" cols="30" rows="1" id="obs_frustrada" maxlength="796"></textarea>';
+
+var obs_frustrada = '<textarea placeholder="Observações" cols="30" rows="1" id="obs_frustrada" maxlength="796"></textarea>';
 
 function desbloqueia_unidades_function(){
     var frustrada = $('#frustrada').val();
@@ -4839,6 +4842,30 @@ function desbloqueia_unidades_function(){
     }	
 }
 
-function operacional_processar_agendamento_function(){
-	
+function operacional_processar_agendamento_function(workId){
+	var frustrada = $('#frustrada').val();
+	var adress_aux = "&FRUSTRADA=" + frustrada;
+	if(frustrada == "sim"){
+		var observacoes = document.getElementById("observacoes");
+		var obsLength = observacoes.textLength;
+		if(Number(obsLength) == 0){
+			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=Não há observações!';
+		}else if(Number(obsLength)< 200){
+			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
+		}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
+			adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+		}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
+			adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+		}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
+			adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+			adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
+		}
+	}else{
+		
+	}
 }

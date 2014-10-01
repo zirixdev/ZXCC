@@ -1,16 +1,17 @@
 <!--
-ZIRIX CONTROL CENTER - FORMULÁRIO DE CONSULTA
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+ZIRIX CONTROL CENTER - FORMULÃRIO DE CONSULTA
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <!--Operacional -> Consulta -> Cliente-->
 <div id="operacional-consulta-cliente-content">
     <br>
     <fieldset class="fieldinner">
-        Nome / Razão Social: <input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_65">
+        Nome / RazÃ£o Social: <input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_65">
         <datalist id="nome_list">      	
 		<%        	
 			try {
@@ -28,7 +29,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		%>
         </datalist>
         <br>
-        Número Documento: <input type="text" class="size_16" name="numero_documento" id="num_doc_cons" disabled="disabled">
+        NÃºmero Documento: <input type="text" class="size_16" name="numero_documento" id="num_doc_cons" disabled="disabled">
         Tipo do Documento:
        	<select id="tipodoc_list" disabled="disabled">
 		<%        	
@@ -97,7 +98,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 <div id="comercial-consulta-cliente-content">
     <br>
     <fieldset class="fieldinner">
-        Nome / Razão Social: <input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_65">
+        Nome / RazÃ£o Social: <input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_65">
         <datalist id="nome_list">      	
 		<%        	
 			try {

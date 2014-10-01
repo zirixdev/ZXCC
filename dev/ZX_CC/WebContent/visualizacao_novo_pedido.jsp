@@ -1,11 +1,11 @@
 <!--
 ZIRIX CONTROL CENTER - CADASTRO DE NOVO PEDIDO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
 
 <%
@@ -24,8 +24,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#aba_cliente" data-toggle="tab">Cliente</a></li>
 		<li><a href="#aba_unidade" data-toggle="tab">Unidades</a></li>
-		<li><a href="#aba_servicos" data-toggle="tab">Serviços</a></li>
-		<li><a href="#aba_observacoes" data-toggle="tab">Observações</a></li>
+		<li><a href="#aba_servicos" data-toggle="tab">ServiÃ§os</a></li>
+		<li><a href="#aba_observacoes" data-toggle="tab">ObservaÃ§Ãµes</a></li>
 		<li><a href="#aba_anexos" data-toggle="tab" hidden="hidden">Anexos</a></li>
 	</ul>
 	<div class="tab-content">
@@ -33,9 +33,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 			<fieldset class="field">
 			<legend><b>Cliente:</b></legend>
 				<%if(beanCliente.getTipo() == 0){%>
-					<b>Pessoa Física</b>
+					<b>Pessoa FÃ­sica</b>
 				<%}else{%>
-					<b>Pessoa Jurídica</b>
+					<b>Pessoa JurÃ­dica</b>
 				<%}%>
 				<fieldset class="fild_vendedor">
 					<b>Vendedor:</b>
@@ -51,7 +51,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						out.println("Error ao retornar vendedor... " + e.getMessage());
 					}%>
 				</fieldset>
-					<br><b>Razão Social / Nome:</b> <%=beanCliente.getNome().trim()%>
+					<br><b>RazÃ£o Social / Nome:</b> <%=beanCliente.getNome().trim()%>
 					<br><b>Nome Fantasia / Apelido:</b> <%=beanCliente.getNomeFantasia().trim()%>
 					<br><b>Data de Nascimento:</b> <%=beanCliente.getDtNascimento().trim()%>
 					<%if(beanCliente.getSite().trim().compareTo("") !=0 ){%><br><b>Site:</b> <%=beanCliente.getSite().trim()%><%}%>
@@ -84,7 +84,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</div>
 			</fieldset>
 			<fieldset class="field">
-			<legend><b>Endereço:</b></legend>
+			<legend><b>EndereÃ§o:</b></legend>
 				<div id="endereco">
 					<%Vector<String[]> endList = beanCliente.getEnd();%>
 					<select id="tipo_end_list" class="size_27">
@@ -212,17 +212,17 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		</div>
 		<div class="tab-pane" id="aba_unidade">
 			<fieldset class="field">
-			<legend><b>Dados para Instalação:</b></legend>
+			<legend><b>Dados para InstalaÃ§Ã£o:</b></legend>
 				<%Vector<String[]> instalacaoList = beanPedido.getDadosInstalacao();
 					for (int i=0;i < instalacaoList.size();i++) {%>
-						<b>Endereço:</b>&nbsp;<%=instalacaoList.elementAt(i)[0].trim()%>
+						<b>EndereÃ§o:</b>&nbsp;<%=instalacaoList.elementAt(i)[0].trim()%>
 						<%if(instalacaoList.elementAt(i)[5].trim().compareTo("") !=0 ){%>
 							<br><b>Complemento:</b>&nbsp;<%=instalacaoList.elementAt(i)[5].trim()%>
 						<%}%>
 						<br><b>Bairro:</b>&nbsp;<%=instalacaoList.elementAt(i)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Cidade:</b>&nbsp;<%=instalacaoList.elementAt(i)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>UF.:</b>&nbsp;<div id="uf_inst_visu" style="display: inline-block;"><%=instalacaoList.elementAt(i)[3].trim()%></div>
-						<br><b>País:</b>&nbsp;<%=instalacaoList.elementAt(i)[4].trim()%>&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;<%=instalacaoList.elementAt(i)[6].trim()%>
-						<br><b>Ponto de Referência:</b>&nbsp;<%=instalacaoList.elementAt(i)[7].trim()%>
-						<br><b>Contato Responsável:</b>&nbsp;<%=instalacaoList.elementAt(i)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(i)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(i)[9].trim()%>
+						<br><b>PaÃ­s:</b>&nbsp;<%=instalacaoList.elementAt(i)[4].trim()%>&nbsp;&nbsp;&nbsp;<b>CEP.:</b>&nbsp;<%=instalacaoList.elementAt(i)[6].trim()%>
+						<br><b>Ponto de ReferÃªncia:</b>&nbsp;<%=instalacaoList.elementAt(i)[7].trim()%>
+						<br><b>Contato ResponsÃ¡vel:</b>&nbsp;<%=instalacaoList.elementAt(i)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(i)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(i)[9].trim()%>
 					<%} %>
 			</fieldset>
 			<fieldset class="field">
@@ -230,7 +230,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				<ul class="nav nav-tabs">
 					<%Vector<String[]> CodUnidadesVeiculo = beanPedido.getCodUnidadesVeiculo();
 					for (int i=0;i < CodUnidadesVeiculo.size();i++) {%>
-						<li<%if(i==0){%> class="active"<%}%>><a href="#aba_unidade_<%=i+1%>" data-toggle="tab">Veículo <%=i+1%></a></li>
+						<li<%if(i==0){%> class="active"<%}%>><a href="#aba_unidade_<%=i+1%>" data-toggle="tab">VeÃ­culo <%=i+1%></a></li>
 					<%}%>
 				</ul>
 				<div class="tab-content" style="background: #eeeeee;">
@@ -242,9 +242,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								VeiculoDAO dao = listVeiculo.elementAt(j);%>
 								<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>&nbsp;&nbsp;&nbsp;<b>Chassi:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("CHASSI")).trim()%>&nbsp;&nbsp;&nbsp;<b>Renavam:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("RENAVAN")).trim()%>
 								<br><b>Marca:</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Modelo:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("MODELO")).trim()%>
-								<br><b>Ano de Fabricação:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_FAB")).trim()%>&nbsp;&nbsp;&nbsp;<b>Ano do Modelo:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_MOD")).trim()%>&nbsp;&nbsp;&nbsp;<b>Cor:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("COR")).trim()%>
-								<br><b>Tipo de Combustível:</b>&nbsp;<%=beanPedido.getNomeCombustivel(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_COMBUSTIVEL")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Voltagem:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("VOLT")).trim()%>&nbsp;&nbsp;&nbsp;<b>KM:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("KM")).trim()%>
-								<br><b>Data da Última Vistoria:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("DATA_ULT_VISTORIA")).trim()%>
+								<br><b>Ano de FabricaÃ§Ã£o:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_FAB")).trim()%>&nbsp;&nbsp;&nbsp;<b>Ano do Modelo:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_MOD")).trim()%>&nbsp;&nbsp;&nbsp;<b>Cor:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("COR")).trim()%>
+								<br><b>Tipo de CombustÃ­vel:</b>&nbsp;<%=beanPedido.getNomeCombustivel(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_COMBUSTIVEL")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Voltagem:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("VOLT")).trim()%>&nbsp;&nbsp;&nbsp;<b>KM:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("KM")).trim()%>
+								<br><b>Data da Ãšltima Vistoria:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("DATA_ULT_VISTORIA")).trim()%>
 								<%if(AREA.compareTo("CAD_GS")==0){%>
 									<br><b>Senha para Atendimento:</b>&nbsp;<%=beanPedido.getSenhaAtendimento(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]))%>
 								<%}else{%>
@@ -279,10 +279,10 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		<div class="tab-pane" id="aba_servicos">
 			<fieldset class="field">
 			<legend><b>Tipo do Pedido:</b></legend>
-				<b>Pedido de <%=beanPedido.getTipoPedido()%> - Nº:</b> <%=beanPedido.getNumeroPedido()%>
+				<b>Pedido de <%=beanPedido.getTipoPedido()%> - NÂº:</b> <%=beanPedido.getNumeroPedido()%>
 				<br><b>Dia de Vencimento:</b> <%=beanPedido.getDataVencimento()%>
 				<fieldset class="fieldinner">
-				<legend><b>Serviços:</b></legend>
+				<legend><b>ServiÃ§os:</b></legend>
 					<%try{
 						Vector<String[]> listServico = beanPedido.getServicoPedido();
 						for(int i=0; i<listServico.size();i++){
@@ -296,16 +296,16 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									ctx.stroke();
 								</script>
 							<%}%>
-							<b><%=listServico.elementAt(i)[0].trim()%>:</b> <%=listServico.elementAt(i)[1].trim()%> unid. - <b>Valor Unitário:</b> R$<%=listServico.elementAt(i)[2].trim()%>   <b>Total:</b> R$<%=listServico.elementAt(i)[3].trim()%>
+							<b><%=listServico.elementAt(i)[0].trim()%>:</b> <%=listServico.elementAt(i)[1].trim()%> unid. - <b>Valor UnitÃ¡rio:</b> R$<%=listServico.elementAt(i)[2].trim()%>   <b>Total:</b> R$<%=listServico.elementAt(i)[3].trim()%>
 						<%}
 					}catch (Exception e){
-						out.println("Error ao preencher serviços... " + e.getMessage());
+						out.println("Error ao preencher serviÃ§os... " + e.getMessage());
 					}%>
 				</fieldset>
-				<b>Valor Total dos Serviços:</b> R$<%=beanPedido.getValorTotalServico()%>
+				<b>Valor Total dos ServiÃ§os:</b> R$<%=beanPedido.getValorTotalServico()%>
 				<br>
 				<fieldset class="fieldinner">
-				<legend><b>Equipamentos/Acessórios:</b></legend>
+				<legend><b>Equipamentos/AcessÃ³rios:</b></legend>
 					<%try{
 						Vector<String[]> listEquipamento = beanPedido.getEquipAcessorioPedido();
 						for(int i=0; i<listEquipamento.size();i++){
@@ -319,25 +319,25 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									ctx.stroke();
 								</script>
 							<%}%>
-							<b><%=listEquipamento.elementAt(i)[0].trim()%>:</b> <%=listEquipamento.elementAt(i)[1].trim()%> unid. - <b>Valor Unitário:</b> R$<%=listEquipamento.elementAt(i)[2].trim()%>   <b>Total:</b> R$<%=listEquipamento.elementAt(i)[3].trim()%>
+							<b><%=listEquipamento.elementAt(i)[0].trim()%>:</b> <%=listEquipamento.elementAt(i)[1].trim()%> unid. - <b>Valor UnitÃ¡rio:</b> R$<%=listEquipamento.elementAt(i)[2].trim()%>   <b>Total:</b> R$<%=listEquipamento.elementAt(i)[3].trim()%>
 						<%}
 					}catch (Exception e){
 						out.println("Error ao preencher equipamentos... " + e.getMessage());
 					}%>
 				</fieldset>
-				<b>Valor Total dos Equipamentos e Acessórios:</b> R$<%=beanPedido.getValorTotalEquipamento()%>
+				<b>Valor Total dos Equipamentos e AcessÃ³rios:</b> R$<%=beanPedido.getValorTotalEquipamento()%>
 			</fieldset>
 		</div>
 		<div class="tab-pane" id="aba_observacoes">
 			<fieldset class="field">
-			<legend><b>Observações:</b></legend>
+			<legend><b>ObservaÃ§Ãµes:</b></legend>
 				<%try{
 					Vector<String[]> listObservacoes = beanPedido.getObsPedido();
 					for(int i=0; i<listObservacoes.size(); i++){%>
 						<%=listObservacoes.elementAt(i)[0].trim()%>
 					<%}
 				}catch(Exception e){
-					out.println("Error ao preencher observações... " + e.getMessage());
+					out.println("Error ao preencher observaÃ§Ãµes... " + e.getMessage());
 				}%>
 			</fieldset>
 		</div>
@@ -367,8 +367,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		}%>
 		<%switch(combos){
 			case 1:%>
-				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados do pedido estão corretos.
-				<br><input type="checkbox" value="1" id="scpSerasa">Confirmo que o cliente não possui restrição no SPC/SERASA.
+				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados do pedido estÃ£o corretos.
+				<br><input type="checkbox" value="1" id="scpSerasa">Confirmo que o cliente nÃ£o possui restriÃ§Ã£o no SPC/SERASA.
 			<%	break;
 			case 2:%>
 				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados foram cadastrados corretamento no Global Search.
@@ -380,11 +380,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados foram cadastrados corretamento no ZXLog.
 			<%	break;
 			case 5:%>
-				<input type="checkbox" value="1" id="dadosCorretos">Confirmo ter realizado a separação dos equipamentos necessários para a instalação.
+				<input type="checkbox" value="1" id="dadosCorretos">Confirmo ter realizado a separaÃ§Ã£o dos equipamentos necessÃ¡rios para a instalaÃ§Ã£o.
 			<%	break;
 		}%>
 		<br>
-		<button type="button" id="conferido_modal" onclick="form_novo_pedido_function('<%=AREA%>')">Conferido</button>
+		<button type="button" id="conferido_modal" onclick="form_novo_pedido_function('<%=AREA%>','<%=WORK_ID%>','<%=PK_OBJ[0]%>')">Conferido</button>
 		<button type="button" id="cancel_modal">Cancelar</button>
 	</div>
 </div>

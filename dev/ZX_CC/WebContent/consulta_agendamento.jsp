@@ -6,7 +6,7 @@ CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
 <%
 	String[] PK_OBJ = {request.getParameter("PK_OBJ")};
 	String WORK_ID = request.getParameter("WORK_ID");
@@ -15,6 +15,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	AgendamentoServiceBean beanAgendamento = new AgendamentoServiceBean(PK_OBJ);
 	String[] pkCodCliente = {beanAgendamento.getCodCliente()};
 	ClienteServiceBean beanCliente = new ClienteServiceBean(pkCodCliente);
+	MockScheduleBean bean = new MockScheduleBean(COD_USUARIO);
+	bean.setStartTimestamp(WORK_ID);
 %>
 
 <!--Operacional -> Agendamento-->
@@ -124,7 +126,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</select>
 		    </div>
             <div class="div_modal_bt">
-            	<button type="button" id="incluir_modal" onclick="operacional_processar_agendamento_function">Incluir</button>
+            	<button type="button" id="incluir_modal" onclick="operacional_processar_agendamento_function('<%=WORK_ID%>')">Incluir</button>
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>
         </div>

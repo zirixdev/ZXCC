@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - MOCK FLUX SERVICE SERVLET
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server.mock;
 import java.io.IOException;
@@ -26,13 +26,13 @@ public class MockFluxServiceServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	   response.setContentType("text/html");
 	   PrintWriter out = response.getWriter();
-	   int PROCESS_ID;
 	   String OP_CODE = request.getParameter("OP_CODE");
 	   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
-	   Vector<String[]> CodProcessWork = new Vector<String[]>();
-	   Vector<String[]> NameProcess = new Vector<String[]>();
-	   SchedProcessDAO daoSchedProcess = new SchedProcessDAO();
 	   try{
+		   int PROCESS_ID;
+		   Vector<String[]> CodProcessWork = new Vector<String[]>();
+		   Vector<String[]> NameProcess = new Vector<String[]>();
+		   SchedProcessDAO daoSchedProcess = new SchedProcessDAO();
 		   if (OP_CODE.compareTo("STARTFLUX") == 0) {
 			   int DEFINED_PROCESS_ID = Integer.parseInt(request.getParameter("PROCESS_ID"));
 			   int PK_COLUMN = Integer.parseInt(request.getParameter("PK_COLUMN"));
@@ -82,7 +82,7 @@ public class MockFluxServiceServlet extends HttpServlet {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));
 			   MockSchedule.createWork(WORK_ID);
 		   }
-		   /********SERVER APENAS PARA FORÇAR UM ENDWORK********/
+		   /********SERVER APENAS PARA FORï¿½AR UM ENDWORK********/
 		   /******************FINALIDADE TESTE******************/
 		   else if (OP_CODE.compareTo("ENDWORK") == 0) {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));

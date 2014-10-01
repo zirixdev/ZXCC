@@ -1,18 +1,18 @@
 <!--
 ZIRIX CONTROL CENTER - CADASTRO DE EQUIPAMENTOS
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <!--Operacional -> Cadastro -> Equipamento-->
 <div id="operacional-cadastro-equipamentos-content">
     <form class="outer_form">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#aba_modulo" data-toggle="tab">Módulo</a></li>
+            <li class="active"><a href="#aba_modulo" data-toggle="tab">MÃ³dulo</a></li>
         </ul>   
         <div class="tab-content"> 
             <div class="tab-pane active" id="aba_modulo">

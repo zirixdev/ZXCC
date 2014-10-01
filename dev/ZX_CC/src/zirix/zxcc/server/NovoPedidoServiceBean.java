@@ -250,15 +250,13 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_CONTATO.NOME_TIPO "			//0
 					+ 														   "     , CONTATO_PROCEDIMENTO.DDD "		//1
 					+														   "     , CONTATO_PROCEDIMENTO.NUMERO "	//2
-					+ 														   "     , PAIS.COD_PAIS "					//3
+					+ 														   "     , CONTATO_PROCEDIMENTO.COD_PAIS "	//3
 					+														   "     , CONTATO_PROCEDIMENTO.NOME "		//4
 					+ 														   "     , INFO_CONTATO.NOME_GRAU "			//5
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "CONTATO_PROCEDIMENTO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "PAIS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "INFO_CONTATO "
 					+ 														   " WHERE TIPO_CONTATO.COD_CONTATO = CONTATO_PROCEDIMENTO.COD_CONTATO "
-					+														   "   AND PAIS.COD_PAIS = CONTATO_PROCEDIMENTO.COD_PAIS "
 					+														   "   AND INFO_CONTATO.COD_GRAU = CONTATO_PROCEDIMENTO.COD_GRAU "
 					+														   "   AND CONTATO_PROCEDIMENTO.COD_UNIDADE = 2 "
 					+														   "   AND CONTATO_PROCEDIMENTO.COD_UNIDADE_CADASTRADA = " + codVeiculo);

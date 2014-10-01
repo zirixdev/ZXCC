@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <!--
 ZIRIX CONTROL CENTER - INDEX PAGE
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
@@ -30,7 +31,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                    <br>
                    <br>
                    Senha: <input type="password" name="senha_login" style="color: #000;">
-                   <br><%if(log_failed.compareTo("FAIL") == 0) {%>Login e/ou Senha inválidos. Tente novamente!<%}%>
+                   <br><%if(log_failed.compareTo("FAIL") == 0) {%>Login e/ou Senha invÃ¡lidos. Tente novamente!<%}%>
                    <br>
                    <button type="submit" style="color: #000;" id="entrar_login">Entrar</button>
                 </div>
