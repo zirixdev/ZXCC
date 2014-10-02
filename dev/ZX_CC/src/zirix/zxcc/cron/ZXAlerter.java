@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Vector;
 import antena.mailer.ADGoogleMailer;
 import javax.mail.*;
-
+import java.util.logging.*;
 
 public class ZXAlerter {
 
