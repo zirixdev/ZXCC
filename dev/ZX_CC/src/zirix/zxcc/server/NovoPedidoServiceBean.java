@@ -147,7 +147,7 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(UNIDADES_AGENDADAS.COD_UNIDADE) as CONTADOR "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
-					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE NOT IN (VEICULO.COD_VEICULO) "
+					+ 														   " WHERE UNIDADES_AGENDADAS.COD_UNIDADE IN (VEICULO.COD_VEICULO) "
 					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = 2 "
 					+ 														   "   AND UNIDADES_AGENDADAS.ESTADO NOT IN (2) "
 					+ 														   "   AND VEICULO.COD_PEDIDO = " + COD_PEDIDO_);
@@ -182,6 +182,27 @@ public class NovoPedidoServiceBean {
     		ex.printStackTrace();
 		}finally{
 			return codUnidades;
+		}
+	}
+
+	@SuppressWarnings("finally")
+	public Vector<String[]> getDadosVeiculo(int cod_veiculo){
+		Vector<String[]> dadosVeiculo = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_MARCA "
+					+ 														   "     , PLACA"
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
+					+ 														   " WHERE COD_VEICULO = " + cod_veiculo);
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[2];
+				attList[0] = (String) values.get(i)[0].toString();
+				attList[1] = (String) values.get(i)[1].toString();
+				dadosVeiculo.add(attList);
+			}
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}finally{
+			return dadosVeiculo;
 		}
 	}
 

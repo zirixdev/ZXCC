@@ -301,11 +301,13 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </section>
                 <section class="conteudo">
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
-					<br>123
-					<br>Let's
-					<br>456
-					<br>Go
-					<br>789
+                <br>
+                <br>
+				<progress id="progressBar" max="100" value="0">
+				</progress>
+				<br><input type="button" id="theButton" value="Add 10%" onclick="addTenPercent();">
+				<br>
+                <br>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">
 				  	<label for="checkboxConfirmInput"></label>

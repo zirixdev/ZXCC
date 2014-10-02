@@ -33,6 +33,7 @@ public class MockEvaluator {
 		try{
 			DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 							  "   SET END_TIMESTAMP = NOW() "
+					+							  "     , WORK_STATE_ID = 2 "
 					+ 							  " WHERE START_TIMESTAMP IS NOT NULL "
 					+ 							  "   AND END_TIMESTAMP IS NULL "
 					+ 							  "   AND WORK_ID = " + WORK_ID_);
