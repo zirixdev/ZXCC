@@ -2,11 +2,13 @@
 <Context antiJARLocking="true" path="/APP_NAME">
     <Resource name="jdbc/poolConn"
             auth="Container"
-            driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            driverClassName="com.mysql.jdbc.Driver"
             maxactive="100"
             maxidle="30"
             maxwait="10000"            
             type="javax.sql.DataSource"
-            url="jdbc:sqlserver://localhost:1433;integratedSecurity=true">
+            username="root"
+            password=""
+            url="jdbc:mysql://127.0.0.1:3306/ZX_CC_PROD">
     </Resource>
 </Context>

@@ -1,11 +1,11 @@
 <!--
 ZIRIX CONTROL CENTER - CONSULTA CLIENTE
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
@@ -23,11 +23,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <div class="tab-pane active" id="aba_cliente">
                 <fieldset class="field">
                 <%if(beanCliente.getTipo() == 0){%>
-                	<input type="radio" name="pessoa" value="pessoafisica" checked="checked">Pessoa Física
-                    <input type="radio" name="pessoa" value="pessoajuridica">Pessoa Jurídica
+                	<input type="radio" name="pessoa" value="pessoafisica" checked="checked">Pessoa FÃ­sica
+                    <input type="radio" name="pessoa" value="pessoajuridica">Pessoa JurÃ­dica
                 <%}else{%>
-                	<input type="radio" name="pessoa" value="pessoafisica">Pessoa Física
-                    <input type="radio" name="pessoa" value="pessoajuridica" checked="checked">Pessoa Jurídica
+                	<input type="radio" name="pessoa" value="pessoafisica">Pessoa FÃ­sica
+                    <input type="radio" name="pessoa" value="pessoajuridica" checked="checked">Pessoa JurÃ­dica
                 <%}%>
                 	<fieldset class="fild_vendedor">
                     	Vendedor: <select id="vendedor_list" class="size_60">
@@ -51,7 +51,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							%>
                     	</select>
                     </fieldset>
-                    <br>Razão Social / Nome:
+                    <br>RazÃ£o Social / Nome:
                     <input type="text" id="nome_razaosocial" class="size_100" value="<%=beanCliente.getNome().trim()%>">
                     <br>Nome Fantasia / Apelido:
                     <input type="text" id="nomefantasia"  class="size_100" value="<%=beanCliente.getNomeFantasia().trim()%>">
@@ -61,7 +61,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </fieldset>
                 <fieldset class="field">
                     <legend>Documentos:</legend>
-					<div id="div_doc">Número:
+					<div id="div_doc">NÃºmero:
 						<input type="text" class="size_25" id="numero_documento" onkeypress="javascript: return EntradaNumerico(event);">Tipo do Documento:
 						<select id="tipodoc_list" >
                             <%        	
@@ -79,7 +79,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								   }	
 							%>
                         </select>
-						<br>Data de Emissão:<input type="date" id="data_emissao">Órgão Emissor:
+						<br>Data de EmissÃ£o:<input type="date" id="data_emissao">Ã“rgÃ£o Emissor:
 						<input class="size_28" type="text" id="orgao_emissor">
                     </div>
 					<fieldset class="fieldinner">
@@ -101,7 +101,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     </div>
                 </fieldset>
                 <fieldset class="field">
-                    <legend>Endereço:</legend>
+                    <legend>EndereÃ§o:</legend>
                     <div id="div_end">
 						Logradouro: <input type="text" class="size_100" id="endereco">
 						<br>
@@ -139,7 +139,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                             <option value="27" name="option_endereco_uf">TO</option>
                             <option value="28" name="option_endereco_uf">OUTRO</option>
                         </select>
-                        &nbsp;País:
+                        &nbsp;PaÃ­s:
                         <select id="pais_list" class="size_20" onchange="">
                            	<%try {
 								Vector<PaisDAO> list = PaisDAOService.loadAll();
@@ -155,7 +155,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								   out.println("Error... " + e.getMessage());
 							   }%>
 						</select>&nbsp;CEP:
-						<input type="text" class="size_12" id="cep" maxlength="8"  onkeypress="javascript: return EntradaNumerico(event);">Tipo de Endereço:
+						<input type="text" class="size_12" id="cep" maxlength="8"  onkeypress="javascript: return EntradaNumerico(event);">Tipo de EndereÃ§o:
                         <select id="tipo_end_list" class="size_24">
                             <%        	
 								try {
@@ -202,7 +202,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <fieldset class="field">
                     <div id="div_contato">
 	                    DDD:<input type="text" class="size_5" id="ddd" maxlength="2" onkeypress="javascript: return EntradaNumerico(event);">
-                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="10" onkeypress="javascript: return EntradaNumerico(event);">
+                        NÃºmero:<input type="text" class="size_19" id="numero_contato" maxlength="10" onkeypress="javascript: return EntradaNumerico(event);">
                         Tipo do Contato:
                         <select id="tipocont_list" class="size_21">
 	                        <%        	
@@ -220,7 +220,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								   }	
 							%>
 	                    </select>
-	                    Cod. País: <input type="text" class="size_5" id="cod_pais" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);">
+	                    Cod. PaÃ­s: <input type="text" class="size_5" id="cod_pais" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);">
 	                    <br>Nome:<input class="size_32" type="text" id="nome_contato">
 	                    Parentesco / Cargo:
                         <select id="info_contato_list" class="size_35">

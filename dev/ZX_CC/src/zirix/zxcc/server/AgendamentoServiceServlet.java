@@ -29,6 +29,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		String OP_CODE = request.getParameter("OP_CODE");
 		String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 		String WORK_ID = request.getParameter("WORK_ID");
+		int PK_COLUMN = 0;
 		try {
 			AgendamentoDAO daoAgendamento = new AgendamentoDAO();
 			PkList pkList;
@@ -68,6 +69,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 					   ex.printStackTrace();
 				   }  finally {
 					   pkListValue = Integer.parseInt(CodAgendamento_.elementAt(0)[0].trim());
+					   PK_COLUMN = pkListValue;
 				   }
 				   if(pkListValue != 0){
 					   int arraysize = Integer.parseInt(request.getParameter("QOBS").trim());
@@ -121,9 +123,10 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoDadosAgendamento.Create();
 					   }
 				   }else{
-					   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE n�o encontrado! ");
+					   out.println("Error on AgendamentoServiceServlet... " + "\nIngresso do Agendamento! ");
 				   }
 			   }
+			   System.err.println("\n WORK_ID = " + WORK_ID);
 			   if(WORK_ID.compareTo("0") != 0){
 				   MockEvaluator eval = new MockEvaluator(Integer.parseInt(WORK_ID));
 				   if(eval.endWork()){
@@ -133,7 +136,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   MockSchedule.createWork(Integer.parseInt(WORK_ID));
 					   }else{
 						   MockSchedule sched = new MockSchedule(Integer.parseInt(WORK_ID));
-						   sched.changeState(Integer.parseInt(WORK_ID));
+						   sched.changeState(PK_COLUMN);
 					   }
 				   }
 			   }
@@ -146,7 +149,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		}catch(Exception e){
 			out.println("Error on AgendamentoServiceServlet... " + ' ' + e.getMessage());
 		}
-		response.sendRedirect(ZXMain.URL_ADRESS_ + "/zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+		response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}

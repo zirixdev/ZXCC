@@ -1,16 +1,16 @@
 <!--
-ZIRIX CONTROL CENTER - INFORMA«’ES SOBRE INSTALA«√O DO MODULO
-DESENVOLVIDO POR ZIRIX SOLU«’ES EM RASTREAMENTO LTDA.
+ZIRIX CONTROL CENTER - INFORMA√á√ïES SOBRE INSTALA√á√ÉO DO MODULO
+DESENVOLVIDO POR ZIRIX SOLU√á√ïES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5 E JSP
 -->
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
-<!--InstalaÁ„o Cliente-->
+<!--Instala√ß√£o Cliente-->
 <div id="instalado_cliente">
-	Nome / Raz„o Social:<input list="nome_list" name="nome_razaosocial_cad_modulo" id="item_nome_razao" class="size_61">
+	Nome / Raz√£o Social:<input list="nome_list" name="nome_razaosocial_cad_modulo" id="item_nome_razao" class="size_61">
 	<datalist id="nome_list">      	
 		<%        	
 		try {		
@@ -25,7 +25,7 @@ TECNOLOGIAS UTILIZADAS: HTML5 E JSP
 		}%>
 	</datalist>
 	<div id="div_veiculo_equip">
-		VeÌculo - Placa:<input list="placa_list" name="placa_veiculo_cad_modulo" id="item_placa_veiculo" class="size_71" disabled="disabled">
+		Ve√≠culo - Placa:<input list="placa_list" name="placa_veiculo_cad_modulo" id="item_placa_veiculo" class="size_71" disabled="disabled">
 		<datalist id="placa_list">
 			<!-- TODO de acordo com o cliente selecionado -->
 		</datalist>

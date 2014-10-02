@@ -137,18 +137,16 @@ function modal_click(id){
             });
             break;
         case "menu_com_cad_ped":
-        	if(ambiente === "DEV"){
-                $.ajax({
-                    url: url_adress + "cadastro_novo_pedido.jsp",
-                    success: function(result) {
-                        $('.modal-content').html(result);
-                        $('.modal').modal({backdrop:'static'});
-                    },
-                    error: function(e){
-                        alert('error');
-                    }
-                });
-        	}
+            $.ajax({
+                url: url_adress + "cadastro_novo_pedido.jsp",
+                success: function(result) {
+                    $('.modal-content').html(result);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
         	break;
         case "menu_com_con":
             $.ajax({
@@ -370,7 +368,7 @@ function callModalTarefas(event){
 	    	break;
 	    case "opr_acompanha_inst":
 	        $.ajax({
-	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ACOMP_AGEND&PK_OBJ="+selectedPK,
+	            url: url_adress + "consulta_agendamento.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ACOMP_AGEND&PK_OBJ="+selectedPK,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});
@@ -384,7 +382,7 @@ function callModalTarefas(event){
 	    case "adm_finaliza_processo":
 	    	//TODO
 	        /*$.ajax({
-	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ACOMP_AGEND&PK_OBJ="+selectedPK,
+	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ADM_FINAL&PK_OBJ="+selectedPK,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});

@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - DAO MANAGER
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -29,7 +29,13 @@ public class DAOManager {
 
     public Connection getConnection() throws SQLException {
         try{
-            return src.getConnection();
+        	
+        	Connection con = src.getConnection();
+        	if(ZXMain.LOCAL_.compareTo("PROD") == 0){
+        		con.setAutoCommit(true);
+        	}
+        	
+        	return con;
         }
         catch(SQLException e) { throw e; }
     }
@@ -63,8 +69,22 @@ public class DAOManager {
     }
     
     public void executeUpdate(String query) throws SQLException {
-    	
-    	
+		PreparedStatement stmt = null;
+		Connection con = getConnection();
+		try
+		{                       	        	
+		   stmt = con.prepareStatement(query);
+		   stmt.executeUpdate();        			        		        
+		} catch(SQLException e){ 
+		    throw e; 
+		}
+		finally {
+			if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+				con.commit();
+			}
+			if (stmt != null) stmt.close();
+			closeConnection(con);
+		} 
     }
     
     public ArrayList<Object[]> executeQuery(String query) throws SQLException {
@@ -75,7 +95,7 @@ public class DAOManager {
                 
         try
         {                       	        	
-	       stmt = con.prepareStatement(query);	        	       	    			       
+	       stmt = con.prepareStatement(query);
 	       res = stmt.executeQuery();
 	        
 	        ArrayList<Object[]> values = new ArrayList<Object[]>();	    	       

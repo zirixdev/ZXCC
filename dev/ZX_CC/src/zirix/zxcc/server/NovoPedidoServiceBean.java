@@ -250,15 +250,13 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_CONTATO.NOME_TIPO "			//0
 					+ 														   "     , CONTATO_PROCEDIMENTO.DDD "		//1
 					+														   "     , CONTATO_PROCEDIMENTO.NUMERO "	//2
-					+ 														   "     , PAIS.COD_PAIS "					//3
+					+ 														   "     , CONTATO_PROCEDIMENTO.COD_PAIS "	//3
 					+														   "     , CONTATO_PROCEDIMENTO.NOME "		//4
 					+ 														   "     , INFO_CONTATO.NOME_GRAU "			//5
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "CONTATO_PROCEDIMENTO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "PAIS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "INFO_CONTATO "
 					+ 														   " WHERE TIPO_CONTATO.COD_CONTATO = CONTATO_PROCEDIMENTO.COD_CONTATO "
-					+														   "   AND PAIS.COD_PAIS = CONTATO_PROCEDIMENTO.COD_PAIS "
 					+														   "   AND INFO_CONTATO.COD_GRAU = CONTATO_PROCEDIMENTO.COD_GRAU "
 					+														   "   AND CONTATO_PROCEDIMENTO.COD_UNIDADE = 2 "
 					+														   "   AND CONTATO_PROCEDIMENTO.COD_UNIDADE_CADASTRADA = " + codVeiculo);
@@ -346,9 +344,7 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SERVICO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			System.err.println("\n values.size() = " + values.size());
 			valorTotal = values.get(0)[0].toString();
-			System.err.println("\n getValorTotalServico valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{
@@ -363,9 +359,7 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "EQUIP_ACESSORIO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			System.err.println("\n values.size() = " + values.size());
 			valorTotal = values.get(0)[0].toString();
-			System.err.println("\n getValorTotalEquipamento valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{

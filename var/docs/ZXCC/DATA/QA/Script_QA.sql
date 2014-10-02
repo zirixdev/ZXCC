@@ -1,0 +1,1420 @@
+-- ----------------------------------------------------------------------------
+-- MySQL Workbench Migration
+-- Migrated Schemata: ZX_CC_DEV
+-- Source Schemata: ZX_CC_DEV
+-- Created: Wed Oct 01 12:01:51 2014
+-- ----------------------------------------------------------------------------
+
+SET FOREIGN_KEY_CHECKS = 0;;
+
+-- ----------------------------------------------------------------------------
+-- Schema ZX_CC_DEV
+-- ----------------------------------------------------------------------------
+DROP SCHEMA IF EXISTS `ZX_CC_QA` ;
+CREATE SCHEMA IF NOT EXISTS `ZX_CC_QA` ;
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_ENDERECO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_ENDERECO` (
+  `COD_ENDERECO` INT NOT NULL AUTO_INCREMENT,
+  `NOME` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_ENDERECO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DEFINED_PROCESS_STATE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DEFINED_PROCESS_STATE` (
+  `PROCESS_STATE_ID` INT NOT NULL AUTO_INCREMENT,
+  `STATE_NAME` CHAR(50) NOT NULL,
+  `NEXT_STATE_ID` INT NULL,
+  `STATE_NUM` INT NOT NULL,
+  `PROCESS_ID` INT NOT NULL,
+  PRIMARY KEY (`PROCESS_STATE_ID`),
+  CONSTRAINT `FK_DEFINED_PROCESS_STATE_DEFINED_WORK_PROCESS_ID`
+    FOREIGN KEY (`PROCESS_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS` (`PROCESS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTATO_CLIENTE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTATO_CLIENTE` (
+  `COD_CONTATO_CLI` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE` INT NOT NULL,
+  `COD_CONTATO` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(10) NOT NULL,
+  `COD_PAIS` INT NULL,
+  `NOME` CHAR(50) NULL,
+  `COD_GRAU` INT NOT NULL,
+  PRIMARY KEY (`COD_CONTATO_CLI`),
+  CONSTRAINT `FK_CONTATO_CLIENTE_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_CLIENTE_TIPO_CONTATO_COD_CONTATO`
+    FOREIGN KEY (`COD_CONTATO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_CONTATO` (`COD_CONTATO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_CLIENTE_INFO_CONTATO_COD_GRAU`
+    FOREIGN KEY (`COD_GRAU`)
+    REFERENCES `ZX_CC_QA`.`INFO_CONTATO` (`COD_GRAU`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_CONTATO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_CONTATO` (
+  `COD_CONTATO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_TIPO` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_CONTATO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DOCUMENTO_CLIENTE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DOCUMENTO_CLIENTE` (
+  `COD_DOCUMENTO_CLI` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE` INT NOT NULL,
+  `COD_DOCUMENTO` INT NOT NULL,
+  `NUMERO` CHAR(20) NOT NULL,
+  `DATA_EMISSAO` DATE NULL,
+  `ORGAO_EMISSOR` CHAR(20) NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_DOCUMENTO_CLI`),
+  CONSTRAINT `FK_DOCUMENTO_CLIENTE_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DOCUMENTO_CLIENTE_TIPO_DOCUMENTO_COD_DOCUMENTO`
+    FOREIGN KEY (`COD_DOCUMENTO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_DOCUMENTO` (`COD_DOCUMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_DOCUMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_DOCUMENTO` (
+  `COD_DOCUMENTO` INT NOT NULL AUTO_INCREMENT,
+  `NOME` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_DOCUMENTO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.VENDEDOR
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`VENDEDOR` (
+  `COD_VENDEDOR` INT NOT NULL AUTO_INCREMENT,
+  `TIPO` INT NOT NULL,
+  `NOME` CHAR(50) NOT NULL,
+  `NOME_FANTASIA` CHAR(50) NULL,
+  `SITE` CHAR(60) NULL,
+  `DATA_NASCIMENTO` DATE NOT NULL,
+  `DATA_INGRESSO` DATE NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_VENDEDOR`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ENDERECO_VENDEDOR
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ENDERECO_VENDEDOR` (
+  `COD_ENDERECO_VEN` INT NOT NULL AUTO_INCREMENT,
+  `COD_VENDEDOR` INT NOT NULL,
+  `ENDERECO` CHAR(100) NOT NULL,
+  `BAIRRO` CHAR(50) NOT NULL,
+  `CIDADE` CHAR(50) NOT NULL,
+  `UF` CHAR(2) NOT NULL,
+  `COD_PAIS` INT NOT NULL,
+  `COMPLEMENTO` CHAR(30) NULL,
+  `CEP` CHAR(9) NOT NULL,
+  `COD_ENDERECO` INT NOT NULL,
+  PRIMARY KEY (`COD_ENDERECO_VEN`),
+  CONSTRAINT `FK_ENDERECO_VENDEDOR_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_VENDEDOR_PAIS_COD_PAIS`
+    FOREIGN KEY (`COD_PAIS`)
+    REFERENCES `ZX_CC_QA`.`PAIS` (`COD_PAIS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_VENDEDOR_TIPO_ENDERECO_COD_ENDERECO`
+    FOREIGN KEY (`COD_ENDERECO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_ENDERECO` (`COD_ENDERECO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTATO_VENDEDOR
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTATO_VENDEDOR` (
+  `COD_CONTATO_VEN` INT NOT NULL AUTO_INCREMENT,
+  `COD_VENDEDOR` INT NOT NULL,
+  `COD_CONTATO` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(10) NOT NULL,
+  `COD_PAIS` INT NULL,
+  `NOME` CHAR(50) NULL,
+  `COD_GRAU` INT NOT NULL,
+  PRIMARY KEY (`COD_CONTATO_VEN`),
+  CONSTRAINT `FK_CONTATO_VENDEDOR_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_VENDEDOR_TIPO_CONTATO_COD_CONTATO`
+    FOREIGN KEY (`COD_CONTATO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_CONTATO` (`COD_CONTATO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_VENDEDOR_INFO_CONTATO_COD_GRAU`
+    FOREIGN KEY (`COD_GRAU`)
+    REFERENCES `ZX_CC_QA`.`INFO_CONTATO` (`COD_GRAU`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.WORK_STATUS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`WORK_STATUS` (
+  `WORK_STATUS_ID` INT NOT NULL AUTO_INCREMENT,
+  `WORK_STATUS_NAME` CHAR(50) NOT NULL,
+  PRIMARY KEY (`WORK_STATUS_ID`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DOCUMENTO_VENDEDOR
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DOCUMENTO_VENDEDOR` (
+  `COD_DOCUMENTO_VEN` INT NOT NULL AUTO_INCREMENT,
+  `COD_VENDEDOR` INT NOT NULL,
+  `COD_DOCUMENTO` INT NOT NULL,
+  `NUMERO` CHAR(20) NOT NULL,
+  `DATA_EMISSAO` DATE NULL,
+  `ORGAO_EMISSOR` CHAR(20) NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_DOCUMENTO_VEN`),
+  CONSTRAINT `FK_DOCUMENTO_VENDEDOR_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DOCUMENTO_VENDEDOR_TIPO_DOCUMENTO_COD_DOCUMENTO`
+    FOREIGN KEY (`COD_DOCUMENTO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_DOCUMENTO` (`COD_DOCUMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.VEICULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`VEICULO` (
+  `COD_VEICULO` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE` INT NOT NULL,
+  `PLACA` CHAR(8) NOT NULL,
+  `ANO_FAB` INT NOT NULL,
+  `ANO_MOD` INT NOT NULL,
+  `COD_MARCA` INT NOT NULL,
+  `MODELO` CHAR(50) NOT NULL,
+  `COR` CHAR(50) NOT NULL,
+  `CHASSI` CHAR(30) NOT NULL,
+  `RENAVAN` CHAR(20) NOT NULL,
+  `DATA_INGRESSO` DATE NOT NULL,
+  `COD_COMBUSTIVEL` INT NOT NULL,
+  `VOLT` INT NOT NULL,
+  `KM` CHAR(20) NULL,
+  `DATA_ULT_VISTORIA` DATE NOT NULL,
+  `COD_INSTALACAO` INT NULL,
+  `DELETED` INT NOT NULL,
+  `COD_PEDIDO` INT NULL,
+  PRIMARY KEY (`COD_VEICULO`),
+  CONSTRAINT `FK_VEICULO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_VEICULO_VEICULO_MARCA_COD_MARCA`
+    FOREIGN KEY (`COD_MARCA`)
+    REFERENCES `ZX_CC_QA`.`VEICULO_MARCA` (`COD_MARCA`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_VEICULO_VEICULO_COMBUSTIVEL_COD_COMBUSTIVEL`
+    FOREIGN KEY (`COD_COMBUSTIVEL`)
+    REFERENCES `ZX_CC_QA`.`VEICULO_COMBUSTIVEL` (`COD_COMBUSTIVEL`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.VEICULO_MARCA
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`VEICULO_MARCA` (
+  `COD_MARCA` INT NOT NULL AUTO_INCREMENT,
+  `NOME_MARCA` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_MARCA`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.VEICULO_COMBUSTIVEL
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`VEICULO_COMBUSTIVEL` (
+  `COD_COMBUSTIVEL` INT NOT NULL AUTO_INCREMENT,
+  `NOME_COMBUSTIVEL` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_COMBUSTIVEL`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.NUMERO_OS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`NUMERO_OS` (
+  `NUM_OS` INT NOT NULL AUTO_INCREMENT,
+  `COD_USUARIO` INT NOT NULL,
+  `DATA_GERACAO` DATE NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`NUM_OS`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`MODULO` (
+  `COD_MODULO` INT NOT NULL AUTO_INCREMENT,
+  `NUMERO_MODULO` CHAR(16) NOT NULL,
+  `COD_CLIENTE` INT NOT NULL,
+  `COD_MODELO` INT NOT NULL,
+  `COD_CHIP` INT NOT NULL,
+  `NFE` CHAR(20) NOT NULL,
+  `COD_ESTADO` INT NOT NULL,
+  `COD_INSTALACAO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_MODULO`),
+  CONSTRAINT `FK_MODULO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MODULO_DESC_MODULO_COD_MODELO`
+    FOREIGN KEY (`COD_MODELO`)
+    REFERENCES `ZX_CC_QA`.`DESC_MODULO` (`COD_MODELO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MODULO_CHIP_COD_CHIP`
+    FOREIGN KEY (`COD_CHIP`)
+    REFERENCES `ZX_CC_QA`.`CHIP` (`COD_CHIP`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MODULO_INSTALACAO_COD_INSTALACAO`
+    FOREIGN KEY (`COD_INSTALACAO`)
+    REFERENCES `ZX_CC_QA`.`INSTALACAO` (`COD_INSTALACAO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MODULO_ESTADO_MODULO_COD_ESTADO`
+    FOREIGN KEY (`COD_ESTADO`)
+    REFERENCES `ZX_CC_QA`.`ESTADO_MODULO` (`COD_ESTADO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.OBS_OS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`OBS_OS` (
+  `COD_OBS_OS` INT NOT NULL AUTO_INCREMENT,
+  `INDICE` INT NOT NULL,
+  `OBSERVACAO` CHAR(200) NOT NULL,
+  `COD_OS` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_OBS_OS`),
+  CONSTRAINT `FK_OBS_OS_OS_COD_OS`
+    FOREIGN KEY (`COD_OS`)
+    REFERENCES `ZX_CC_QA`.`OS` (`COD_OS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CHIP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CHIP` (
+  `COD_CHIP` INT NOT NULL AUTO_INCREMENT,
+  `COD_MODULO` INT NULL,
+  `NFE` CHAR(20) NOT NULL,
+  `ICCID` CHAR(25) NOT NULL,
+  `COD_OPERADORA` INT NOT NULL,
+  `APN` CHAR(50) NOT NULL,
+  `TECNOLOGIA` CHAR(10) NOT NULL,
+  `COD_STATUS` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO_CHIP` CHAR(15) NOT NULL,
+  `DATA_VIGENCIA` DATE NOT NULL,
+  `COD_CONTA` INT NOT NULL,
+  `COD_PACOTE` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_CHIP`),
+  CONSTRAINT `FK_CHIP_OPERADORA_CHIP_COD_OPERADORA`
+    FOREIGN KEY (`COD_OPERADORA`)
+    REFERENCES `ZX_CC_QA`.`OPERADORA_CHIP` (`COD_OPERADORA`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CHIP_STATUS_CHIP_COD_STATUS`
+    FOREIGN KEY (`COD_STATUS`)
+    REFERENCES `ZX_CC_QA`.`STATUS_CHIP` (`COD_STATUS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.WORK_GROUP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`WORK_GROUP` (
+  `WORK_GROUP_ID` INT NOT NULL AUTO_INCREMENT,
+  `WORK_GROUP_NAME` CHAR(50) NOT NULL,
+  PRIMARY KEY (`WORK_GROUP_ID`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.OPERADORA_CHIP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`OPERADORA_CHIP` (
+  `COD_OPERADORA` INT NOT NULL AUTO_INCREMENT,
+  `NOME_OPERADORA` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_OPERADORA`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TESTES_OS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TESTES_OS` (
+  `COD_TESTES_OS` INT NOT NULL AUTO_INCREMENT,
+  `COD_OS` INT NOT NULL,
+  `IGNICAO` INT NOT NULL,
+  `BLOQUEIO` INT NOT NULL,
+  `GPS` INT NOT NULL,
+  `GPRS` INT NOT NULL,
+  `SIRENE` INT NOT NULL,
+  `PANICO` INT NOT NULL,
+  `RPM` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_TESTES_OS`),
+  CONSTRAINT `FK_TESTES_OS_OS_COD_OS`
+    FOREIGN KEY (`COD_OS`)
+    REFERENCES `ZX_CC_QA`.`OS` (`COD_OS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.STATUS_CHIP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`STATUS_CHIP` (
+  `COD_STATUS` INT NOT NULL AUTO_INCREMENT,
+  `NOME_STATUS` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_STATUS`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.WORK_USER
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`WORK_USER` (
+  `WORK_USER_ID` INT NOT NULL AUTO_INCREMENT,
+  `WORK_GROUP_ID` INT NOT NULL,
+  `COD_USUARIO` INT NOT NULL,
+  PRIMARY KEY (`WORK_USER_ID`),
+  CONSTRAINT `FK_WORK_USER_WORK_GROUP_WORK_GROUP_ID`
+    FOREIGN KEY (`WORK_GROUP_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_GROUP` (`WORK_GROUP_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_WORK_USER_USUARIO_COD_USUARIO`
+    FOREIGN KEY (`COD_USUARIO`)
+    REFERENCES `ZX_CC_QA`.`USUARIO` (`COD_USUARIO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DESC_MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DESC_MODULO` (
+  `COD_MODELO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_MODELO` CHAR(50) NOT NULL,
+  `COD_MARCA` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_MODELO`),
+  CONSTRAINT `FK_DESC_MODULO_MARCA_MODULO_COD_MARCA`
+    FOREIGN KEY (`COD_MARCA`)
+    REFERENCES `ZX_CC_QA`.`MARCA_MODULO` (`COD_MARCA`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.MARCA_MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`MARCA_MODULO` (
+  `COD_MARCA` INT NOT NULL AUTO_INCREMENT,
+  `NOME_MARCA` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_MARCA`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ESTADO_MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ESTADO_MODULO` (
+  `COD_ESTADO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_ESTADO` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_ESTADO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CLIENTE_PROSPECCAO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CLIENTE_PROSPECCAO` (
+  `COD_CLIENTE_PROSPECCAO` INT NOT NULL AUTO_INCREMENT,
+  `TIPO` INT NOT NULL,
+  `NOME` CHAR(50) NOT NULL,
+  `NOME_FANTASIA` CHAR(50) NULL,
+  `DATA_INGRESSO` DATE NOT NULL,
+  `COD_VENDEDOR` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_CLIENTE_PROSPECCAO`),
+  CONSTRAINT `FK_CLIENTE_PROSPECCAO_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.HIST_MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`HIST_MODULO` (
+  `COD_HIST_MODULO` INT NOT NULL AUTO_INCREMENT,
+  `COD_MODULO` INT NOT NULL,
+  `DATA_INGRESSO` DATE NOT NULL,
+  `DATA_REMOVIDO` DATE NULL,
+  `COD_INSTALACAO` INT NOT NULL,
+  `COD_MOTIVO` INT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_HIST_MODULO`),
+  CONSTRAINT `FK_HIST_MODULO_MODULO_COD_MODULO`
+    FOREIGN KEY (`COD_MODULO`)
+    REFERENCES `ZX_CC_QA`.`MODULO` (`COD_MODULO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_HIST_MODULO_INSTALACAO_COD_INSTALACAO`
+    FOREIGN KEY (`COD_INSTALACAO`)
+    REFERENCES `ZX_CC_QA`.`INSTALACAO` (`COD_INSTALACAO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_HIST_MODULO_MOTIVO_HIST_MODULO_COD_MOTIVO`
+    FOREIGN KEY (`COD_MOTIVO`)
+    REFERENCES `ZX_CC_QA`.`MOTIVO_HIST_MODULO` (`COD_MOTIVO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.OS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`OS` (
+  `COD_OS` INT NOT NULL AUTO_INCREMENT,
+  `NUM_OS` INT NOT NULL,
+  `COD_TECNICO` INT NULL,
+  `ARRAIVE_TIME` TIME NULL,
+  `LEAVE_TIME` TIME NULL,
+  `FRUSTRADA` INT NULL,
+  `TIPO_OS` INT NOT NULL,
+  `HAVE_TEST` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_OS`),
+  CONSTRAINT `FK_OS_NUMERO_OS_NUM_OS`
+    FOREIGN KEY (`NUM_OS`)
+    REFERENCES `ZX_CC_QA`.`NUMERO_OS` (`NUM_OS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_OS_TECNICO_COD_TECNICO`
+    FOREIGN KEY (`COD_TECNICO`)
+    REFERENCES `ZX_CC_QA`.`TECNICO` (`COD_TECNICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTATO_PROSPECCAO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTATO_PROSPECCAO` (
+  `COD_CONTATO_PROS` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE_PROSPECCAO` INT NOT NULL,
+  `COD_CONTATO` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(10) NOT NULL,
+  `COD_PAIS` INT NULL,
+  PRIMARY KEY (`COD_CONTATO_PROS`),
+  CONSTRAINT `FK_CONTATO_PROSPECCAO_CLIENTE_PROSPECCAO_COD_CLIENTE_PROSPECCAO`
+    FOREIGN KEY (`COD_CLIENTE_PROSPECCAO`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE_PROSPECCAO` (`COD_CLIENTE_PROSPECCAO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_PROSPECCAO_TIPO_CONTATO_COD_CONTATO`
+    FOREIGN KEY (`COD_CONTATO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_CONTATO` (`COD_CONTATO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ESTOQUE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ESTOQUE` (
+  `COD_ESTOQUE` INT NOT NULL AUTO_INCREMENT,
+  `COD_INSTALACAO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_ESTOQUE`),
+  CONSTRAINT `FK_ESTOQUE_INSTALACAO_COD_INSTALACAO`
+    FOREIGN KEY (`COD_INSTALACAO`)
+    REFERENCES `ZX_CC_QA`.`INSTALACAO` (`COD_INSTALACAO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TELA
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TELA` (
+  `COD_TELA` INT NOT NULL AUTO_INCREMENT,
+  `NOME_TELA` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_TELA`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.EMAIL_PROSPECCAO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`EMAIL_PROSPECCAO` (
+  `COD_EMAIL_PROSPECCAO` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE_PROSPECCAO` INT NOT NULL,
+  `EMAIL` CHAR(100) NOT NULL,
+  PRIMARY KEY (`COD_EMAIL_PROSPECCAO`),
+  CONSTRAINT `FK_EMAIL_PROSPECCAO_CLIENTE_PROSPECCAO_COD_CLIENTE_PROSPECCAO`
+    FOREIGN KEY (`COD_CLIENTE_PROSPECCAO`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE_PROSPECCAO` (`COD_CLIENTE_PROSPECCAO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PERMISSAO_USUARIO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PERMISSAO_USUARIO` (
+  `COD_PERMISSAO` INT NOT NULL AUTO_INCREMENT,
+  `COD_USUARIO` INT NOT NULL,
+  `COD_TELA` INT NOT NULL,
+  `CHAVE` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_PERMISSAO`),
+  CONSTRAINT `FK_PERMISSAO_USUARIO_TELA_COD_TELA`
+    FOREIGN KEY (`COD_TELA`)
+    REFERENCES `ZX_CC_QA`.`TELA` (`COD_TELA`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PERMISSAO_USUARIO_USUARIO`
+    FOREIGN KEY (`COD_USUARIO`)
+    REFERENCES `ZX_CC_QA`.`USUARIO` (`COD_USUARIO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.USUARIO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`USUARIO` (
+  `COD_USUARIO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_USUARIO` CHAR(50) NOT NULL,
+  `LOGIN` CHAR(20) NOT NULL,
+  `SENHA` CHAR(17) NOT NULL,
+  `COD_GRUPO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_USUARIO`),
+  CONSTRAINT `FK_USUARIO_GRUPO`
+    FOREIGN KEY (`COD_GRUPO`)
+    REFERENCES `ZX_CC_QA`.`GRUPO` (`COD_GRUPO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.WORK_SERVICE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`WORK_SERVICE` (
+  `WORK_SERVICE_ID` INT NOT NULL AUTO_INCREMENT,
+  `SERVICE_NAME` CHAR(50) NOT NULL,
+  `PROCESS_ID` INT NOT NULL,
+  `WORK_ID` INT NOT NULL,
+  PRIMARY KEY (`WORK_SERVICE_ID`),
+  CONSTRAINT `FK_WORK_SERVICE_DEFINED_WORK_WORK_ID`
+    FOREIGN KEY (`WORK_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_WORK` (`WORK_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_WORK_SERVICE_DEFINED_WORK_PROCESS_ID`
+    FOREIGN KEY (`PROCESS_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS` (`PROCESS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.EMAIL_CLI_VEN
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`EMAIL_CLI_VEN` (
+  `COD_EMAIL` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLI_VEN` INT NOT NULL,
+  `TIPO_CLI_VEN` INT NOT NULL,
+  `EMAIL` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_EMAIL`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.INFO_CONTATO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`INFO_CONTATO` (
+  `COD_GRAU` INT NOT NULL AUTO_INCREMENT,
+  `NOME_GRAU` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_GRAU`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PEDIDO` (
+  `COD_PEDIDO` INT NOT NULL AUTO_INCREMENT,
+  `COD_VENDEDOR` INT NOT NULL,
+  `COD_CLIENTE` INT NOT NULL,
+  `NUM_PEDIDO` INT NOT NULL,
+  `COD_TIPO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  `DATA_VENCIMENTO` INT NOT NULL,
+  PRIMARY KEY (`COD_PEDIDO`),
+  CONSTRAINT `FK_PEDIDO_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PEDIDO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PEDIDO_TIPO_PEDIDO_COD_TIPO`
+    FOREIGN KEY (`COD_TIPO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_PEDIDO` (`COD_TIPO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_PEDIDO` (
+  `COD_TIPO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_TIPO` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_TIPO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.OBS_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`OBS_PEDIDO` (
+  `COD_OBS` INT NOT NULL AUTO_INCREMENT,
+  `COD_PEDIDO` INT NOT NULL,
+  `COD_CLIENTE` INT NOT NULL,
+  `INDICE` INT NOT NULL,
+  `OBSERVACAO` CHAR(200) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_OBS`),
+  CONSTRAINT `FK_OBS_PEDIDO_PEDIDO_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_OBS_PEDIDO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ANEXO_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ANEXO_PEDIDO` (
+  `COD_ANEXO` INT NOT NULL AUTO_INCREMENT,
+  `COD_PEDIDO` INT NOT NULL,
+  `COD_CLIENTE` INT NOT NULL,
+  `ANEXO` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_ANEXO`),
+  CONSTRAINT `FK_ANEXO_PEDIDO_PEDIDO_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ANEXO_PEDIDO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_SERVICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_SERVICO` (
+  `COD_SERVICO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_SERVICO` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_SERVICO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.sysdiagrams
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`sysdiagrams` (
+  `name` VARCHAR(160) NOT NULL,
+  `principal_id` INT NOT NULL,
+  `diagram_id` INT NOT NULL AUTO_INCREMENT,
+  `version` INT NULL,
+  `definition` LONGBLOB NULL,
+  PRIMARY KEY (`diagram_id`),
+  UNIQUE INDEX `UK_principal_name` (`principal_id` ASC, `name` ASC));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.SERVICO_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`SERVICO_PEDIDO` (
+  `COD_SERV_PED` INT NOT NULL AUTO_INCREMENT,
+  `COD_SERVICO` INT NOT NULL,
+  `COD_PEDIDO` INT NOT NULL,
+  `QUANTIDADE` INT NOT NULL,
+  `VALOR_UNITARIO` DECIMAL(5,2) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_SERV_PED`),
+  CONSTRAINT `FK_SERVICO_PEDIDO_TIPO_SERVICO_COD_SERVICO`
+    FOREIGN KEY (`COD_SERVICO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_SERVICO` (`COD_SERVICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PEDIDO_CLIENTE_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.NUMERO_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`NUMERO_PEDIDO` (
+  `NUM_PEDIDO` INT NOT NULL AUTO_INCREMENT,
+  `COD_USUARIO` INT NOT NULL,
+  `DATA_GERACAO` DATE NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`NUM_PEDIDO`),
+  CONSTRAINT `FK_NUMERO_PEDIDO_USUARIO_COD_USUARIO`
+    FOREIGN KEY (`COD_USUARIO`)
+    REFERENCES `ZX_CC_QA`.`USUARIO` (`COD_USUARIO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PERMISSAO_GRUPO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PERMISSAO_GRUPO` (
+  `COD_PERMISSAO` INT NOT NULL AUTO_INCREMENT,
+  `COD_GRUPO` INT NOT NULL,
+  `COD_TELA` INT NOT NULL,
+  `CHAVE` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_PERMISSAO`),
+  CONSTRAINT `FK_PERMISSAO_GRUPO_TELA_COD_TELA`
+    FOREIGN KEY (`COD_TELA`)
+    REFERENCES `ZX_CC_QA`.`TELA` (`COD_TELA`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PERMISSAO_GRUPO_USUARIO`
+    FOREIGN KEY (`COD_GRUPO`)
+    REFERENCES `ZX_CC_QA`.`GRUPO` (`COD_GRUPO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DADOS_INSTALACAO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DADOS_INSTALACAO` (
+  `COD_DADOS_INSTALACAO` INT NOT NULL AUTO_INCREMENT,
+  `ENDERECO` CHAR(100) NOT NULL,
+  `BAIRRO` CHAR(50) NOT NULL,
+  `CIDADE` CHAR(50) NOT NULL,
+  `UF` CHAR(2) NOT NULL,
+  `COD_PAIS` INT NOT NULL,
+  `COMPLEMENTO` CHAR(30) NULL,
+  `CEP` CHAR(9) NOT NULL,
+  `REFERENCIA` CHAR(250) NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(11) NOT NULL,
+  `NOME` CHAR(50) NULL,
+  `DELETED` INT NOT NULL,
+  `COD_PEDIDO` INT NOT NULL,
+  PRIMARY KEY (`COD_DADOS_INSTALACAO`),
+  CONSTRAINT `FK_DADOS_INSTALACAO_PEDIDO_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.GRUPO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`GRUPO` (
+  `COD_GRUPO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_GRUPO` CHAR(50) NOT NULL,
+  `GRUPO` CHAR(6) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_GRUPO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PERGUNTA_PROCEDIMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PERGUNTA_PROCEDIMENTO` (
+  `COD_PERGUNTA_PROCEDIMENTO` INT NOT NULL AUTO_INCREMENT,
+  `COD_UNIDADE` INT NOT NULL,
+  `SENHA` CHAR(5) NOT NULL,
+  `COD_UNIDADE_CADASTRADA` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  `COD_CLIENTE` INT NOT NULL,
+  PRIMARY KEY (`COD_PERGUNTA_PROCEDIMENTO`),
+  CONSTRAINT `FK_PERGUNTA_PROCEDIMENTO_TIPO_UNIDADE_COD_UNIDADE`
+    FOREIGN KEY (`COD_UNIDADE`)
+    REFERENCES `ZX_CC_QA`.`TIPO_UNIDADE` (`COD_UNIDADE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_PERGUNTA_PROCEDIMENTO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.MOTIVO_HIST_MODULO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`MOTIVO_HIST_MODULO` (
+  `COD_MOTIVO` INT NOT NULL AUTO_INCREMENT,
+  `NOME` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_MOTIVO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTATO_PROCEDIMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTATO_PROCEDIMENTO` (
+  `COD_CONTATO_PROCEDIMENTO` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE` INT NOT NULL,
+  `COD_UNIDADE_CADASTRADA` INT NOT NULL,
+  `COD_UNIDADE` INT NOT NULL,
+  `COD_CONTATO` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(10) NOT NULL,
+  `COD_PAIS` INT NULL,
+  `NOME` CHAR(50) NULL,
+  `COD_GRAU` INT NOT NULL,
+  PRIMARY KEY (`COD_CONTATO_PROCEDIMENTO`),
+  CONSTRAINT `FK_CONTATO_PROCEDIMENTO_TIPO_UNIDADE_COD_UNIDADE`
+    FOREIGN KEY (`COD_UNIDADE`)
+    REFERENCES `ZX_CC_QA`.`TIPO_UNIDADE` (`COD_UNIDADE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_PROCEDIMENTO_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_PROCEDIMENTO_INFO_CONTATO_COD_GRAU`
+    FOREIGN KEY (`COD_GRAU`)
+    REFERENCES `ZX_CC_QA`.`INFO_CONTATO` (`COD_GRAU`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_PROCEDIMENTO_TIPO_CONTATO_COD_CONTATO`
+    FOREIGN KEY (`COD_CONTATO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_CONTATO` (`COD_CONTATO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTA_CHIP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTA_CHIP` (
+  `COD_CONTA` INT NOT NULL,
+  `NUMERO_CONTA` CHAR(10) NOT NULL,
+  `DELETED` INT NOT NULL);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.EQUIP_ACESSORIO_PEDIDO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`EQUIP_ACESSORIO_PEDIDO` (
+  `COD_EQUIP_ACESSORIO_PEDIDO` INT NOT NULL AUTO_INCREMENT,
+  `COD_EQUIP_ACESSORIO` INT NOT NULL,
+  `COD_PEDIDO` INT NOT NULL,
+  `QUANTIDADE` INT NOT NULL,
+  `VALOR_UNITARIO` DECIMAL(5,2) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_EQUIP_ACESSORIO_PEDIDO`),
+  CONSTRAINT `FK_EQUIP_ACESSORIO_PEDIDO_TIPO_EQUIP_ACESSORIO_COD_EQUIP_ACESS1`
+    FOREIGN KEY (`COD_EQUIP_ACESSORIO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_EQUIP_ACESSORIO` (`COD_EQUIP_ACESSORIO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_EQUIP_ACESSORIO_PEDIDO_PEDIDO_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PACOTE_CHIP
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PACOTE_CHIP` (
+  `COD_PACOTE` INT NOT NULL,
+  `COD_CONTA` INT NOT NULL,
+  `NOME_PACOTE` CHAR(25) NOT NULL,
+  `INFO_PACOTE` CHAR(100) NOT NULL,
+  `COMPARTILHADO` INT NOT NULL,
+  `DELETED` INT NOT NULL);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_EQUIP_ACESSORIO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_EQUIP_ACESSORIO` (
+  `COD_EQUIP_ACESSORIO` INT NOT NULL AUTO_INCREMENT,
+  `NOME_EQUIP_ACESSORIO` CHAR(100) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_EQUIP_ACESSORIO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.INSTALACAO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`INSTALACAO` (
+  `COD_INSTALACAO` INT NOT NULL AUTO_INCREMENT,
+  `COD_VEICULO` INT NOT NULL,
+  `COD_MODULO` INT NOT NULL,
+  `COD_UNIDADE` INT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_INSTALACAO`),
+  CONSTRAINT `FK_INSTALACAO_MODULO_COD_MODULO`
+    FOREIGN KEY (`COD_MODULO`)
+    REFERENCES `ZX_CC_QA`.`MODULO` (`COD_MODULO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_INSTALACAO_TIPO_UNIDADE_COD_UNIDADE`
+    FOREIGN KEY (`COD_UNIDADE`)
+    REFERENCES `ZX_CC_QA`.`TIPO_UNIDADE` (`COD_UNIDADE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TIPO_UNIDADE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TIPO_UNIDADE` (
+  `COD_UNIDADE` INT NOT NULL AUTO_INCREMENT,
+  `NOME` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_UNIDADE`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.AGENDAMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`AGENDAMENTO` (
+  `COD_AGENDAMENTO` INT NOT NULL AUTO_INCREMENT,
+  `COD_PEDIDO` INT NOT NULL,
+  `DATA_AGENDAMENTO` DATE NOT NULL,
+  `HORA_AGENDAMENTO` TIME NOT NULL,
+  `ESTADO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  `COD_DADOS_INSTALACAO` INT NULL,
+  PRIMARY KEY (`COD_AGENDAMENTO`),
+  CONSTRAINT `FK_AGENDAMENTO_PEDIDO_COD_PEDIDO`
+    FOREIGN KEY (`COD_PEDIDO`)
+    REFERENCES `ZX_CC_QA`.`PEDIDO` (`COD_PEDIDO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.OBS_AGENDAMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`OBS_AGENDAMENTO` (
+  `COD_OBS_AGENDAMENTO` INT NOT NULL AUTO_INCREMENT,
+  `INDICE` INT NOT NULL,
+  `OBSERVACAO` CHAR(200) NOT NULL,
+  `DELETED` INT NOT NULL,
+  `COD_AGENDAMENTO` INT NOT NULL,
+  `CHAVE` INT NOT NULL,
+  PRIMARY KEY (`COD_OBS_AGENDAMENTO`),
+  CONSTRAINT `FK_OBS_AGENDAMENTO_AGENDAMENTOCOD_AGENDAMENTO`
+    FOREIGN KEY (`COD_AGENDAMENTO`)
+    REFERENCES `ZX_CC_QA`.`AGENDAMENTO` (`COD_AGENDAMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.SCHED_WORK
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`SCHED_WORK` (
+  `WORK_ID` INT NOT NULL AUTO_INCREMENT,
+  `WORK_NAME` CHAR(50) NOT NULL,
+  `PROCESS_ID` INT NOT NULL,
+  `RESTRICTION_ID` INT NOT NULL,
+  `PROCESS_STATE_ID` INT NOT NULL,
+  `WORK_ALERT_ID` INT NOT NULL,
+  `START_TIMESTAMP` DATETIME(6) NULL,
+  `END_TIMESTAMP` DATETIME(6) NULL,
+  `WORK_GROUP_ID` INT NOT NULL,
+  `DEPENDENCY_WORK_ID` INT NULL,
+  `SCHED_TIMESTAMP` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `COD_USUARIO` INT NULL,
+  `DEFINED_PROCESS_ID` INT NOT NULL,
+  `DEFINED_WORK_ID` INT NOT NULL,
+  `PK_COLUMN` INT NOT NULL,
+  `WORK_STATE_ID` INT NOT NULL,
+  `ALERT_STATUS` INT NOT NULL,
+  PRIMARY KEY (`WORK_ID`),
+  CONSTRAINT `FK_SCHED_WORK_DEFINED_PROCESS_STATE_STATE_ID`
+    FOREIGN KEY (`PROCESS_STATE_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS_STATE` (`PROCESS_STATE_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_WORK_STATe_WORK_STATe_ID`
+    FOREIGN KEY (`WORK_STATE_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_STATUS` (`WORK_STATUS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_WORK_GROUP_WORK_GROUP_ID`
+    FOREIGN KEY (`WORK_GROUP_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_GROUP` (`WORK_GROUP_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_DEFINED_PROCESS_PROCESS_ID`
+    FOREIGN KEY (`DEFINED_PROCESS_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS` (`PROCESS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_DEFINED_WORK_WORK_ID`
+    FOREIGN KEY (`DEFINED_WORK_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_WORK` (`WORK_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_RESTRICTION_WORD_RESTRICTION_ID`
+    FOREIGN KEY (`RESTRICTION_ID`)
+    REFERENCES `ZX_CC_QA`.`RESTRICTION_WORK` (`RESTRICTION_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_SCHED_PROCESS_PROCESS_ID`
+    FOREIGN KEY (`PROCESS_ID`)
+    REFERENCES `ZX_CC_QA`.`SCHED_PROCESS` (`PROCESS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_SCHED_WORK_WORK_ALERT_WORK_ALERT_ID`
+    FOREIGN KEY (`WORK_ALERT_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_ALERT` (`WORK_ALERT_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DADOS_AGENDAMENTO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DADOS_AGENDAMENTO` (
+  `COD_DADOS_AGENDAMENTO` INT NOT NULL AUTO_INCREMENT,
+  `ENDERECO` CHAR(100) NOT NULL,
+  `BAIRRO` CHAR(50) NOT NULL,
+  `CIDADE` CHAR(50) NOT NULL,
+  `UF` CHAR(2) NOT NULL,
+  `COD_PAIS` INT NOT NULL,
+  `COMPLEMENTO` CHAR(30) NULL,
+  `CEP` CHAR(9) NOT NULL,
+  `REFERENCIA` CHAR(250) NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(11) NOT NULL,
+  `NOME` CHAR(50) NULL,
+  `COD_AGENDAMENTO` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_DADOS_AGENDAMENTO`),
+  CONSTRAINT `FK_DADOS_AGENDAMENTO_AGENDAMENTO_COD_AGENDAMENTO`
+    FOREIGN KEY (`COD_AGENDAMENTO`)
+    REFERENCES `ZX_CC_QA`.`AGENDAMENTO` (`COD_AGENDAMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.SCHED_PROCESS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`SCHED_PROCESS` (
+  `PROCESS_ID` INT NOT NULL AUTO_INCREMENT,
+  `PROCESS_NAME` CHAR(50) NOT NULL,
+  `STATE_ID` INT NOT NULL,
+  PRIMARY KEY (`PROCESS_ID`),
+  CONSTRAINT `FK_SCHED_PROCESS_DEFINED_PROCESS_STATE_STATE_ID`
+    FOREIGN KEY (`STATE_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS_STATE` (`PROCESS_STATE_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.WORK_ALERT
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`WORK_ALERT` (
+  `WORK_ALERT_ID` INT NOT NULL AUTO_INCREMENT,
+  `GROUP_ALERT_ID` INT NOT NULL,
+  `GROUP_NAME` CHAR(50) NOT NULL,
+  PRIMARY KEY (`WORK_ALERT_ID`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.UNIDADES_AGENDADAS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`UNIDADES_AGENDADAS` (
+  `COD_UNIDADES_AGENDADAS` INT NOT NULL AUTO_INCREMENT,
+  `COD_AGENDAMENTO` INT NOT NULL,
+  `COD_UNIDADE` INT NOT NULL,
+  `TIPO_UNIDADE` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  `ESTADO` INT NOT NULL,
+  PRIMARY KEY (`COD_UNIDADES_AGENDADAS`),
+  CONSTRAINT `FK_UNIDADES_AGENDADAS_AGENDAMENTO_COD_AGENDAMENTO`
+    FOREIGN KEY (`COD_AGENDAMENTO`)
+    REFERENCES `ZX_CC_QA`.`AGENDAMENTO` (`COD_AGENDAMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_UNIDADES_AGENDADAS_TIPO_UNIDADE_COD_UNIDADE`
+    FOREIGN KEY (`TIPO_UNIDADE`)
+    REFERENCES `ZX_CC_QA`.`TIPO_UNIDADE` (`COD_UNIDADE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.USER_GROUP_ALERT
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`USER_GROUP_ALERT` (
+  `USER_GROUP_ID` INT NOT NULL AUTO_INCREMENT,
+  `GROUP_ALERT_ID` INT NOT NULL,
+  `COD_USUARIO` INT NOT NULL,
+  `EMAIL` CHAR(50) NOT NULL,
+  PRIMARY KEY (`USER_GROUP_ID`),
+  CONSTRAINT `FK_USER_GROUP_USUARIO_COD_USUARIO`
+    FOREIGN KEY (`COD_USUARIO`)
+    REFERENCES `ZX_CC_QA`.`USUARIO` (`COD_USUARIO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.RESTRICTION_WORK
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`RESTRICTION_WORK` (
+  `RESTRICTION_ID` INT NOT NULL AUTO_INCREMENT,
+  `RESTRICTION_VALUE` TIME NOT NULL,
+  PRIMARY KEY (`RESTRICTION_ID`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.TECNICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`TECNICO` (
+  `COD_TECNICO` INT NOT NULL AUTO_INCREMENT,
+  `TIPO` INT NOT NULL,
+  `NOME` CHAR(50) NOT NULL,
+  `NOME_FANTASIA` CHAR(50) NULL,
+  `SITE` CHAR(60) NULL,
+  `DATA_NASCIMENTO` DATE NOT NULL,
+  `DATA_INGRESSO` DATE NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_TECNICO`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ENDERECO_TECNICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ENDERECO_TECNICO` (
+  `COD_ENDERECO_TECNICO` INT NOT NULL AUTO_INCREMENT,
+  `COD_TECNICO` INT NOT NULL,
+  `ENDERECO` CHAR(100) NOT NULL,
+  `BAIRRO` CHAR(50) NOT NULL,
+  `CIDADE` CHAR(50) NOT NULL,
+  `UF` CHAR(2) NOT NULL,
+  `COD_PAIS` INT NOT NULL,
+  `COMPLEMENTO` CHAR(30) NULL,
+  `CEP` CHAR(9) NOT NULL,
+  `COD_ENDERECO` INT NOT NULL,
+  PRIMARY KEY (`COD_ENDERECO_TECNICO`),
+  CONSTRAINT `FK_ENDERECO_TECNICO_TECNICO_COD_TECNICO`
+    FOREIGN KEY (`COD_TECNICO`)
+    REFERENCES `ZX_CC_QA`.`TECNICO` (`COD_TECNICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_TECNICO_PAIS_COD_PAIS`
+    FOREIGN KEY (`COD_PAIS`)
+    REFERENCES `ZX_CC_QA`.`PAIS` (`COD_PAIS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_TECNICO_TIPO_ENDERECO_COD_ENDERECO`
+    FOREIGN KEY (`COD_ENDERECO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_ENDERECO` (`COD_ENDERECO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CONTATO_TECNICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CONTATO_TECNICO` (
+  `COD_CONTATO_TECNICO` INT NOT NULL AUTO_INCREMENT,
+  `COD_TECNICO` INT NOT NULL,
+  `COD_CONTATO` INT NOT NULL,
+  `DDD` CHAR(3) NOT NULL,
+  `NUMERO` CHAR(10) NOT NULL,
+  `COD_PAIS` INT NULL,
+  `NOME` CHAR(50) NULL,
+  `COD_GRAU` INT NOT NULL,
+  PRIMARY KEY (`COD_CONTATO_TECNICO`),
+  CONSTRAINT `FK_CONTATO_TECNICO_TECNICO_COD_TECNICO`
+    FOREIGN KEY (`COD_TECNICO`)
+    REFERENCES `ZX_CC_QA`.`TECNICO` (`COD_TECNICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_CONTATO_TECNICO_TIPO_CONTATO_COD_CONTATO`
+    FOREIGN KEY (`COD_CONTATO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_CONTATO` (`COD_CONTATO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DEFINED_WORK
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DEFINED_WORK` (
+  `WORK_ID` INT NOT NULL AUTO_INCREMENT,
+  `WORK_NAME` CHAR(50) NOT NULL,
+  `PROCESS_ID` INT NOT NULL,
+  `RESTRICTION_ID` INT NOT NULL,
+  `PROCESS_STATE_ID` INT NOT NULL,
+  `WORK_ALERT_ID` INT NOT NULL,
+  `WORK_GROUP_ID` INT NULL,
+  `DEPENDENCY_WORK_ID` INT NULL,
+  PRIMARY KEY (`WORK_ID`),
+  CONSTRAINT `FK_DEFINED_WORK_DEFINED_PROCESS_STATE_STATE_ID`
+    FOREIGN KEY (`PROCESS_STATE_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS_STATE` (`PROCESS_STATE_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DEFINED_WORK_WORK_GROUP_WORK_GROUP_ID`
+    FOREIGN KEY (`WORK_GROUP_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_GROUP` (`WORK_GROUP_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DEFINED_WORK_RESTRICTION_WORD_RESTRICTION_ID`
+    FOREIGN KEY (`RESTRICTION_ID`)
+    REFERENCES `ZX_CC_QA`.`RESTRICTION_WORK` (`RESTRICTION_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DEFINED_WORK_DEFINED_PROCESS_PROCESS_ID`
+    FOREIGN KEY (`PROCESS_ID`)
+    REFERENCES `ZX_CC_QA`.`DEFINED_PROCESS` (`PROCESS_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DEFINED_WORK_WORK_ALERT_WORK_ALERT_ID`
+    FOREIGN KEY (`WORK_ALERT_ID`)
+    REFERENCES `ZX_CC_QA`.`WORK_ALERT` (`WORK_ALERT_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DOCUMENTO_TECNICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DOCUMENTO_TECNICO` (
+  `COD_DOCUMENTO_TECNICO` INT NOT NULL AUTO_INCREMENT,
+  `COD_TECNICO` INT NOT NULL,
+  `COD_DOCUMENTO` INT NOT NULL,
+  `NUMERO` CHAR(20) NOT NULL,
+  `DATA_EMISSAO` DATE NULL,
+  `ORGAO_EMISSOR` CHAR(20) NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_DOCUMENTO_TECNICO`),
+  CONSTRAINT `FK_DOCUMENTO_TECNICO_TIPO_DOCUMENTO_COD_DOCUMENTO`
+    FOREIGN KEY (`COD_DOCUMENTO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_DOCUMENTO` (`COD_DOCUMENTO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_DOCUMENTO_TECNICO_TECNICO_COD_TECNICO`
+    FOREIGN KEY (`COD_TECNICO`)
+    REFERENCES `ZX_CC_QA`.`TECNICO` (`COD_TECNICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.DEFINED_PROCESS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`DEFINED_PROCESS` (
+  `PROCESS_ID` INT NOT NULL AUTO_INCREMENT,
+  `PROCESS_NAME` CHAR(50) NOT NULL,
+  PRIMARY KEY (`PROCESS_ID`));
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.EMAIL_TECNICO
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`EMAIL_TECNICO` (
+  `COD_EMAIL_TECNICO` INT NOT NULL AUTO_INCREMENT,
+  `COD_TECNICO` INT NOT NULL,
+  `EMAIL` CHAR(100) NOT NULL,
+  PRIMARY KEY (`COD_EMAIL_TECNICO`),
+  CONSTRAINT `FK_EMAIL_TECNICO_TECNICO_COD_TECNICO`
+    FOREIGN KEY (`COD_TECNICO`)
+    REFERENCES `ZX_CC_QA`.`TECNICO` (`COD_TECNICO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.CLIENTE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`CLIENTE` (
+  `COD_CLIENTE` INT NOT NULL AUTO_INCREMENT,
+  `TIPO` INT NOT NULL,
+  `NOME` CHAR(50) NOT NULL,
+  `NOME_FANTASIA` CHAR(50) NULL,
+  `SITE` CHAR(60) NULL,
+  `DATA_NASCIMENTO` DATE NOT NULL,
+  `DATA_INGRESSO` DATE NOT NULL,
+  `COD_VENDEDOR` INT NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_CLIENTE`),
+  CONSTRAINT `FK_CLIENTE_VENDEDOR_COD_VENDEDOR`
+    FOREIGN KEY (`COD_VENDEDOR`)
+    REFERENCES `ZX_CC_QA`.`VENDEDOR` (`COD_VENDEDOR`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.ENDERECO_CLIENTE
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`ENDERECO_CLIENTE` (
+  `COD_ENDERECO_CLI` INT NOT NULL AUTO_INCREMENT,
+  `COD_CLIENTE` INT NOT NULL,
+  `ENDERECO` CHAR(100) NOT NULL,
+  `BAIRRO` CHAR(50) NOT NULL,
+  `CIDADE` CHAR(50) NOT NULL,
+  `UF` CHAR(2) NOT NULL,
+  `COD_PAIS` INT NOT NULL,
+  `COMPLEMENTO` CHAR(30) NULL,
+  `CEP` CHAR(9) NOT NULL,
+  `COD_ENDERECO` INT NOT NULL,
+  PRIMARY KEY (`COD_ENDERECO_CLI`),
+  CONSTRAINT `FK_ENDERECO_CLIENTE_CLIENTE_COD_CLIENTE`
+    FOREIGN KEY (`COD_CLIENTE`)
+    REFERENCES `ZX_CC_QA`.`CLIENTE` (`COD_CLIENTE`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_CLIENTE_PAIS_COD_PAIS`
+    FOREIGN KEY (`COD_PAIS`)
+    REFERENCES `ZX_CC_QA`.`PAIS` (`COD_PAIS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ENDERECO_CLIENTE_TIPO_ENDERECO_COD_ENDERECO`
+    FOREIGN KEY (`COD_ENDERECO`)
+    REFERENCES `ZX_CC_QA`.`TIPO_ENDERECO` (`COD_ENDERECO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- ----------------------------------------------------------------------------
+-- Table ZX_CC_QA.PAIS
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ZX_CC_QA`.`PAIS` (
+  `COD_PAIS` INT NOT NULL AUTO_INCREMENT,
+  `NOME_PAIS` CHAR(50) NOT NULL,
+  `DELETED` INT NOT NULL,
+  PRIMARY KEY (`COD_PAIS`));
+SET FOREIGN_KEY_CHECKS = 1;;

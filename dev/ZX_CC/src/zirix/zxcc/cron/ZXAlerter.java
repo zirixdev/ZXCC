@@ -6,17 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Time;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 import antena.mailer.ADGoogleMailer;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.logging.*;
 
 
 public class ZXAlerter {
@@ -58,11 +51,27 @@ public class ZXAlerter {
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ZX_CC_QA?" + "user=zirix&password=pinguim01");
 
 		// SCHEDED_WORKs
-		PreparedStatement stmtTOEXPIRE = con.prepareStatement("SELECT NOW(),sched_time_stamp,restriction_id,work_id,work_name,cod_usuario from sched_work where work_state_id = " + SCHEDED_WORK_FLAG + " AND alert_status != " + ALERT_TOEXPIRE_SENT);
+		PreparedStatement stmtTOEXPIRE = con.prepareStatement("SELECT NOW()"
+				+ 											  "     , SCHED_TIMESTAMP"
+				+ 											  "     , RESTRICTION_ID"
+				+ 											  "     , WORK_ID"
+				+ 											  "     , WORK_NAME"
+				+ 											  "     , COD_USUARIO "
+				+ 											  "  FROM SCHED_WORK"
+				+ 											  " WHERE WORK_STATE_ID = " + SCHEDED_WORK_FLAG
+				+											  "   AND ALERT_STATUS != " + ALERT_TOEXPIRE_SENT);
 		ResultSet resTOEXPIRE = stmtTOEXPIRE.executeQuery();
 
 		// STARTED_WORKs
-		PreparedStatement stmtEXPIRED = con.prepareStatement("SELECT NOW(),sched_time_stamp,restriction_id,work_id,work_name,cod_usuario from sched_work where work_state_id = " + STARTED_WORK_FLAG + " AND alert_status != " + ALERT_EXPIRED_SENT);
+		PreparedStatement stmtEXPIRED = con.prepareStatement("SELECT NOW()"
+				+ 											  "     , SCHED_TIMESTAMP"
+				+ 											  "     , RESTRICTION_ID"
+				+ 											  "     , WORK_ID"
+				+ 											  "     , WORK_NAME"
+				+ 											  "     , COD_USUARIO "
+				+ 											  "  FROM SCHED_WORK"
+				+ 											  " WHERE WORK_STATE_ID = " + SCHEDED_WORK_FLAG
+				+											  "   AND ALERT_STATUS != " + ALERT_EXPIRED_SENT);
 		ResultSet resEXPIRED = stmtEXPIRED.executeQuery();
 
 		while (resTOEXPIRE.next()) {
@@ -73,7 +82,7 @@ public class ZXAlerter {
 
 			String resctriction_id = resTOEXPIRE.getString(3);
 
-			PreparedStatement stmt2 = con.prepareStatement("SELECT restriction_value from restriction_work where restriction_id = " + resctriction_id);
+			PreparedStatement stmt2 = con.prepareStatement("SELECT RESTRICTION_VALUE FROM RESTRICTION_WORK WHERE RESTRICTION_ID = " + resctriction_id);
 			ResultSet res2 = stmt2.executeQuery();
 
 			Timestamp sched_time = resTOEXPIRE.getTimestamp(2);
@@ -88,7 +97,13 @@ public class ZXAlerter {
 
 			if (alerter.evalTOEXPIRE(now_time,sched_time,restriction_val)) {
 
-				PreparedStatement stmt3 = con.prepareStatement("SELECT email from user_group where user_group_id in (SELECT user_group_id from alert_group where alert_group_id = (SELECT alert_group_id from work_alert where work_alert_id = (SELECT work_alert_id from sched_work where work_id =? )))");
+				PreparedStatement stmt3 = con.prepareStatement("SELECT EMAIL "
+						+									   "  FROM USER_GROUP_ALERT"
+						+									   " WHERE GROUP_ALERT_ID in (Select GROUP_ALERT_ID"
+						+									   "                            From WORK_ALERT"
+						+									   "                           Where WORK_ALERT_ID = (select WORK_ALERT_ID"
+						+									   "                                                    from SCHED_WORK"
+						+									   "                                                   where WORK_ID =?))");
 				stmt3.setInt(1,work_id);
 				ResultSet res3 = stmt3.executeQuery();
 
@@ -98,7 +113,7 @@ public class ZXAlerter {
 
 				alerter.notify(work_id,work_name,cod_usuario,RISK_SUBJECT,email_TO_List);
 				
-				PreparedStatement stmt4 = con.prepareStatement("UPDATE sched_work set alert_status =? where work_id =?");
+				PreparedStatement stmt4 = con.prepareStatement("UPDATE SCHED_WORK SET ALERT_STATUS =? where WORK_ID =?");
 				stmt4.setInt(1,Integer.parseInt(ALERT_TOEXPIRE_SENT));
 				stmt4.setInt(2,work_id);
 				stmt4.executeUpdate();
@@ -112,7 +127,7 @@ public class ZXAlerter {
 
 			String resctriction_id = resEXPIRED.getString(3);
 
-			PreparedStatement stmt2 = con.prepareStatement("SELECT restriction_value from restriction_work where restriction_id = " + resctriction_id);
+			PreparedStatement stmt2 = con.prepareStatement("SELECT RESTRICTION_VALUE FROM RESTRICTION_WORK WHERE RESTRICTION_ID = " + resctriction_id);
 			ResultSet res2 = stmt2.executeQuery();
 
 			Timestamp sched_time = resEXPIRED.getTimestamp(2);
@@ -127,7 +142,13 @@ public class ZXAlerter {
 
 			if (alerter.evalEXPIRED(now_time,sched_time,restriction_val)) {
 
-				PreparedStatement stmt3 = con.prepareStatement("SELECT email from user_group where user_group_id in (SELECT user_group_id from alert_group where alert_group_id = (SELECT alert_group_id from work_alert where work_alert_id = (SELECT work_alert_id from sched_work where work_id =? )))");
+				PreparedStatement stmt3 = con.prepareStatement("SELECT EMAIL "
+						+									   "  FROM USER_GROUP_ALERT"
+						+									   " WHERE GROUP_ALERT_ID in (Select GROUP_ALERT_ID"
+						+									   "                            From WORK_ALERT"
+						+									   "                           Where WORK_ALERT_ID = (select WORK_ALERT_ID"
+						+									   "                                                    from SCHED_WORK"
+						+									   "                                                   where WORK_ID =?))");
 				stmt3.setInt(1,work_id);
 				ResultSet res3 = stmt3.executeQuery();
 
@@ -137,7 +158,7 @@ public class ZXAlerter {
 
 				alerter.notify(work_id,work_name,cod_usuario,OVERTIME_SUBJECT,email_TO_List);
 
-				PreparedStatement stmt4 = con.prepareStatement("UPDATE sched_work set alert_status =? where work_id =?");
+				PreparedStatement stmt4 = con.prepareStatement("UPDATE SCHED_WORK SET ALERT_STATUS =? where WORK_ID =?");
 				stmt4.setInt(1,Integer.parseInt(ALERT_EXPIRED_SENT));
 				stmt4.setInt(2,work_id);
 				stmt4.executeUpdate();

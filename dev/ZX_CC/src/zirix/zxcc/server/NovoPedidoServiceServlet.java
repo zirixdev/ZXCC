@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - NOVO PEDIDO SERVICE SERVLET
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server;
 import java.io.IOException;
@@ -156,7 +156,6 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 						}finally{
 							pkNumPedido = Integer.parseInt(NumeroPedido_.elementAt(0)[0].trim());
 						}
-						System.err.println("\npkNumPedido = " + pkNumPedido);
 						String TIPO_PEDIDO = request.getParameter("TIPO_PEDIDO").trim();
 						String DATA_VENCIMENTO = request.getParameter("DATA_VENCIMENTO").trim();
 						PedidoDAO daoPedido = new PedidoDAO();
@@ -329,7 +328,7 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 							daoObsPedido.Create();
 						}
 					}else{
-						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO não encontrado! ");
+						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO nï¿½o encontrado! ");
 					}
 				}
 			}response.sendRedirect(ZXMain.URL_ADRESS_ + "services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=" + COD_USUARIO + "&PROCESS_ID=1&PK_COLUMN=" + pkCodPedido);

@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - MOCK EVALUATOR
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server.mock;
 import java.sql.SQLException;
@@ -31,8 +31,8 @@ public class MockEvaluator {
 	@SuppressWarnings("finally")
 	public boolean endWork() throws SQLException{
 		try{
-			DAOManager.getInstance().executeQuery("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
-					+ 							  "   SET END_TIMESTAMP = GETDATE() "
+			DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
+					+ 							  "   SET END_TIMESTAMP = NOW() "
 					+ 							  " WHERE START_TIMESTAMP IS NOT NULL "
 					+ 							  "   AND END_TIMESTAMP IS NULL "
 					+ 							  "   AND WORK_ID = " + WORK_ID_);

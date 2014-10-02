@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - SCHEDULE WORK DAO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -45,6 +45,8 @@ public class SchedWorkDAO extends GenericDAO<SchedWorkDAO> {
     	setAttValueFor("DEFINED_PROCESS_ID",res.getInt("DEFINED_PROCESS_ID"));
     	setAttValueFor("DEFINED_WORK_ID",res.getInt("DEFINED_WORK_ID"));
     	setAttValueFor("PK_COLUMN",res.getInt("PK_COLUMN"));
+    	setAttValueFor("WORK_STATE_ID",res.getInt("WORK_STATE_ID"));
+    	setAttValueFor("ALERT_STATUS",res.getInt("ALERT_STATUS"));
     }
 
     public Set<String> getPkNamesSet() {

@@ -180,7 +180,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 
 					   if(pkModulo != 0){
 						   try {
-							   DAOManager.getInstance().executeQuery("UPDATE " + ZXMain.DB_NAME_ + "INSTALACAO SET COD_MODULO = " + pkModulo + " WHERE COD_INSTALACAO = " + pkInstalacao);
+							   DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "INSTALACAO SET COD_MODULO = " + pkModulo + " WHERE COD_INSTALACAO = " + pkInstalacao);
 						   }catch (SQLException ex) {
 							   ex.printStackTrace();
 						   }finally{}
@@ -201,7 +201,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 						   }
 
 						   try {
-							   DAOManager.getInstance().executeQuery("UPDATE " + ZXMain.DB_NAME_ + "CHIP SET COD_MODULO = " + pkModulo + " WHERE COD_CHIP = " + COD_CHIP);
+							   DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "CHIP SET COD_MODULO = " + pkModulo + " WHERE COD_CHIP = " + COD_CHIP);
 						   }catch (SQLException ex) {
 							   ex.printStackTrace();
 						   }finally{}

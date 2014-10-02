@@ -1,11 +1,11 @@
 <!--
-ZIRIX CONTROL CENTER - CONSULTA CLIENTE PROSPECÇÃO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+ZIRIX CONTROL CENTER - CONSULTA CLIENTE PROSPECÃ‡ÃƒO
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
@@ -23,11 +23,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <div class="tab-pane active" id="aba_cliente">
                 <fieldset class="field">
                 <%if(bean.getTipo() == 0){%>
-                	<input type="radio" name="pessoa" value="pessoafisica" checked="checked">Pessoa Física
-                    <input type="radio" name="pessoa" value="pessoajuridica">Pessoa Jurídica
+                	<input type="radio" name="pessoa" value="pessoafisica" checked="checked">Pessoa FÃ­sica
+                    <input type="radio" name="pessoa" value="pessoajuridica">Pessoa JurÃ­dica
                 <%}else{%>
-                	<input type="radio" name="pessoa" value="pessoafisica">Pessoa Física
-                    <input type="radio" name="pessoa" value="pessoajuridica" checked="checked">Pessoa Jurídica
+                	<input type="radio" name="pessoa" value="pessoafisica">Pessoa FÃ­sica
+                    <input type="radio" name="pessoa" value="pessoajuridica" checked="checked">Pessoa JurÃ­dica
                 <%}%>
                 	<fieldset class="fild_vendedor">
                     	Vendedor: <select id="vendedor_list" class="size_60">
@@ -51,16 +51,16 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							%>
                     	</select>
                     </fieldset>
-                    <br>Razão Social / Nome:
+                    <br>RazÃ£o Social / Nome:
                     <input type="text" id="nome_razaosocial" class="size_100" value="<%=bean.getNome().trim()%>" maxlength="49">
-                    <br>Responsável:
+                    <br>ResponsÃ¡vel:
                     <input type="text" id="nomefantasia"  class="size_100" value="<%=bean.getNomeFantasia().trim()%>" maxlength="49">
                 </fieldset>
                 <fieldset class="field">
                     <legend>Contato:</legend>
                     <div id="div_contato">
 	                    DDD:<input type="text" class="size_5" id="ddd" maxlength="2" onkeypress="javascript: return EntradaNumerico(event);">
-                        Número:<input type="text" class="size_19" id="numero_contato" maxlength="9" onkeypress="javascript: return EntradaNumerico(event);">
+                        NÃºmero:<input type="text" class="size_19" id="numero_contato" maxlength="9" onkeypress="javascript: return EntradaNumerico(event);">
                         Tipo do Contato:
                         <select id="tipocont_list" class="size_21">
 	                        <%        	
@@ -78,7 +78,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								   }	
 							%>
 	                    </select>
-	                    Cod. País: <input type="text" class="size_5" id="cod_pais" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);">
+	                    Cod. PaÃ­s: <input type="text" class="size_5" id="cod_pais" maxlength="3" onkeypress="javascript: return EntradaNumerico(event);">
                     </div>
                     <fieldset class="fieldinner">
                         <legend>Inseridos:</legend>
