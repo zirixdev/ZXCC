@@ -55,7 +55,7 @@ public class ZXAlerter {
 		// This will load the MySQL driver, each DB has its own driver
 		Class.forName("com.mysql.jdbc.Driver");
 		// Setup the connection with the DB
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/zxccmock?" + "user=zirix&password=pinguim01");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ZX_CC_QA?" + "user=zirix&password=pinguim01");
 
 		// SCHEDED_WORKs
 		PreparedStatement stmtTOEXPIRE = con.prepareStatement("SELECT NOW(),sched_time_stamp,restriction_id,work_id,work_name,cod_usuario from sched_work where work_state_id = " + SCHEDED_WORK_FLAG + " AND alert_status != " + ALERT_TOEXPIRE_SENT);
@@ -84,7 +84,7 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check TOEXPIRE : " + work_id);
+            		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check TOEXPIRE : " + work_id);
 
 			if (alerter.evalTOEXPIRE(now_time,sched_time,restriction_val)) {
 
@@ -123,7 +123,7 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check EXPIRED : " + work_id);
+            		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check EXPIRED : " + work_id);
 
 			if (alerter.evalEXPIRED(now_time,sched_time,restriction_val)) {
 
@@ -173,8 +173,8 @@ public class ZXAlerter {
 		Calendar cal_now = Calendar.getInstance();
 		cal_now.setTimeInMillis(now.getTime());
 
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + cal_sched_plus_rest.getTime());
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + cal_now.getTime());
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + cal_sched_plus_rest.getTime());
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + cal_now.getTime());
 
 		long diff_millis = new Double(new Double(cal_sched_plus_rest.getTimeInMillis()).doubleValue() - new Double(now.getTime()).doubleValue()).longValue(); 
 
@@ -182,11 +182,11 @@ public class ZXAlerter {
 		long diffHours = diff_millis / (60 * 60 * 1000) % 24;
 
 		Time diff = new Time(new Double(diffHours).intValue(),new Double(diffMinutes).intValue(),0);
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "diff is : " + diff.toString());
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "rest is : " + rest.toString());
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "diff is : " + diff.toString());
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "rest is : " + rest.toString());
 
 		double time_ratio = 1. - new Double(diff.getTime()).doubleValue()/new Double(rest.getTime()).doubleValue();
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "time_ratio is : " + time_ratio);
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "time_ratio is : " + time_ratio);
 
 
 		if (time_ratio > .6)
@@ -211,8 +211,8 @@ public class ZXAlerter {
 
 		Timestamp sched_plus_rest = new Timestamp(cal_sched_plus_rest.getTimeInMillis());
 
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + sched_plus_rest);
-            	//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + now);
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + sched_plus_rest);
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + now);
 
 		if (now.after(sched_plus_rest))
 			return true;
@@ -230,8 +230,9 @@ public class ZXAlerter {
 
 		String msg = "ZXCC MAILER : " + work_id + " | " + work_name + " | " + cod_usuario;
 
-		for (int i=0;i < email_TO_List.size();i++)
-			mailer.send(email_TO_List.elementAt(i),msg,subject);
-
+		for (int i=0;i < email_TO_List.size();i++) {
+			//mailer.send(email_TO_List.elementAt(i),msg,subject);
+            		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sending email to : " + email_TO_List.elementAt(i));
+		}
 	}
 }
