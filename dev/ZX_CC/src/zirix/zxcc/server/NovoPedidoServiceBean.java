@@ -344,9 +344,7 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SERVICO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			System.err.println("\n values.size() = " + values.size());
 			valorTotal = values.get(0)[0].toString();
-			System.err.println("\n getValorTotalServico valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{
@@ -361,9 +359,7 @@ public class NovoPedidoServiceBean {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT SUM(QUANTIDADE*VALOR_UNITARIO) "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "EQUIP_ACESSORIO_PEDIDO "
 					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO_);
-			System.err.println("\n values.size() = " + values.size());
 			valorTotal = values.get(0)[0].toString();
-			System.err.println("\n getValorTotalEquipamento valorTotal = " + valorTotal);
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}finally{

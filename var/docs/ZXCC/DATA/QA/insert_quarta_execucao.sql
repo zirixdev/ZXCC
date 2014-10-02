@@ -1,3 +1,5 @@
+USE ZX_CC_QA;
+
 INSERT INTO `RESTRICTION_WORK` (RESTRICTION_VALUE) VALUES ('00:00:00'),('00:30:00'),('01:00:00'),('01:30:00'),('02:00:00'),('02:30:00'),('03:00:00'),('03:30:00'),('04:00:00'),('04:30:00'),('05:00:00'),('05:30:00'),('06:00:00'),('06:30:00'),('07:00:00'),('07:30:00'),('08:00:00');
 INSERT INTO `WORK_GROUP` (WORK_GROUP_NAME) VALUES ('ADM Conferir Documentos'),('OPR Cadastrar GS'),('OPR Cadastrar ZX / Syscom'),('OPR Separar Equipamentos'),('OPR Agendamento'),('OPR Acompanhar Instalação'),('ADM Finalizar e Arquivar');
 INSERT INTO `WORK_USER` (WORK_GROUP_ID, COD_USUARIO) VALUES(1,3),(2,12),(2,13),(2,17),(2,24),(3,12),(3,17),(3,19),(3,24),(4,10),(4,11),(5,12),(5,13),(6,10),(6,12),(6,13),(7,3);

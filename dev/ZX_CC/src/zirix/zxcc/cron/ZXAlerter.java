@@ -48,7 +48,7 @@ public class ZXAlerter {
 		// This will load the MySQL driver, each DB has its own driver
 		Class.forName("com.mysql.jdbc.Driver");
 		// Setup the connection with the DB
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/zxccmock?" + "user=zirix&password=pinguim01");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ZX_CC_QA?" + "user=zirix&password=pinguim01");
 
 		// SCHEDED_WORKs
 		PreparedStatement stmtTOEXPIRE = con.prepareStatement("SELECT NOW()"

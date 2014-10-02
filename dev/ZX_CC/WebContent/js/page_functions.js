@@ -4119,7 +4119,7 @@ function comercial_cadastrar_novo_pedido_function(){
 	ajustar_vetor_unidade_inserido();
 	ajustar_vetor_equip_acessorio_inserido();
 	ajustar_vetor_servico_inserido();
-	if(confirm('Deseja realizar o ingresso do Cliente?')){
+	if(confirm('Deseja realizar o Pedido?')){
 		var values = $("input[type='radio'][name='pessoa']:checked").val();
 		var tipo_pessoa;
 		if(values === "pessoafisica"){
@@ -4842,9 +4842,10 @@ function desbloqueia_unidades_function(){
     }	
 }
 
-function operacional_processar_agendamento_function(workId){
+function operacional_processar_agendamento_function(workId,pkObj){
 	var frustrada = $('#frustrada').val();
 	var adress_aux = "&FRUSTRADA=" + frustrada;
+	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
 	if(frustrada == "sim"){
 		var observacoes = document.getElementById("observacoes");
 		var obsLength = observacoes.textLength;
@@ -4867,5 +4868,9 @@ function operacional_processar_agendamento_function(workId){
 		}
 	}else{
 		
+	}
+	if (confirm("Confirma a instalação?")){
+		var adress = url_adress + "services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=" + cod_usuario + "&WORK_ID=" + workId + "&PK_COLUMN=" + pkObj;
+		document.location.href = adress;
 	}
 }

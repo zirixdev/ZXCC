@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - MOCK SCHEDULE
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server.mock;
 import java.sql.SQLException;
@@ -44,7 +44,7 @@ public class MockSchedule {
 		}finally{}
 		createSchedWork((Integer)dao_.getAttValueFor("PROCESS_ID"),(Integer)dao_.getAttValueFor("DEFINED_PROCESS_ID"),nextState_,0,PK_COLUMN);
 		try{
-			DAOManager.getInstance().executeQuery("UPDATE " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
+			DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
 					+ 							  "   SET STATE_ID = " + nextState_
 					+ 							  " WHERE PROCESS_ID = " + (Integer)dao_.getAttValueFor("PROCESS_ID"));
 		}catch (SQLException ex) {
@@ -65,7 +65,7 @@ public class MockSchedule {
 					+ 														  "  FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "
 					+ 														  " WHERE PROCESS_STATE_ID=" + STATE_ID
 					+ 														  "   AND PROCESS_ID=" + DEFINED_PROCESS_ID
-					+ 														  "   AND DEPENDENCY_WORK_ID=" + DEPENDENCY_WORK_ID + ";");
+					+ 														  "   AND DEPENDENCY_WORK_ID=" + DEPENDENCY_WORK_ID +";");
 		   for (int i=0;i < values.size();i++) {
 			   String[] attList = new String[7];
 			   attList[0] = (String) values.get(i)[0];
@@ -91,6 +91,8 @@ public class MockSchedule {
 			   daoSchedWork.setAttValueFor("PROCESS_ID",PROCESS_ID);
 			   daoSchedWork.setAttValueFor("DEFINED_PROCESS_ID",DEFINED_PROCESS_ID);
 			   daoSchedWork.setAttValueFor("PK_COLUMN",PK_COLUMN);
+			   daoSchedWork.setAttValueFor("WORK_STATE_ID",0);
+			   daoSchedWork.setAttValueFor("ALERT_STATUS",0);
 			   daoSchedWork.Create();
 		   }
 	   }

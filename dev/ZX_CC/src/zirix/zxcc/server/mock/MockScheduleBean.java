@@ -18,11 +18,11 @@ public class MockScheduleBean {
 	public Vector<String[]> getWork(){
 		Vector<String[]> work = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_ID "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_NAME "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS.PROCESS_NAME "
-					+ 														   "     , ISNULL(" + ZXMain.DB_NAME_ + "SCHED_WORK.COD_USUARIO,0) "
-					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.PK_COLUMN "
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_ID "					//00
+					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_NAME "				//01
+					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS.PROCESS_NAME "			//02
+					+ 														   "     , IFNULL(" + ZXMain.DB_NAME_ + "SCHED_WORK.COD_USUARIO,0) "	//03
+					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_WORK.PK_COLUMN "				//04
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "WORK_USER "
@@ -72,8 +72,8 @@ public class MockScheduleBean {
 	public void setStartTimestamp(String work_id){
 		if(work_id.compareTo("0") != 0){
 			try {
-				DAOManager.getInstance().executeQuery("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
-						+ 							  "   SET START_TIMESTAMP = GETDATE() "
+				DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
+						+ 							  "   SET START_TIMESTAMP = NOW() "
 						+ 							  "     , COD_USUARIO = " + COD_USUARIO_
 						+ 							  " WHERE START_TIMESTAMP IS NULL AND WORK_ID = " + work_id);
 			}catch (SQLException ex) {

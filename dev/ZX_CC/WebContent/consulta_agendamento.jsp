@@ -126,7 +126,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</select>
 		    </div>
             <div class="div_modal_bt">
-            	<button type="button" id="incluir_modal" onclick="operacional_processar_agendamento_function('<%=WORK_ID%>')">Incluir</button>
+            	<button type="button" id="incluir_modal" onclick="operacional_processar_agendamento_function('<%=WORK_ID%>','<%=PK_OBJ[0]%>')">Incluir</button>
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>
         </div>

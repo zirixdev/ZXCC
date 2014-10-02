@@ -44,46 +44,29 @@ public class MockFluxServiceServlet extends HttpServlet {
 					   NameProcess.add(attList);
 				   }
 			   }catch (SQLException ex) {
-				   out.println("Error on MockFluxServiceServlet -> SELECT SCOPE_IDENTITY() ... " + ex.getMessage());
+				   out.println("Error on MockFluxServiceServlet -> Select Process_Name ... " + ex.getMessage());
 			   }finally {
 				   daoSchedProcess.setAttValueFor("PROCESS_NAME", (NameProcess.elementAt(0)[0].trim()).toString());
 			   }
 			   daoSchedProcess.setAttValueFor("STATE_ID", 1);
 			   daoSchedProcess.Create();
-			   if(ZXMain.LOCAL_.compareTo("PROD")==0){
-				   try{
-					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT LAST_INSERT_ID();");
-					   for (int i=0;i < values.size();i++) {
-						   String[] attList = new String[1];
-						   attList[0] = values.get(i)[0].toString();
-						   CodProcessWork.add(attList);
-					   }
-				   }catch (SQLException ex) {
-					   out.println("Error on MockFluxServiceServlet... " + ex.getMessage());
-				   }finally{
-					   PROCESS_ID = Integer.parseInt(CodProcessWork.elementAt(0)[0].trim());
+			   try{
+				   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(PROCESS_ID) FROM " + ZXMain.DB_NAME_ + "SCHED_PROCESS;");
+				   for (int i=0;i < values.size();i++) {
+					   String[] attList = new String[1];
+					   attList[0] = values.get(i)[0].toString();
+					   CodProcessWork.add(attList);
 				   }
-			   }else{
-				   try{
-					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(PROCESS_ID) FROM " + ZXMain.DB_NAME_ + "SCHED_PROCESS;");
-					   for (int i=0;i < values.size();i++) {
-						   String[] attList = new String[1];
-						   attList[0] = values.get(i)[0].toString();
-						   CodProcessWork.add(attList);
-					   }
-				   }catch (SQLException ex) {
-					   out.println("Error on MockFluxServiceServlet... " + ex.getMessage());
-				   }finally{
-					   PROCESS_ID = Integer.parseInt(CodProcessWork.elementAt(0)[0].trim());
-				   }
+			   }catch (SQLException ex) {
+				   out.println("Error on MockFluxServiceServlet... " + ex.getMessage());
+			   }finally{
+				   PROCESS_ID = Integer.parseInt(CodProcessWork.elementAt(0)[0].trim());
 			   }
 			   MockSchedule.createSchedWork(PROCESS_ID,DEFINED_PROCESS_ID,1,0, PK_COLUMN);
 		   }else if (OP_CODE.compareTo("CREATEWORK") == 0) {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));
 			   MockSchedule.createWork(WORK_ID);
 		   }
-		   /********SERVER APENAS PARA FOR�AR UM ENDWORK********/
-		   /******************FINALIDADE TESTE******************/
 		   else if (OP_CODE.compareTo("ENDWORK") == 0) {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));
 			   int PK_COLUMN = Integer.parseInt(request.getParameter("PK_COLUMN"));
@@ -93,7 +76,6 @@ public class MockFluxServiceServlet extends HttpServlet {
 				   sched.changeState(PK_COLUMN);
 			   }
 		   }
-		   /****************************************************/
 	   }
 	   catch (Exception e){
 		   out.println("Error on MockFluxServiceServlet... " + e.getMessage());

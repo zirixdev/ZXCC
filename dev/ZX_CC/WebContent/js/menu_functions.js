@@ -137,18 +137,16 @@ function modal_click(id){
             });
             break;
         case "menu_com_cad_ped":
-        	if(ambiente === "DEV"){
-                $.ajax({
-                    url: url_adress + "cadastro_novo_pedido.jsp",
-                    success: function(result) {
-                        $('.modal-content').html(result);
-                        $('.modal').modal({backdrop:'static'});
-                    },
-                    error: function(e){
-                        alert('error');
-                    }
-                });
-        	}
+            $.ajax({
+                url: url_adress + "cadastro_novo_pedido.jsp",
+                success: function(result) {
+                    $('.modal-content').html(result);
+                    $('.modal').modal({backdrop:'static'});
+                },
+                error: function(e){
+                    alert('error');
+                }
+            });
         	break;
         case "menu_com_con":
             $.ajax({

@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - GENERIC DAO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
-DESENVOLVEDOR: MÁRIO DE SÁ VERA
+DESENVOLVEDOR: Mï¿½RIO DE Sï¿½ VERA
 TECNOLOGIAS UTILIZADAS: JAVA*/
 
 package zirix.zxcc.server.dao;
@@ -82,7 +82,7 @@ public abstract class GenericDAO<T> {
     	}
 
     	query = query.concat(")");
-
+    	System.err.println("\n\n Query = " + query);
         try
         {
 	        stmt = con.prepareStatement(query);

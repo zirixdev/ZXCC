@@ -355,7 +355,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								for (int i=0;i < list.size();i++) {
 									TipoUnidadeDAO dao = list.elementAt(i);
 									String str = String.valueOf(dao.getAttValueFor("NOME")).trim();
-									if(str.compareTo("ESTOQUE") != 0){%>
+									if(str.compareTo("Estoque") != 0){%>
 										<option value="<%=dao.getPkValueFor("COD_UNIDADE")%>"><%=str%></option>
 									<%}
 								}
