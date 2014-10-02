@@ -64,8 +64,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						Vector<String[]> CodVeiculoToSched = beanPedido.getCodUnidadesVeiculoToSched();
 						for (int i=0;i < CodVeiculoToSched.size();i++) {
 							try{
-								Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodVeiculoToSched.elementAt(i)[0]));
-								VeiculoDAO dao = listVeiculo.elementAt(0);
+								Vector<String[]> listVeiculo = beanPedido.getDadosVeiculo((Integer.parseInt(CodVeiculoToSched.elementAt(i)[0])));
 								if(i!=0){%>
 									<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
 										<script>
@@ -76,8 +75,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 											ctx.stroke();
 										</script>
 								<%}%>
-								<input type="checkbox" value="<%=CodVeiculoToSched.elementAt(i)[0].trim()%>" id="unidade_check_<%=i%>" name="unidade_name">&nbsp;<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>
-								<br><b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+								<input type="checkbox" value="<%=CodVeiculoToSched.elementAt(i)[0].trim()%>" id="unidade_check_<%=i%>" name="unidade_name">&nbsp;<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(listVeiculo.elementAt(0)[0].trim()))%>
+								<br><b>Placa:</b>&nbsp;<%=listVeiculo.elementAt(0)[1].trim()%>
 							<%}catch (Exception e){
 								out.println("Error ao preencher unidades agendamento... " + e.getMessage());
 							}%>

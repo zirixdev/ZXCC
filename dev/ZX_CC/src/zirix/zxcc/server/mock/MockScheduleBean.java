@@ -75,6 +75,7 @@ public class MockScheduleBean {
 				DAOManager.getInstance().executeUpdate("UPDATE " + ZXMain.DB_NAME_ + "SCHED_WORK "
 						+ 							  "   SET START_TIMESTAMP = NOW() "
 						+ 							  "     , COD_USUARIO = " + COD_USUARIO_
+						+							  "     , WORK_STATE_ID = 1 "
 						+ 							  " WHERE START_TIMESTAMP IS NULL AND WORK_ID = " + work_id);
 			}catch (SQLException ex) {
 				ex.printStackTrace();

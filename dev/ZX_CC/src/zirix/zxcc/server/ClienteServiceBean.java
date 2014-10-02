@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - CLIENTE SERVICE BEAN
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -97,12 +97,12 @@ public class ClienteServiceBean {
 	public Vector<String[]> getContato(){
 		Vector<String[]> contatoClienteList = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "TIPO_CONTATO.NOME_TIPO "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.DDD "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.NUMERO "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_PAIS "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.NOME "
-					+ "                                                              , " + ZXMain.DB_NAME_ + "INFO_CONTATO.NOME_GRAU "
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_CONTATO.NOME_TIPO "
+					+ "                                                              , CONTATO_CLIENTE.DDD "
+					+ "                                                              , CONTATO_CLIENTE.NUMERO "
+					+ "                                                              , CONTATO_CLIENTE.COD_PAIS "
+					+ "                                                              , CONTATO_CLIENTE.NOME "
+					+ "                                                              , INFO_CONTATO.NOME_GRAU "
 		    		+ "							   FROM " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE "
 					+ "                               , " + ZXMain.DB_NAME_ + "INFO_CONTATO "
 					+ "                               , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
@@ -131,26 +131,34 @@ public class ClienteServiceBean {
 	public Vector<String[]> getDocumento(){
 		Vector<String[]> documentoClienteList = new Vector<String[]>();
 		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.NUMERO "
-					+ ",							    " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO.NOME "
-					+ ",                                " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.DATA_EMISSAO "
-					+ ",                                " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.ORGAO_EMISSOR "
+			System.err.println("\n Dentro do TRY");
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DOCUMENTO_CLIENTE.NUMERO "
+					+ ",							    TIPO_DOCUMENTO.NOME "
+					+ ",                                DOCUMENTO_CLIENTE.DATA_EMISSAO "
+					+ ",                                DOCUMENTO_CLIENTE.ORGAO_EMISSOR "
 		    		+ "							   FROM " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE "
 		    		+ "							      , " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO "
-		    		+ "							  WHERE " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO.COD_DOCUMENTO = " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_DOCUMENTO "
-		    		+ "                             AND " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
+		    		+ "							  WHERE TIPO_DOCUMENTO.COD_DOCUMENTO = DOCUMENTO_CLIENTE.COD_DOCUMENTO "
+		    		+ "                             AND DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
 
+			System.err.println("\n Executei a query. values.size() = " + values.size());
 		    for (int i=0;i < values.size();i++) {
-			    String[] attList = new String[4]; // pois eu sei que sao 4 atributos de fato !
+			    String[] attList = new String[4];
 			    attList[0] = (String) values.get(i)[0];
+				System.err.println("\n attList[0] = " + attList[0]);
 			    attList[1] = (String) values.get(i)[1];
-		    	attList[2] = ((java.sql.Date) values.get(i)[2]).toLocalDate().toString();
+				System.err.println("\n attList[1] = " + attList[1]);
+		    	attList[2] = values.get(i)[2].toString();
+				System.err.println("\n attList[2] = " + attList[2]);
 			    attList[3] = (String) values.get(i)[3];
+				System.err.println("\n attList[3] = " + attList[3]);
 			    documentoClienteList.add(attList);
+				System.err.println("\n Final do FOR");
 		    }
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}  finally {
+			System.err.println("\n Dentro do finally");
 			return documentoClienteList;
 		}
 	}
