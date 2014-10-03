@@ -42,13 +42,12 @@ public class ZXAlerter {
 
 		validateInput(args);
 
-		ZXAlerter alerter = new ZXAlerter(args[0],args[1]);
-
+		ZXAlerter alerter = new ZXAlerter(args[2],args[3]);
 
 		// This will load the MySQL driver, each DB has its own driver
 		Class.forName("com.mysql.jdbc.Driver");
 		// Setup the connection with the DB
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ZX_CC_QA?" + "user=zirix&password=pinguim01");
+		Connection con = DriverManager.getConnection(args[0] + args[1]);
 
 		// SCHEDED_WORKs
 		PreparedStatement stmtTOEXPIRE = con.prepareStatement("SELECT NOW()"
@@ -59,7 +58,7 @@ public class ZXAlerter {
 				+ 											  "     , COD_USUARIO "
 				+ 											  "  FROM SCHED_WORK"
 				+ 											  " WHERE WORK_STATE_ID = " + SCHEDED_WORK_FLAG
-				+											  "   AND ALERT_STATUS != " + ALERT_TOEXPIRE_SENT);
+				+											  "   AND ALERT_STATUS = " + ALERT_PENDING);
 		ResultSet resTOEXPIRE = stmtTOEXPIRE.executeQuery();
 
 		// STARTED_WORKs
@@ -70,7 +69,7 @@ public class ZXAlerter {
 				+ 											  "     , WORK_NAME"
 				+ 											  "     , COD_USUARIO "
 				+ 											  "  FROM SCHED_WORK"
-				+ 											  " WHERE WORK_STATE_ID = " + SCHEDED_WORK_FLAG
+				+ 											  " WHERE WORK_STATE_ID != " + FINISHED_WORK_FLAG
 				+											  "   AND ALERT_STATUS != " + ALERT_EXPIRED_SENT);
 		ResultSet resEXPIRED = stmtEXPIRED.executeQuery();
 
@@ -174,8 +173,8 @@ public class ZXAlerter {
 	public static void validateInput(String[] args) throws IllegalArgumentException {
 
 		// USERNAME and PASSWORD
-		if (args.length != 2)
-			throw new IllegalArgumentException("Usage : ZXMailer [USERNAME] [PASSWORD] ... ");
+		if (args.length != 4)
+			throw new IllegalArgumentException("Usage : ZXMailer [DATABASE URL] [JDBC USER:PASSWORD] [MAIL USERNAME] [MAIL PASSWORD] ... ");
 
 	}
 
@@ -194,6 +193,12 @@ public class ZXAlerter {
 		Calendar cal_now = Calendar.getInstance();
 		cal_now.setTimeInMillis(now.getTime());
 
+		// just in case...
+		// neste caso o EXPIRED somente serah enviado...
+		//
+		if (now.after(cal_sched_plus_rest.getTime()))
+			return false;
+
             	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "sched plus rest is : " + cal_sched_plus_rest.getTime());
             	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "now is : " + cal_now.getTime());
 
@@ -201,16 +206,22 @@ public class ZXAlerter {
 
 		long diffMinutes = diff_millis / (60 * 1000) % 60;
 		long diffHours = diff_millis / (60 * 60 * 1000) % 24;
+		long diff_total_minutes = diffMinutes + diffHours*60;
 
-		Time diff = new Time(new Double(diffHours).intValue(),new Double(diffMinutes).intValue(),0);
-            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "diff is : " + diff.toString());
-            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "rest is : " + rest.toString());
+		long rest_millis = rest.getTime();
 
-		double time_ratio = 1. - new Double(diff.getTime()).doubleValue()/new Double(rest.getTime()).doubleValue();
+		long restMinutes = rest_millis / (60 * 1000) % 60;
+		long restHours = rest_millis / (60 * 60 * 1000) % 24;
+		long rest_total_minutes = restMinutes + restHours*60;
+
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "diff_total_minutes is : " + diff_total_minutes);
+            	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "rest_total_minutes is : " + rest_total_minutes);
+
+		double time_ratio = new Double(diff_total_minutes).doubleValue()/new Double(rest_total_minutes).doubleValue();
             	Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "time_ratio is : " + time_ratio);
 
 
-		if (time_ratio > .6)
+		if (time_ratio > .75)
 			return true;
 
 		return false;
