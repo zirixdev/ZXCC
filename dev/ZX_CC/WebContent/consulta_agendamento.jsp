@@ -105,6 +105,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 									<option value="inprodutivo_<%=UnidadesAgendadas.elementAt(i)[0].trim()%>">Visita Improdutiva</option>
 								</select>
 								<br><b>Placa: </b><%=UnidadesAgendadas.elementAt(i)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Marca: </b><%=UnidadesAgendadas.elementAt(i)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>Modelo: </b><%=UnidadesAgendadas.elementAt(i)[3].trim()%>
+								<br><b>O.S.: <%=UnidadesAgendadas.elementAt(i)[5].trim()%></b>
 								<br>
 								<fieldset class="fieldinner">
 									<textarea placeholder="Observações" cols="70" rows="4" id="observacoes" maxlength="796"></textarea>

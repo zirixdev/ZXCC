@@ -31,10 +31,10 @@ public class DAOManager {
         try{
         	
         	Connection con = src.getConnection();
-        	if(ZXMain.LOCAL_.compareTo("PROD") == 0){
-        		con.setAutoCommit(true);
-        	}
-        	
+			if(ZXMain.LOCAL_.compareTo("SQLSERVER") != 0){
+				con.setAutoCommit(true);
+			}
+
         	return con;
         }
         catch(SQLException e) { throw e; }
@@ -43,7 +43,7 @@ public class DAOManager {
     @SuppressWarnings("finally")
 	public Connection getLocalConnection() throws SQLException {
     	
-    	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+    	if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
 	    	String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
 	    	Connection conn = null;
 	    	try{
@@ -54,6 +54,17 @@ public class DAOManager {
 	    	}finally{
 	    		return conn;
 	    	}
+    	}else if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+    		String url="jdbc:mysql://192.168.0.50/ZX_CC_DEV";
+        	Connection conn = null;
+        	try{
+        		Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+        		conn = DriverManager.getConnection (url, "root", "pinguim01");
+        	}catch (Exception ex){
+        		ex.printStackTrace();
+        	}finally{
+        		return conn;
+        	}
     	}else{
     		String url="jdbc:mysql://192.168.0.32/ZX_CC_PROD";
         	Connection conn = null;
@@ -79,7 +90,7 @@ public class DAOManager {
 		    throw e; 
 		}
 		finally {
-			if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
 				con.commit();
 			}
 			if (stmt != null) stmt.close();
@@ -122,7 +133,7 @@ public class DAOManager {
         }
         
         finally {
-        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
         		con.commit();
     		}
         	if (res != null) res.close();
