@@ -4874,10 +4874,3 @@ function operacional_processar_agendamento_function(workId,pkObj){
 		document.location.href = adress;
 	}
 }
-
-function addTenPercent() {
-    // locate the progress bar and store it in a variable
-    var bar = document.getElementById("progressBar");
-    // add 10 to the value
-    bar.value += 10;
-};

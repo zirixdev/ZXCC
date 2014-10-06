@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - LOGIN SERVLET
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -45,7 +45,11 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			String query = "SELECT " + ZXMain.DB_NAME_ + "USUARIO.COD_USUARIO FROM " + ZXMain.DB_NAME_ + "USUARIO WHERE LOGIN=\'" + userLoginName + "\'"	+ " AND SENHA=\'" + userPassword + "\'";
+			String query = "SELECT " + ZXMain.DB_NAME_ + "USUARIO.COD_USUARIO "
+					+	   "  FROM " + ZXMain.DB_NAME_ + "USUARIO "
+					+ 	   " WHERE LOGIN = \'" + userLoginName + "\'"
+					+ 	   "   AND SENHA = \'" + userPassword + "\'"
+					+ 	   "   AND DELETED = 0";
 
 		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery(query);
 		    Object[] retVal = (Object[])values.get(0);

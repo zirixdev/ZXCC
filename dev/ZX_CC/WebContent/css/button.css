@@ -1,6 +1,6 @@
 /*
-ZIRIX CONTROL CENTER - ESTILOS DOS BOTÕES
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+ZIRIX CONTROL CENTER - ESTILOS DOS BOTï¿½ES
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: CSS
@@ -88,4 +88,78 @@ TECNOLOGIAS UTILIZADAS: CSS
 
 .checkboxConfirm input[type=checkbox]:checked + label {
 	background: #26ca28;
+}
+
+.progressGreen[value]::-webkit-progress-value{
+	background-image:
+	   -webkit-linear-gradient(-45deg, 
+	                           transparent 33%, rgba(0, 0, 0, .1) 33%, 
+	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+	   -webkit-linear-gradient(top, 
+	                           rgba(255, 255, 255, .25), 
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, green, green);
+
+    border-radius: 35px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+.progressOrange[value]::-webkit-progress-value{
+	background-image:
+	   -webkit-linear-gradient(-45deg, 
+	                           transparent 33%, rgba(0, 0, 0, .1) 33%, 
+	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+	   -webkit-linear-gradient(top, 
+	                           rgba(255, 255, 255, .25), 
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, orange, orange);
+
+    border-radius: 35px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+.progressRed[value]::-webkit-progress-value{
+	background-image:
+	   -webkit-linear-gradient(-45deg, 
+	                           transparent 33%, rgba(0, 0, 0, .1) 33%, 
+	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+	   -webkit-linear-gradient(top, 
+	                           rgba(255, 255, 255, .25), 
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, red, red);
+
+    border-radius: 35px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+.progressBlack[value]::-webkit-progress-value{
+	background-image:
+	   -webkit-linear-gradient(-45deg, 
+	                           transparent 33%, rgba(0, 0, 0, .1) 33%, 
+	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+	   -webkit-linear-gradient(top, 
+	                           rgba(255, 255, 255, .25), 
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, black, black);
+
+    border-radius: 35px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+progress[value]::-webkit-progress-bar {
+	background-color: #eee;
+    border-radius: 35px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress[value] {
+	/* Reset the default appearance */
+	-webkit-appearance: none;
+	appearance: none;
+	-moz-box-shadow:2px 2px 2px rgb(108, 108, 108);
+	-webkit-box-shadow:2px 2px 2px rgb(108, 108, 108);
+	box-shadow:2px 2px 2px rgb(108, 108, 108);
+    border-radius: 35px;
+	width: 100px;
+	height: 15px;
 }
