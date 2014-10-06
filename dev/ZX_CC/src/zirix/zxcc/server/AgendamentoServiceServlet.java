@@ -9,11 +9,13 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import zirix.zxcc.server.dao.*;
 import zirix.zxcc.server.mock.MockEvaluator;
 import zirix.zxcc.server.mock.MockSchedule;
@@ -29,6 +31,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		String OP_CODE = request.getParameter("OP_CODE");
 		String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 		String WORK_ID = request.getParameter("WORK_ID");
+		String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 		int PK_COLUMN = 0;
 		try {
 			AgendamentoDAO daoAgendamento = new AgendamentoDAO();
@@ -92,6 +95,51 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoUnidadesAgendadas.setAttValueFor("TIPO_UNIDADE",2);
 						   daoUnidadesAgendadas.setAttValueFor("ESTADO",0);
 						   daoUnidadesAgendadas.setAttValueFor("DELETED",0);
+						   int pkNumOS = 0;
+						   NumeroPedidoDAO daoNumeroPedido = new NumeroPedidoDAO();
+						   daoNumeroPedido.setAttValueFor("COD_USUARIO", COD_USUARIO);
+						   daoNumeroPedido.setAttValueFor("DATA_GERACAO", DATA_INGRESSO);
+						   daoNumeroPedido.setAttValueFor("DELETED", 0);
+						   daoNumeroPedido.Create();
+						   Vector<String[]> NumeroOS_ = new Vector<String[]>();
+						   try{
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(NUM_OS) "
+									   + 														   "  FROM " + ZXMain.DB_NAME_ + "NUMERO_OS "
+									   + 														   " WHERE COD_USUARIO = " + COD_USUARIO);
+							   for (int i=0;i < values.size();i++) {
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();
+								   NumeroOS_.add(attList);
+							   }
+						   }catch(SQLException ex){
+							   ex.printStackTrace();
+						   }finally{
+							   pkNumOS = Integer.parseInt(NumeroOS_.elementAt(0)[0].trim());
+						   }
+						   OsDAO daoOS = new OsDAO();
+						   daoOS.setAttValueFor("NUM_OS", pkNumOS);
+						   daoOS.setAttValueFor("FRUSTRADA", 0);
+						   daoOS.setAttValueFor("TIPO_OS", 1);
+						   daoOS.setAttValueFor("HAVE_TESTE", 0);
+						   daoOS.setAttValueFor("DELETED", 0);
+						   daoOS.Create();
+						   int pkCodOS = 0;
+						   Vector<String[]> CodOS_ = new Vector<String[]>();
+						   try{
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_OS "
+									   + 														   "  FROM " + ZXMain.DB_NAME_ + "OS "
+									   + 														   " WHERE NUM_OS = " + pkNumOS);
+							   for (int i=0;i < values.size();i++) {
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();
+								   CodOS_.add(attList);
+							   }
+						   }catch(SQLException ex){
+							   ex.printStackTrace();
+						   }finally{
+							   pkCodOS = Integer.parseInt(CodOS_.elementAt(0)[0].trim());
+						   }
+						   daoUnidadesAgendadas.setAttValueFor("COD_OS",pkCodOS);
 						   daoUnidadesAgendadas.Create();
 					   }
 					   if(END_AGEND.compareTo("nao") == 0){

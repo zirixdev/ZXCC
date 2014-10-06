@@ -390,11 +390,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							String str = String.valueOf(dao.getAttValueFor("NOME_TIPO")).trim();%>
 							<input type="radio" name="servico" value="<%=codTipo%>" onchange="libera_div('<%=str%>')"<%if(str.compareTo("Compra") == 0){%> checked="checked"<%}%>><%=str%>
 							<%if(str.compareTo("Teste") == 0){%>
-								<div style="display: inline-block;" id="div_teste_dias">
-								</div>
+								<div style="display: inline-block;" id="div_teste_dias"></div>
 							<%}else if(str.compareTo("Outro") == 0){%>
-								<div style="display: inline-block;" id="div_outro_servico">
-								</div>
+								<div style="display: inline-block;" id="div_outro_servico"></div>
 							<%}
 							count ++;
 							if(count == 3){

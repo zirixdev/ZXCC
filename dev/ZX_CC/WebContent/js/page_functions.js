@@ -4819,10 +4819,10 @@ function operacional_agendamento_function(workId){
 		adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
 		adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
 	}
-
+	dia = new Date();
 	adress_aux = adress_aux + "&DATAAGEND=" + data_agendamento;
 	adress_aux = adress_aux + "&HORAAGEND=" + hora_agendamento;
-	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=" + workId;
+	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=" + workId + '&DATA_INGRESSO=' + dia.yyyymmdd();;
     adress = adress + adress_aux;
 	document.location.href = adress;
 }

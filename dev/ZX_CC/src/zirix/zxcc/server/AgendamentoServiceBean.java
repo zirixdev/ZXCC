@@ -192,27 +192,33 @@ public class AgendamentoServiceBean {
 	public Vector<String[]> getUnidadesAgendadas(){
 		Vector<String[]> unidadesAgendadas= new Vector<String[]>();
 		try{
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT UNIDADES_AGENDADAS.COD_UNIDADES_AGENDADAS "				//00
-					+ 														   "     , VEICULO.PLACA "											//01
-					+ 														   "     , VEICULO_MARCA.NOME_MARCA "								//02
-					+ 														   "     , VEICULO.MODELO "											//03
-					+ 														   "     , TIPO_UNIDADE.NOME "										//04
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT UNIDADES_AGENDADAS.COD_UNIDADES_AGENDADAS "															//00
+					+ 														   "     , VEICULO.PLACA "																						//01
+					+ 														   "     , VEICULO_MARCA.NOME_MARCA "																			//02
+					+ 														   "     , VEICULO.MODELO "																						//03
+					+ 														   "     , TIPO_UNIDADE.NOME "																					//04
+					+ 														   "     , CONCAT(YEAR(NUMERO_OS.DATA_GERACAO),MONTH(NUMERO_OS.DATA_GERACAO),'/',LPAD(NUMERO_OS.NUM_OS,6,0)) "	//05
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO_MARCA "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "TIPO_UNIDADE "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "OS "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "NUMERO_OS "
 					+ 														   " WHERE VEICULO.COD_VEICULO = UNIDADES_AGENDADAS.COD_UNIDADE "
 					+ 														   "   AND UNIDADES_AGENDADAS.TIPO_UNIDADE = TIPO_UNIDADE.COD_UNIDADE "
 					+ 														   "   AND VEICULO_MARCA.COD_MARCA = VEICULO.COD_MARCA "
 					+ 														   "   AND UNIDADES_AGENDADAS.ESTADO = 0 "
+					+ 														   "   AND UNIDADES_AGENDADAS.COD_OS = OS.COD_OS "
+					+ 														   "   AND OS.NUM_OS = NUMERO_OS.NUM_OS "
 					+ 														   "   AND COD_AGENDAMENTO = " + COD_AGENDAMENTO_);
 			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[5];
+				String[] attList = new String[6];
 				attList[0] = values.get(i)[0].toString();
 				attList[1] = values.get(i)[1].toString();
 				attList[2] = values.get(i)[2].toString();
 				attList[3] = values.get(i)[3].toString();
 				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
 				unidadesAgendadas.add(attList);;
 			}
 		}catch (SQLException ex) {
