@@ -112,7 +112,7 @@ public abstract class GenericDAO<T> {
         	throw new SQLException("CREATE failed, no rows affected..." + e);
         }
         finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -230,7 +230,7 @@ public abstract class GenericDAO<T> {
         	throw e;
         }
         finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (generatedKeys != null) generatedKeys.close();
@@ -357,7 +357,7 @@ public abstract class GenericDAO<T> {
             throw e;
         }
         finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -442,7 +442,7 @@ public abstract class GenericDAO<T> {
         }
         
         finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
         		con.commit();
     		}
         	if (stmt != null) stmt.close();
@@ -492,7 +492,7 @@ public abstract class GenericDAO<T> {
 	        }
 	
 	        finally {
-				if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+	        	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
 	        		con.commit();
 	    		}
 	        	if (stmt != null) stmt.close();
@@ -551,7 +551,7 @@ public abstract class GenericDAO<T> {
             }
             
             finally {
-    			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+            	if(ZXMain.LOCAL_.compareTo("DEV") == 0){
             		con.commit();
         		}
             	if (stmt != null) stmt.close();

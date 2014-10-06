@@ -7,7 +7,6 @@ package zirix.zxcc.server.mock;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import zirix.zxcc.server.ZXMain;
 import zirix.zxcc.server.dao.DAOManager;
 public class MockScheduleBean {
@@ -51,13 +50,13 @@ public class MockScheduleBean {
 		Vector<String[]> workService = new Vector<String[]>();
 		try {
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT  " + ZXMain.DB_NAME_ + "WORK_SERVICE.SERVICE_NAME "
-					+ " 											 FROM " + ZXMain.DB_NAME_ + "WORK_SERVICE "
-					+ " 											    , " + ZXMain.DB_NAME_ + "DEFINED_WORK "
-					+ " 											    , " + ZXMain.DB_NAME_ + "DEFINED_PROCESS "
-					+ "                                             WHERE " + ZXMain.DB_NAME_ + "DEFINED_WORK.PROCESS_ID =  " + ZXMain.DB_NAME_ + "WORK_SERVICE.PROCESS_ID "
-					+ "                                               AND " + ZXMain.DB_NAME_ + "DEFINED_WORK.WORK_ID =  " + ZXMain.DB_NAME_ + "WORK_SERVICE.WORK_ID "
-					+ "                                               AND " + ZXMain.DB_NAME_ + "DEFINED_PROCESS.PROCESS_NAME = N'" + processName + "' "
-					+ "                                               AND " + ZXMain.DB_NAME_ + "DEFINED_WORK.WORK_NAME = N'" + workName + "' ");
+					+ " 											 FROM  " + ZXMain.DB_NAME_ + "WORK_SERVICE "
+					+ " 											    ,  " + ZXMain.DB_NAME_ + "DEFINED_WORK "
+					+ " 											    ,  " + ZXMain.DB_NAME_ + "DEFINED_PROCESS "
+					+ "                                             WHERE  " + ZXMain.DB_NAME_ + "DEFINED_WORK.PROCESS_ID =  " + ZXMain.DB_NAME_ + "WORK_SERVICE.PROCESS_ID "
+					+ "                                               AND  " + ZXMain.DB_NAME_ + "DEFINED_WORK.WORK_ID =  " + ZXMain.DB_NAME_ + "WORK_SERVICE.WORK_ID "
+					+ "                                               AND  " + ZXMain.DB_NAME_ + "DEFINED_PROCESS.PROCESS_NAME = N'" + processName + "' "
+					+ "                                               AND  " + ZXMain.DB_NAME_ + "DEFINED_WORK.WORK_NAME = N'" + workName + "' ");
 
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
@@ -81,28 +80,6 @@ public class MockScheduleBean {
 			}catch (SQLException ex) {
 				ex.printStackTrace();
 			}finally{}
-		}
-	}
-	@SuppressWarnings("finally")
-	public double getPercentageTimeWork(String WORK_ID){
-		double percentage = 0;
-		try {
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIMEDIFF(NOW(),SCHED_WORK.SCHED_TIMESTAMP)/TIMEDIFF((SCHED_WORK.SCHED_TIMESTAMP + INTERVAL CAST(RESTRICTION_WORK.RESTRICTION_VALUE AS TIME) HOUR_SECOND),SCHED_WORK.SCHED_TIMESTAMP)*100 "
-					+ 														   " FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
-					+ 														   "    , " + ZXMain.DB_NAME_ + "RESTRICTION_WORK "
-					+ 														   " WHERE SCHED_WORK.RESTRICTION_ID = RESTRICTION_WORK.RESTRICTION_ID "
-					+ 														   "   AND SCHED_WORK.WORK_ID = " + WORK_ID);
-
-			for (int i=0;i < values.size();i++) {
-				String[] attList = new String[1];
-				attList[0] = values.get(i)[0].toString();
-				System.err.println("\n attList[0] = " + attList[0]);
-				percentage = Double.parseDouble(attList[0]);
-			}
-		}catch (SQLException ex) {
-    		ex.printStackTrace();
-		}  finally {
-			return percentage;
 		}
 	}
 }

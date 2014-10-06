@@ -22,19 +22,19 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	}
 %>
 
-<html lang="pt-br">
+<html lang="pt-br">  
     <head>
         <title>ZX CC</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/Bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="css/Bootstrap/bootstrap.min.css">   
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/modal.css">
         <link rel="stylesheet" href="css/sizes.css">
         <link rel="stylesheet" href="css/button.css">
-    </head>
-    <body>
+    </head>  
+    <body>    
         <div class="container">        
             <header>
            		&nbsp;Bem-vindo: <%=bean.getNomeUsuario()%>
@@ -301,6 +301,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 </section>
                 <section class="conteudo">
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
+                <br>
+                <br>
+				<progress id="progressBar" max="100" value="0">
+				</progress>
+				<br><input type="button" id="theButton" value="Add 10%" onclick="addTenPercent();">
+				<br>
                 <br>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">

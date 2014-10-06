@@ -33,21 +33,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				<%if(workList.elementAt(i)[3].trim().compareTo("0") != 0) {
 					String[] cod_usuario = new String[1];
 					cod_usuario[0] = workList.elementAt(i)[3].trim();
-					ZxAccessControlBean beanAccess = new ZxAccessControlBean(cod_usuario);%>
-					- Iniciado por <%=beanAccess.getNomeUsuario()%>
-				<%}
-				double percentage = bean.getPercentageTimeWork(workList.elementAt(i)[0].trim());%>
-				<progress id="progressBar<%=workList.elementAt(i)[0].trim()%>" max="100" value="<%=percentage%>" style="display: inline-block;"
-					<%if(percentage <= 50){
-						%>class="progressGreen"<%
-					}else if((percentage > 50) && (percentage <= 75)){
-						%>class="progressOrange"<%
-					}else if((percentage > 75) && (percentage <= 100)){
-						%>class="progressRed"<%
-					}else{
-						%>class="progressBlack"<%
-					}%>>
-				</progress>
+					ZxAccessControlBean beanAccess = new ZxAccessControlBean(cod_usuario);
+				%> - Iniciado por <%=beanAccess.getNomeUsuario()%><%}%>
 			</div>
 			<canvas id="myCanvas_<%=workList.elementAt(i)[0].trim()%>" width="495" height="1" style="border:0px;"></canvas>
 			<script>var c = document.getElementById("myCanvas_<%=workList.elementAt(i)[0].trim()%>");
