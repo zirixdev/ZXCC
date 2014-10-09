@@ -55,10 +55,13 @@ public class ZXAlerter {
 				+ 											  "     , RESTRICTION_ID"
 				+ 											  "     , WORK_ID"
 				+ 											  "     , WORK_NAME"
-				+ 											  "     , COD_USUARIO "
-				+ 											  "  FROM SCHED_WORK"
+				+ 											  "     , SCHED_WORK.COD_USUARIO "
+				+ 											  "     , NOME_USUARIO "
+				+ 											  "  FROM SCHED_WORK,USUARIO"
 				+ 											  " WHERE WORK_STATE_ID = " + SCHEDED_WORK_FLAG
-				+											  "   AND ALERT_STATUS = " + ALERT_PENDING);
+				+											  "   AND ALERT_STATUS = " + ALERT_PENDING
+				+											  "   AND SCHED_WORK.COD_USUARIO = USUARIO.COD_USUARIO ");
+
 		ResultSet resTOEXPIRE = stmtTOEXPIRE.executeQuery();
 
 		// STARTED_WORKs
@@ -67,10 +70,13 @@ public class ZXAlerter {
 				+ 											  "     , RESTRICTION_ID"
 				+ 											  "     , WORK_ID"
 				+ 											  "     , WORK_NAME"
-				+ 											  "     , COD_USUARIO "
-				+ 											  "  FROM SCHED_WORK"
+				+ 											  "     , SCHED_WORK.COD_USUARIO "
+				+ 											  "     , NOME_USUARIO "
+				+ 											  "  FROM SCHED_WORK,USUARIO"
 				+ 											  " WHERE WORK_STATE_ID != " + FINISHED_WORK_FLAG
-				+											  "   AND ALERT_STATUS != " + ALERT_EXPIRED_SENT);
+				+											  "   AND ALERT_STATUS != " + ALERT_EXPIRED_SENT
+				+											  "   AND SCHED_WORK.COD_USUARIO = USUARIO.COD_USUARIO ");
+
 		ResultSet resEXPIRED = stmtEXPIRED.executeQuery();
 
 		while (resTOEXPIRE.next()) {
@@ -87,7 +93,7 @@ public class ZXAlerter {
 			Timestamp sched_time = resTOEXPIRE.getTimestamp(2);
 			Integer work_id = resTOEXPIRE.getInt(4);
 			String work_name = resTOEXPIRE.getString(5);
-			Integer cod_usuario = resTOEXPIRE.getInt(6);
+			String nome_usuario = resTOEXPIRE.getString(7);
 
 			res2.next();
 			Time restriction_val = res2.getTime(1);
@@ -110,7 +116,7 @@ public class ZXAlerter {
 				while (res3.next()) 
 					email_TO_List.add(res3.getString(1));	
 
-				alerter.notify(work_id,work_name,cod_usuario,RISK_SUBJECT,email_TO_List);
+				alerter.notify(work_id,work_name,nome_usuario,RISK_SUBJECT,email_TO_List);
 				
 				PreparedStatement stmt4 = con.prepareStatement("UPDATE SCHED_WORK SET ALERT_STATUS =? where WORK_ID =?");
 				stmt4.setInt(1,Integer.parseInt(ALERT_TOEXPIRE_SENT));
@@ -132,7 +138,7 @@ public class ZXAlerter {
 			Timestamp sched_time = resEXPIRED.getTimestamp(2);
 			Integer work_id = resEXPIRED.getInt(4);
 			String work_name = resEXPIRED.getString(5);
-			Integer cod_usuario = resEXPIRED.getInt(6);
+			String nome_usuario = resEXPIRED.getString(7);
 
 			res2.next();
 			Time restriction_val = res2.getTime(1);
@@ -155,7 +161,7 @@ public class ZXAlerter {
 				while (res3.next()) 
 					email_TO_List.add(res3.getString(1));	
 
-				alerter.notify(work_id,work_name,cod_usuario,OVERTIME_SUBJECT,email_TO_List);
+				alerter.notify(work_id,work_name,nome_usuario,OVERTIME_SUBJECT,email_TO_List);
 
 				PreparedStatement stmt4 = con.prepareStatement("UPDATE SCHED_WORK SET ALERT_STATUS =? where WORK_ID =?");
 				stmt4.setInt(1,Integer.parseInt(ALERT_EXPIRED_SENT));
@@ -254,11 +260,11 @@ public class ZXAlerter {
 	/*
 	 * envia e-mail de notificacao com o subject em questao
 	 */
-	public void notify(Integer work_id,String work_name,Integer cod_usuario,String subject,Vector<String> email_TO_List) throws MessagingException {
+	public void notify(Integer work_id,String work_name,String nome_usuario,String subject,Vector<String> email_TO_List) throws MessagingException {
 
 		ADGoogleMailer mailer = new ADGoogleMailer(username_,password_);
 
-		String msg = "ZXCC MAILER : " + work_id + " | " + work_name + " | " + cod_usuario;
+		String msg = "ZXCC MAILER : " + work_id + " | " + work_name + " | " + nome_usuario;
 
 		for (int i=0;i < email_TO_List.size();i++) {
 			mailer.send(email_TO_List.elementAt(i),msg,subject);
