@@ -97,7 +97,7 @@ public class MockSchedule {
 		   }
 	   }
 	}
-	public static void createWork(int WORK_ID) throws SQLException{
+	public static void createSameWork(int WORK_ID) throws SQLException{
 		SchedWorkDAO daoSchedWork = new SchedWorkDAO();
 		Vector<String[]> workToCreate = new Vector<String[]>();
 		try{
@@ -141,6 +141,8 @@ public class MockSchedule {
 				daoSchedWork.setAttValueFor("DEFINED_PROCESS_ID",Integer.parseInt(workToCreate.elementAt(i)[7].trim()));
 				daoSchedWork.setAttValueFor("DEFINED_WORK_ID",Integer.parseInt(workToCreate.elementAt(i)[8].trim()));
 				daoSchedWork.setAttValueFor("PK_COLUMN",Integer.parseInt(workToCreate.elementAt(i)[9].trim()));
+				daoSchedWork.setAttValueFor("WORK_STATE_ID",0);
+				daoSchedWork.setAttValueFor("ALERT_STATUS",0);
 				daoSchedWork.Create();
 			}
 		}

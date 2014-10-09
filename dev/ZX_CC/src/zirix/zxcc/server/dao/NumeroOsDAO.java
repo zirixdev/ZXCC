@@ -35,10 +35,13 @@ public class NumeroOsDAO extends GenericDAO<NumeroPedidoDAO> {
     	setAttValueFor("COD_USUARIO",res.getInt("COD_USUARIO"));
     	setAttValueFor("DATA_GERACAO",res.getDate("DATA_GERACAO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
+    	setAttValueFor("ANO_OS",res.getInt("ANO_OS"));
+    	setAttValueFor("MES_OS",res.getInt("MES_OS"));
+    	setAttValueFor("NUM_OS",res.getInt("NUM_OS"));
     }
     
     public Set<String> getPkNamesSet() {    	
-    	return NumeroPedidoDAO.createKey("NUM_OS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
+    	return NumeroPedidoDAO.createKey("COD_NUM_OS", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();    	    	
     }
 
 	public final static String TABLENAME = ZXMain.DB_NAME_ + "NUMERO_OS";

@@ -98,7 +98,7 @@ TECNOLOGIAS UTILIZADAS: CSS
 	   -webkit-linear-gradient(top, 
 	                           rgba(255, 255, 255, .25), 
 	                           rgba(0, 0, 0, .25)),
-	   -webkit-linear-gradient(left, green, green);
+	   -webkit-linear-gradient(left, #26ca28, #26ca28);
 
     border-radius: 35px; 
     background-size: 35px 20px, 100% 100%, 100% 100%;

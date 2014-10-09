@@ -65,7 +65,7 @@ public class MockFluxServiceServlet extends HttpServlet {
 			   MockSchedule.createSchedWork(PROCESS_ID,DEFINED_PROCESS_ID,1,0, PK_COLUMN);
 		   }else if (OP_CODE.compareTo("CREATEWORK") == 0) {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));
-			   MockSchedule.createWork(WORK_ID);
+			   MockSchedule.createSameWork(WORK_ID);
 		   }
 		   else if (OP_CODE.compareTo("ENDWORK") == 0) {
 			   int WORK_ID = Integer.parseInt(request.getParameter("WORK_ID"));

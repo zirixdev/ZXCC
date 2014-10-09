@@ -1,5 +1,5 @@
-/*ZIRIX CONTROL CENTER - TIPO SERVIÇO DAO SERVICE
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+/*ZIRIX CONTROL CENTER - TIPO SERVIï¿½O DAO SERVICE
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -16,7 +16,7 @@ public class TipoPedidoDAOService {
 
 	public static Vector<TipoPedidoDAO> loadAll() throws SQLException {
 
-		String query = "SELECT * FROM " + TipoPedidoDAO.TABLENAME;
+		String query = "SELECT * FROM " + TipoPedidoDAO.TABLENAME + " WHERE DELETED = 0;";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;

@@ -301,6 +301,19 @@ function callModalTarefas(event){
 	            }
 	        });
 	        break;
+	    case "fin_verifica_spc_serasa":
+	        $.ajax({
+	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=FIN&PK_OBJ="+selectedPK,
+	            success: function(result) {
+	                $('.modal-content').html(result);
+	                $('.modal').modal({backdrop:'static'});
+	                carregar_dados_confirmacao_pedido_function();
+	            },
+	            error: function(e){
+	                alert('error');
+	            }
+	        });
+	        break;
 	    case "opr_cad_globalsearch":
 	        $.ajax({
 	            url: url_adress + "visualizacao_novo_pedido.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=CAD_GS&PK_OBJ="+selectedPK,

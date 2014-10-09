@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - PEDIDO DAO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -37,7 +37,9 @@ public class PedidoDAO extends GenericDAO<PedidoDAO> {
     	setAttValueFor("NUM_PEDIDO",res.getInt("NUM_PEDIDO"));
     	setAttValueFor("COD_TIPO",res.getInt("COD_TIPO"));
     	setAttValueFor("DATA_VENCIMENTO",res.getInt("DATA_VENCIMENTO"));
-    	setAttValueFor("DELETED",res.getInt("DELETED"));        	    	   
+    	setAttValueFor("DELETED",res.getInt("DELETED"));
+    	setAttValueFor("INFO_PEDIDO",res.getString("INFO_PEDIDO"));
+    	setAttValueFor("BOLETO_EMAIL",res.getInt("BOLETO_EMAIL"));
     }
     
     public Set<String> getPkNamesSet() {    	

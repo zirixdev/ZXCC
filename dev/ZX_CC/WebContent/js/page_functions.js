@@ -47,7 +47,7 @@ function unit_function(){
 function libera_div(input_name){
 	var content_div;
 	if(input_name == "Teste"){
-		content_div = '- <input type="text" class="size_25" id="teste_dias"> dias.';
+		content_div = '- <input type="text" class="size_25" id="teste_dias" onkeypress="javascript: return EntradaNumerico(event);"> dias.';
 		$('#div_outro_servico').html("");
 		$('#div_teste_dias').html(content_div);
 	}else if(input_name == "Outro"){
@@ -3883,7 +3883,7 @@ function delete_equip_acessorio_function() {
     var div_deletar = div_select.slice(Number(16),Number(length));
 
     var equip_acessorio_nome = $('#equip_acessorio_nome_' + div_deletar).html();
-    var quantidade = vetor_equip_acessorio_inserido[div_deletar].quantidade;
+    var quantidade = control_vetor_equip_acessorio_inserido[div_deletar].quantidade;
     
     var content_div_equip_acessorio = $('#' + div_select).html();
 
@@ -4330,11 +4330,20 @@ function comercial_cadastrar_novo_pedido_function(){
 				}
 			}
 		}
+		var info_pedido = "VAZIO";
 		var tipoPedido = $("input[type='radio'][name='servico']:checked").val();
 		if((Number(tipoPedido) == 1) || (Number(tipoPedido) == 2) || (Number(tipoPedido) == 3)){
 			if(control_vetor_equip_acessorio_json[0] === 0){
-				alert("Favor inserir ao menos uma EQUIPAMENTO OU ACESSÓRIO no PEDIDO");
+				alert("Favor inserir ao menos um EQUIPAMENTO OU ACESSÓRIO no PEDIDO");
 				return 0;
+			}
+			if((Number(tipoPedido) == 3)){
+				info_pedido = document.getElementById("teste_dias").value;
+				if(info_pedido.trim() == ""){
+					alert("Favor informar a quantidade de dias");
+					document.getElementById("teste_dias").focus();
+					return 0;
+				}
 			}
 		}
 		var equipAcessorioLength = control_vetor_equip_acessorio_json.length;
@@ -4345,7 +4354,7 @@ function comercial_cadastrar_novo_pedido_function(){
 			adress_aux = adress_aux + '&VALOREQUIP_' + i + '=' + control_vetor_equip_acessorio_json[i].valor_unitario;
 		}
 		if(control_vetor_servico_json[0] === 0){
-			alert("Favor inserir ao menos uma SERVIÇO no PEDIDO");
+			alert("Favor inserir ao menos um SERVIÇO no PEDIDO");
 			return 0;
 		}
 		var servicoLength = control_vetor_servico_json.length;
@@ -4374,13 +4383,17 @@ function comercial_cadastrar_novo_pedido_function(){
 			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
 			adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
 		}
+		var envio_boleto = 0;
+		if(document.getElementById("envio_boleto").checked){
+			envio_boleto = 1;
+		}
 
 		var dt_vencimento = $("input[type='radio'][name='vencimento']:checked").val();
 		dia = new Date();
 		var adress = url_adress + 'services/novoPedido?OP_CODE=CREATE&TIPO=' + tipo_pessoa + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + dia.yyyymmdd();
 		adress = adress + '&COD_VENDEDOR='+ cod_vendedor.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&TIPO_PEDIDO=' + tipoPedido.trim();
-		adress = adress + '&DATA_VENCIMENTO=' + dt_vencimento.trim();
+		adress = adress + '&DATA_VENCIMENTO=' + dt_vencimento.trim() + '&INFO_PEDIDO=' + info_pedido.trim() + '&ENVIO_BOLETO=' + envio_boleto;
 		adress = adress + adress_aux;
 		document.location.href = adress;
 	}
@@ -4621,14 +4634,6 @@ function form_novo_pedido_function(area,workId,pkObj){
 			document.getElementById("dadosCorretos").focus();
 			return 0;
 		}
-		if(!document.getElementById("scpSerasa").checked){
-			if(confirm('Existe alguma pendencia no SPC ou Serasa?')){
-				//todo - ENVIAR PARA DIRETORIA DAR OK
-			}
-			alert("Favor confirmar se o cliente possui pendencia no SPC ou Serasa.");
-			document.getElementById("scpSerasa").focus();
-			return 0;
-		}
 		break;
 	case "CAD_GS":
 		if(!document.getElementById("dadosCorretos").checked){
@@ -4655,6 +4660,16 @@ function form_novo_pedido_function(area,workId,pkObj){
 		if(!document.getElementById("dadosCorretos").checked){
 			alert("Favor marcar a box caso tenha realizado a separação dos equipamentos necessários para a instalação.");
 			document.getElementById("dadosCorretos").focus();
+			return 0;
+		}
+		break;
+	case "FIN":
+		if(!document.getElementById("scpSerasa").checked){
+			if(confirm('Existe alguma pendencia no SPC ou Serasa?')){
+				//todo - ENVIAR PARA DIRETORIA DAR OK OU DECLARAR PENDÊNCIA IRRELEVANTE
+			}
+			alert("Favor confirmar se o cliente possui pendencia no SPC ou Serasa.");
+			document.getElementById("scpSerasa").focus();
 			return 0;
 		}
 		break;

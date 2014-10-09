@@ -440,6 +440,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     <input type="radio" name="vencimento" value="03" checked="checked">03
                     <input type="radio" name="vencimento" value="05">05
                     <input type="radio" name="vencimento" value="10">10
+                    <br><input type="checkbox" id="envio_boleto"> Cliente deseja que o boleto seja enviado por e-mail
                 </fieldset>
                 <fieldset class="field">
 				<legend>Serviços:</legend>

@@ -46,6 +46,16 @@ public class NovoPedidoServiceBean {
     	return dataVencimento;
 	}
 
+	public Integer getEnvioBoleto() {
+    	int envioBoleto = (Integer)daoPedido_.getAttValueFor("BOLETO_EMAIL");
+    	return envioBoleto;
+	}
+	
+	public String getInfoPedido() {
+		String infoPedido = daoPedido_.getAttValueFor("INFO_PEDIDO").toString();
+    	return infoPedido;
+	}
+
 	public Integer getCodTipo() {
     	int codTipo = (Integer)daoPedido_.getAttValueFor("COD_TIPO");
     	return codTipo;
@@ -65,7 +75,7 @@ public class NovoPedidoServiceBean {
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "TIPO_PEDIDO "
 					+ 														   " WHERE COD_TIPO = " + codTipo);
 			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[1];
+				String[] attList = new String[2];
 				attList[0] = (String) values.get(i)[0];
 				tipoPedido = attList[0];
 			}

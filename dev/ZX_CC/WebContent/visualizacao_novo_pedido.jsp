@@ -279,10 +279,10 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 		<div class="tab-pane" id="aba_servicos">
 			<fieldset class="field">
 			<legend><b>Tipo do Pedido:</b></legend>
-				<b>Pedido de <%=beanPedido.getTipoPedido()%> - Nº:</b> <%=beanPedido.getNumeroPedido()%>
-				<br><b>Dia de Vencimento:</b> <%=beanPedido.getDataVencimento()%>
+				<b>Pedido de <%=beanPedido.getTipoPedido()%> <%if(beanPedido.getTipoPedido().compareTo("Teste") == 0){%> por <%=beanPedido.getInfoPedido()%> dias<%}%> - Nº:</b> <%=beanPedido.getNumeroPedido()%>
+				<br><b>Dia de Vencimento:</b> <%=beanPedido.getDataVencimento()%>&nbsp;-&nbsp;Cliente<%if(beanPedido.getEnvioBoleto() == 0){%> não<%}%> deseja que o boleto seja enviado por e-mail.
 				<fieldset class="fieldinner">
-				<legend><b>Serviços:</b></legend>
+				<legend><b>Serviços:</b></legend> 
 					<%try{
 						Vector<String[]> listServico = beanPedido.getServicoPedido();
 						for(int i=0; i<listServico.size();i++){
@@ -364,11 +364,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 			combos = 4;
 		}else if (AREA.compareTo("SEP_EQUIP")==0){
 			combos = 5;
+		}else if (AREA.compareTo("FIN")==0){
+			combos = 6;
 		}%>
 		<%switch(combos){
 			case 1:%>
 				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados do pedido estão corretos.
-				<br><input type="checkbox" value="1" id="scpSerasa">Confirmo que o cliente não possui restrição no SPC/SERASA.
 			<%	break;
 			case 2:%>
 				<input type="checkbox" value="1" id="dadosCorretos">Confirmo que todos os dados foram cadastrados corretamento no Global Search.
@@ -382,6 +383,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 			case 5:%>
 				<input type="checkbox" value="1" id="dadosCorretos">Confirmo ter realizado a separação dos equipamentos necessários para a instalação.
 			<%	break;
+			case 6:%>
+				<input type="checkbox" value="1" id="scpSerasa">Confirmo que o cliente não possui restrição no SPC/SERASA.
+		<%	break;
 		}%>
 		<br>
 		<button type="button" id="conferido_modal" onclick="form_novo_pedido_function('<%=AREA%>','<%=WORK_ID%>','<%=PK_OBJ[0]%>')">Conferido</button>

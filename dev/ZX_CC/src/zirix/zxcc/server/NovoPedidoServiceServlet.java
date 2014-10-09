@@ -158,6 +158,8 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 						}
 						String TIPO_PEDIDO = request.getParameter("TIPO_PEDIDO").trim();
 						String DATA_VENCIMENTO = request.getParameter("DATA_VENCIMENTO").trim();
+						String INFO_PEDIDO = request.getParameter("INFO_PEDIDO").trim();
+						String BOLETO_EMAIL = request.getParameter("ENVIO_BOLETO").trim();
 						PedidoDAO daoPedido = new PedidoDAO();
 						daoPedido.setAttValueFor("COD_VENDEDOR", COD_VENDEDOR);
 						daoPedido.setAttValueFor("COD_CLIENTE", pkListValue);
@@ -165,6 +167,10 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 						daoPedido.setAttValueFor("COD_TIPO", TIPO_PEDIDO);
 						daoPedido.setAttValueFor("DATA_VENCIMENTO",DATA_VENCIMENTO);
 						daoPedido.setAttValueFor("DELETED", 0);
+						if(TIPO_PEDIDO.compareTo("3") == 0){
+							daoPedido.setAttValueFor("INFO_PEDIDO", INFO_PEDIDO);
+						}
+						daoPedido.setAttValueFor("BOLETO_EMAIL", BOLETO_EMAIL);
 						daoPedido.Create();
 						Vector<String[]> CodPedido_ = new Vector<String[]>();
 						try{

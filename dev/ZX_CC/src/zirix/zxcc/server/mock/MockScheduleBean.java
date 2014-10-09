@@ -27,10 +27,14 @@ public class MockScheduleBean {
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "WORK_USER "
+					+ 														   "    , " + ZXMain.DB_NAME_ + "RESTRICTION_WORK "
 					+ 														   " WHERE " + ZXMain.DB_NAME_ + "WORK_USER.WORK_GROUP_ID = " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_GROUP_ID "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.PROCESS_ID = " + ZXMain.DB_NAME_ + "SCHED_PROCESS.PROCESS_ID "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.END_TIMESTAMP IS NULL "
-					+ 														   "   AND " + ZXMain.DB_NAME_ + "WORK_USER.COD_USUARIO = " + COD_USUARIO_);
+					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.SCHED_TIMESTAMP < CAST(NOW() - CAST('16:00:00' AS TIME) AS DATETIME) "
+					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.RESTRICTION_ID = " + ZXMain.DB_NAME_ + "RESTRICTION_WORK.RESTRICTION_ID "
+					+ 														   "   AND " + ZXMain.DB_NAME_ + "WORK_USER.COD_USUARIO = " + COD_USUARIO_
+					+ 														   " ORDER BY (TIMEDIFF(NOW(),SCHED_WORK.SCHED_TIMESTAMP)/TIMEDIFF((SCHED_WORK.SCHED_TIMESTAMP + INTERVAL CAST(RESTRICTION_WORK.RESTRICTION_VALUE AS TIME) HOUR_SECOND),SCHED_WORK.SCHED_TIMESTAMP)*100) DESC ");
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[5];
 				attList[0] = (String) values.get(i)[0].toString();
@@ -96,7 +100,6 @@ public class MockScheduleBean {
 			for (int i=0;i < values.size();i++) {
 				String[] attList = new String[1];
 				attList[0] = values.get(i)[0].toString();
-				System.err.println("\n attList[0] = " + attList[0]);
 				percentage = Double.parseDouble(attList[0]);
 			}
 		}catch (SQLException ex) {
