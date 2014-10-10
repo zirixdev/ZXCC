@@ -131,7 +131,6 @@ public class ClienteServiceBean {
 	public Vector<String[]> getDocumento(){
 		Vector<String[]> documentoClienteList = new Vector<String[]>();
 		try {
-			System.err.println("\n Dentro do TRY");
 			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DOCUMENTO_CLIENTE.NUMERO "
 					+ ",							    TIPO_DOCUMENTO.NOME "
 					+ ",                                DOCUMENTO_CLIENTE.DATA_EMISSAO "
@@ -140,25 +139,17 @@ public class ClienteServiceBean {
 		    		+ "							      , " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO "
 		    		+ "							  WHERE TIPO_DOCUMENTO.COD_DOCUMENTO = DOCUMENTO_CLIENTE.COD_DOCUMENTO "
 		    		+ "                             AND DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE_);
-
-			System.err.println("\n Executei a query. values.size() = " + values.size());
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[4];
 			    attList[0] = (String) values.get(i)[0];
-				System.err.println("\n attList[0] = " + attList[0]);
 			    attList[1] = (String) values.get(i)[1];
-				System.err.println("\n attList[1] = " + attList[1]);
 		    	attList[2] = values.get(i)[2].toString();
-				System.err.println("\n attList[2] = " + attList[2]);
 			    attList[3] = (String) values.get(i)[3];
-				System.err.println("\n attList[3] = " + attList[3]);
 			    documentoClienteList.add(attList);
-				System.err.println("\n Final do FOR");
 		    }
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}  finally {
-			System.err.println("\n Dentro do finally");
 			return documentoClienteList;
 		}
 	}

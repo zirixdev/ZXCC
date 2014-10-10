@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - UNIDADES AGENDADAS DAO
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -37,6 +37,9 @@ public class UnidadesAgendadasDAO extends GenericDAO<ObsPedidoDAO> {
     	setAttValueFor("TIPO_UNIDADE",res.getInt("TIPO_UNIDADE"));
     	setAttValueFor("ESTADO",res.getInt("ESTADO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
+    	setAttValueFor("COD_OS",res.getInt("COD_OS"));
+    	setAttValueFor("DATA_AGENDAMENTO",res.getInt("DATA_AGENDAMENTO"));
+    	setAttValueFor("HORA_AGENDAMENTO",res.getInt("HORA_AGENDAMENTO"));
     }
     
     public Set<String> getPkNamesSet() {    	

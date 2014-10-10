@@ -50,8 +50,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							<br><b>Contato Responsável:</b>&nbsp;<%=instalacaoList.elementAt(0)[10].trim()%>&nbsp;-&nbsp;(<%=instalacaoList.elementAt(0)[8].trim()%>)&nbsp;<%=instalacaoList.elementAt(0)[9].trim()%>
 						</div>
 					</fieldset>
-	                <b>Data do Agendamento:</b> <input type="date" id="data_agendamento">
-	                <b>Hora:</b> <input type="time" id="hora_agendamento">
 				</fieldset>
             </div>
             <div class="tab-pane" id="aba_unidades">
@@ -63,9 +61,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					if(Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0]) != 0){
 						Vector<String[]> CodVeiculoToSched = beanPedido.getCodUnidadesVeiculoToSched();
 						for (int i=0;i < CodVeiculoToSched.size();i++) {
-							try{
+							try {
 								Vector<String[]> listVeiculo = beanPedido.getDadosVeiculo((Integer.parseInt(CodVeiculoToSched.elementAt(i)[0])));
-								if(i!=0){%>
+								if(i!=0){ %>
 									<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
 										<script>
 											var c = document.getElementById("myCanvasUnidades_<%=i%>");
@@ -74,13 +72,17 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 											ctx.lineTo(680,0);
 											ctx.stroke();
 										</script>
-								<%}%>
-								<input type="checkbox" value="<%=CodVeiculoToSched.elementAt(i)[0].trim()%>" id="unidade_check_<%=i%>" name="unidade_name">&nbsp;<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(listVeiculo.elementAt(0)[0].trim()))%>
-								<br><b>Placa:</b>&nbsp;<%=listVeiculo.elementAt(0)[1].trim()%>
+								<%} %>
+								<%String COD_VEICULO = CodVeiculoToSched.elementAt(i)[0].trim();%>
+								<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(listVeiculo.elementAt(0)[0].trim()))%>&nbsp;&nbsp;
+								<b>Placa:</b>&nbsp;<%=listVeiculo.elementAt(0)[1].trim()%>
+								<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
+	                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
+	                			<br><input type="checkbox" value="reagendar_<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
 							<%}catch (Exception e){
 								out.println("Error ao preencher unidades agendamento... " + e.getMessage());
-							}%>
-						<%}
+							}
+						}
 					}else{
 						for (int i=0;i < CodtUnidadesVeiculo.size();i++) {
 							try{
@@ -96,8 +98,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 											ctx.stroke();
 										</script>
 								<%}%>
-								<input type="checkbox" value="<%=CodtUnidadesVeiculo.elementAt(i)[0].trim()%>" id="unidade_check_<%=i%>" name="unidade_name">&nbsp;<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>
-								<br><b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+								<%String COD_VEICULO = CodtUnidadesVeiculo.elementAt(i)[0].trim();%>
+								<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;
+								<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+								<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
+	                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
+	                			<br><input type="checkbox" value="<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
 							<%}catch (Exception e){
 								out.println("Error ao preencher unidades agendamento... " + e.getMessage());
 							}%>

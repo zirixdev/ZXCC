@@ -4705,6 +4705,8 @@ function muda_endereco_function(){
 }
 
 var vector_unidades_agendamento = new Array();
+var vector_data_agendamento = new Array();
+var vector_hora_agendamento = new Array();
 
 function operacional_agendamento_function(workId){
 	var end_agend = $('#end_inst').val();
@@ -4779,28 +4781,39 @@ function operacional_agendamento_function(workId){
         var cod_dado_inst = document.getElementById("cod_dado_inst").innerHTML.trim();
     	adress_aux = adress_aux + "&CODDADOINST=" + cod_dado_inst;
     }
-    var data_agendamento = document.getElementById("data_agendamento").value.trim();
-    if(data_agendamento === ""){
-    	alert("Favor ingressar a DATA DO AGENDAMENTO.");
-		document.getElementById("data_agendamento").focus();
-		return 0;
-    }
-    var hora_agendamento = document.getElementById("hora_agendamento").value.trim();
-    if(hora_agendamento === ""){
-    	alert("Favor ingressar a HORA DO AGENDAMENTO.");
-		document.getElementById("hora_agendamento").focus();
-		return 0;
-    }
 	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
 	var cod_pedido = document.getElementById("cod_pedido").innerHTML.trim();
     var total_unidades = document.getElementById("total_unidades").innerHTML.trim();
     var total_unidades_agendadas = 0;
+    var reagendar = "false";
+    var data_agendamento = "";
+    var hora_agendamento = "";
 
     for(var i=0;i<total_unidades;i++){
-		if(document.getElementById("unidade_check_"+i).checked){
-			vector_unidades_agendamento[total_unidades_agendadas] = document.getElementById("unidade_check_"+i).value;
-			total_unidades_agendadas++;
-		}
+    	data_agendamento = document.getElementById("data_agendamento_"+i).value.trim();
+    	hora_agendamento = document.getElementById("hora_agendamento_"+i).value.trim();
+
+    	if((data_agendamento == "" || hora_agendamento == "") && !document.getElementById("reagendar_"+i).checked){
+    		if(document.getElementById("reagendar_"+i).checked){
+    			reagendar = "true";
+    		}else{
+    			if(data_agendamento == ""){
+    				alert("Favor selecionar a DATA DE AGENDAMENTO.");
+    				document.getElementById("data_agendamento_"+i).focus();
+    				return 0;
+    			}
+    			if(hora_agendamento == ""){
+    				alert("Favor selecionar a HORA DE AGENDAMENTO.");
+    				document.getElementById("hora_agendamento_"+i).focus();
+    				return 0;
+    			}
+    		}
+    	}else{
+    		vector_unidades_agendamento[total_unidades_agendadas] = document.getElementById("reagendar_"+i).value;
+    		vector_data_agendamento[total_unidades_agendadas] = data_agendamento;
+    		vector_hora_agendamento[total_unidades_agendadas] = hora_agendamento;
+    		total_unidades_agendadas++;
+    	}
     }
 
     total_unidades_agendadas = vector_unidades_agendamento.length;
@@ -4809,10 +4822,12 @@ function operacional_agendamento_function(workId){
 		return 0;
     }
 
-	adress_aux = adress_aux + "&TOTALUNID=" + total_unidades + "&TOTALUNIDAGEND=" + total_unidades_agendadas;
+	adress_aux = adress_aux + "&TOTALUNIDAGEND=" + total_unidades_agendadas;
 
 	for(i=0;i<total_unidades_agendadas;i++){
 		adress_aux = adress_aux + "&CODVEIC_" + i + "=" + vector_unidades_agendamento[i];
+		adress_aux = adress_aux + "&DATA_AGENDAMENTO_" + i + "=" + vector_data_agendamento[i];
+		adress_aux = adress_aux + "&HORA_AGENDAMENTO_" + i + "=" + vector_hora_agendamento[i];
 	}
 
 	var observacoes = document.getElementById("observacoes");
@@ -4837,7 +4852,8 @@ function operacional_agendamento_function(workId){
 	dia = new Date();
 	adress_aux = adress_aux + "&DATAAGEND=" + data_agendamento;
 	adress_aux = adress_aux + "&HORAAGEND=" + hora_agendamento;
-	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + "&CODPEDIDO=" + cod_pedido + "&WORK_ID=" + workId + '&DATA_INGRESSO=' + dia.yyyymmdd();;
+	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + '&CODPEDIDO=' + cod_pedido 
+							+ '&WORK_ID=' + workId + '&DATA_INGRESSO=' + dia.yyyymmdd() + '&REAGENDAR=' + reagendar;
     adress = adress + adress_aux;
 	document.location.href = adress;
 }

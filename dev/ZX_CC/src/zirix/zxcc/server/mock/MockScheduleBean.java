@@ -27,11 +27,11 @@ public class MockScheduleBean {
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "SCHED_PROCESS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "WORK_USER "
-					+ 														   "    , " + ZXMain.DB_NAME_ + "RESTRICTION_WORK "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "RESTRICTION_WORK "
 					+ 														   " WHERE " + ZXMain.DB_NAME_ + "WORK_USER.WORK_GROUP_ID = " + ZXMain.DB_NAME_ + "SCHED_WORK.WORK_GROUP_ID "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.PROCESS_ID = " + ZXMain.DB_NAME_ + "SCHED_PROCESS.PROCESS_ID "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.END_TIMESTAMP IS NULL "
-					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.SCHED_TIMESTAMP < CAST(NOW() - CAST('16:00:00' AS TIME) AS DATETIME) "
+					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.SCHED_TIMESTAMP < NOW() + CAST('24:00:00' AS TIME) "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "SCHED_WORK.RESTRICTION_ID = " + ZXMain.DB_NAME_ + "RESTRICTION_WORK.RESTRICTION_ID "
 					+ 														   "   AND " + ZXMain.DB_NAME_ + "WORK_USER.COD_USUARIO = " + COD_USUARIO_
 					+ 														   " ORDER BY (TIMEDIFF(NOW(),SCHED_WORK.SCHED_TIMESTAMP)/TIMEDIFF((SCHED_WORK.SCHED_TIMESTAMP + INTERVAL CAST(RESTRICTION_WORK.RESTRICTION_VALUE AS TIME) HOUR_SECOND),SCHED_WORK.SCHED_TIMESTAMP)*100) DESC ");

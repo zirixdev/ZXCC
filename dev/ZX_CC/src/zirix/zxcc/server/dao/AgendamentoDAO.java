@@ -31,8 +31,6 @@ public class AgendamentoDAO extends GenericDAO<AnexoPedidoDAO> {
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	setAttValueFor("COD_PEDIDO",res.getInt("COD_PEDIDO"));
-    	setAttValueFor("DATA_AGENDAMENTO",res.getDate("DATA_AGENDAMENTO"));
-    	setAttValueFor("HORA_AGENDAMENTO",res.getTime("HORA_AGENDAMENTO"));
     	setAttValueFor("ESTADO",res.getInt("ESTADO"));
     	setAttValueFor("COD_DADOS_INSTALACAO",res.getInt("COD_DADOS_INSTALACAO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));

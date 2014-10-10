@@ -33,16 +33,13 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		String WORK_ID = request.getParameter("WORK_ID");
 		String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 		int PK_COLUMN = 0;
+		MockEvaluator eval = new MockEvaluator(Integer.parseInt(WORK_ID));
 		try {
 			AgendamentoDAO daoAgendamento = new AgendamentoDAO();
 			PkList pkList;
 			if ((OP_CODE.compareTo("UPDATE") == 0) || (OP_CODE.compareTo("CREATE") == 0)) {
 			   String COD_PEDIDO = request.getParameter("CODPEDIDO").trim();
 			   daoAgendamento.setAttValueFor("COD_PEDIDO", COD_PEDIDO);
-			   String DATA_AGENDAMENTO = request.getParameter("DATAAGEND").trim();
-			   daoAgendamento.setAttValueFor("DATA_AGENDAMENTO", DATA_AGENDAMENTO);
-			   String HORA_AGENDAMENTO = request.getParameter("HORAAGEND").trim();
-			   daoAgendamento.setAttValueFor("HORA_AGENDAMENTO", HORA_AGENDAMENTO);
 			   daoAgendamento.setAttValueFor("ESTADO", 0);
 			   daoAgendamento.setAttValueFor("DELETED", 0);
 			   String END_AGEND = request.getParameter("END_AGEND").trim();
@@ -91,56 +88,56 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   UnidadesAgendadasDAO daoUnidadesAgendadas = new UnidadesAgendadasDAO();
 						   daoUnidadesAgendadas.setAttValueFor("COD_AGENDAMENTO",pkListValue);
 						   String COD_UNIDADE = request.getParameter("CODVEIC_"+d);
+						   String DATA_AGENDAMENTO = request.getParameter("DATA_AGENDAMENTO_"+d);
+						   String HORA_AGENDAMENTO = request.getParameter("HORA_AGENDAMENTO_"+d);
+						   daoUnidadesAgendadas.setAttValueFor("DATA_AGENDAMENTO",DATA_AGENDAMENTO);
+						   daoUnidadesAgendadas.setAttValueFor("HORA_AGENDAMENTO",HORA_AGENDAMENTO);
 						   daoUnidadesAgendadas.setAttValueFor("COD_UNIDADE",COD_UNIDADE);
 						   daoUnidadesAgendadas.setAttValueFor("TIPO_UNIDADE",2);
 						   daoUnidadesAgendadas.setAttValueFor("ESTADO",0);
 						   daoUnidadesAgendadas.setAttValueFor("DELETED",0);
+
 						   NumeroOsDAO daoNumeroOs = new NumeroOsDAO();
 						   daoNumeroOs.setAttValueFor("COD_USUARIO", COD_USUARIO);
 						   daoNumeroOs.setAttValueFor("DATA_GERACAO", DATA_INGRESSO);
 						   daoNumeroOs.setAttValueFor("DELETED", 0);
 						   int count = 0;
+						   int num_os = 0;
 						   Vector<String[]> NumOS_ = new Vector<String[]>();
 						   try{
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(*) "		//00
-									   + 														  "     , ANO_OS "			//01
-									   + 														  "     , MES_OS "			//02
-									   + 														  "     , NUM_OS "			//03
+									   + 														  "     , NUM_OS "			//01
 									   + 														  "  FROM " + ZXMain.DB_NAME_ + "NUMERO_OS "
 									   + 														  " WHERE ANO_OS = YEAR(NOW()) "
 									   +														  "   AND MES_OS = MONTH(NOW()) "
-									   + 														  "   AND ORDER BY COD_NUM_OS DESC "
+									   + 														  " ORDER BY COD_NUM_OS DESC "
 									   +														  " LIMIT 1 ");
 							   for (int i=0;i < values.size();i++) {
-								   String[] attList = new String[4];
+								   String[] attList = new String[2];
 								   attList[0] = values.get(i)[0].toString();
-								   attList[1] = values.get(i)[1].toString();
-								   attList[2] = values.get(i)[2].toString();
-								   attList[3] = values.get(i)[3].toString();
+								   count = Integer.parseInt(attList[0].trim());
+								   if(count > 0){
+									   attList[1] = values.get(i)[1].toString();
+									   num_os = Integer.parseInt(attList[1]);
+								   }
 								   NumOS_.add(attList);
 							   }
 						   }catch(SQLException ex){
 							   ex.printStackTrace();
-						   }finally{
-							   count = Integer.parseInt(NumOS_.elementAt(0)[0].trim());
-						   }
-						   if(count == 0){
-							   daoNumeroOs.setAttValueFor("ANO_OS", DATA_INGRESSO.substring(0, 3));
-							   System.err.println("\n DATA_INGRESSO.substring(0, 3) = " + DATA_INGRESSO.substring(0, 3));
-							   daoNumeroOs.setAttValueFor("MES_OS", DATA_INGRESSO.substring(5, 6));
-							   System.err.println("\n DATA_INGRESSO.substring(5, 6) = " + DATA_INGRESSO.substring(5, 6));
-							   daoNumeroOs.setAttValueFor("NUM_OS", 1);
-						   }
-						   
-						   
+						   }finally{}
+						   num_os++;
+						   daoNumeroOs.setAttValueFor("ANO_OS", DATA_INGRESSO.substring(0, 4));
+						   daoNumeroOs.setAttValueFor("MES_OS", DATA_INGRESSO.substring(5, 7));
+						   daoNumeroOs.setAttValueFor("NUM_OS", num_os);
 						   daoNumeroOs.Create();
 						   int pkNumOS = 0;
 						   Vector<String[]> NumeroOS_ = new Vector<String[]>();
 						   try{
-							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(COD_NUM_OS) "
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_NUM_OS "
 									   + 														   "  FROM " + ZXMain.DB_NAME_ + "NUMERO_OS "
-									   + 														   " WHERE ANO_OS = YEAR(NOW()) "
-									   + 														   "   AND MES_OS = MONTH(NOW()) "
+									   + 														   " WHERE ANO_OS = " + DATA_INGRESSO.substring(0, 4)
+									   + 														   "   AND MES_OS = " + DATA_INGRESSO.substring(5, 7)
+									   + 														   "   AND NUM_OS = " + num_os
 									   + 														   "   AND COD_USUARIO = " + COD_USUARIO);
 							   for (int i=0;i < values.size();i++) {
 								   String[] attList = new String[1];
@@ -164,7 +161,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   try{
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_OS "
 									   + 														   "  FROM " + ZXMain.DB_NAME_ + "OS "
-									   + 														   " WHERE NUM_OS = " + pkNumOS);
+									   + 														   " WHERE COD_NUM_OS = " + pkNumOS);
 							   for (int i=0;i < values.size();i++) {
 								   String[] attList = new String[1];
 								   attList[0] = values.get(i)[0].toString();
@@ -177,6 +174,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   }
 						   daoUnidadesAgendadas.setAttValueFor("COD_OS",pkCodOS);
 						   daoUnidadesAgendadas.Create();
+						   eval.startDepedencyWorkAgendamento(PK_COLUMN, DATA_AGENDAMENTO, HORA_AGENDAMENTO);
 					   }
 					   if(END_AGEND.compareTo("nao") == 0){
 						   DadosAgendamentoDAO daoDadosAgendamento = new DadosAgendamentoDAO();
@@ -211,15 +209,10 @@ public class AgendamentoServiceServlet extends HttpServlet {
 				   }
 			   }
 			   if(WORK_ID.compareTo("0") != 0){
-				   MockEvaluator eval = new MockEvaluator(Integer.parseInt(WORK_ID));
-				   if(eval.endWork()){
-					   int TOTALUNID = Integer.parseInt(request.getParameter("TOTALUNID"));
-					   int TOTALUNIDAGEND = Integer.parseInt(request.getParameter("TOTALUNIDAGEND"));
-					   if(TOTALUNID > TOTALUNIDAGEND){
+				   if(eval.endWorkAgendamento()){
+					   String REAGENDAR = request.getParameter("REAGENDAR").toString().trim();
+					   if(Boolean.getBoolean(REAGENDAR)){
 						   MockSchedule.createSameWork(Integer.parseInt(WORK_ID));
-					   }else{
-						   MockSchedule sched = new MockSchedule(Integer.parseInt(WORK_ID));
-						   sched.changeState(PK_COLUMN);
 					   }
 				   }
 			   }
