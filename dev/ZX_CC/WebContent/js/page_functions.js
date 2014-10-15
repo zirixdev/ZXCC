@@ -4809,15 +4809,19 @@ function operacional_agendamento_function(workId){
     			}
     		}
     	}else{
-    		vector_unidades_agendamento[total_unidades_agendadas] = document.getElementById("reagendar_"+i).value;
-    		vector_data_agendamento[total_unidades_agendadas] = data_agendamento;
-    		vector_hora_agendamento[total_unidades_agendadas] = hora_agendamento;
-    		total_unidades_agendadas++;
+    		if(document.getElementById("reagendar_"+i).checked){
+    			reagendar = "true";
+    		}else{
+	    		vector_unidades_agendamento[total_unidades_agendadas] = document.getElementById("reagendar_"+i).value;
+	    		vector_data_agendamento[total_unidades_agendadas] = data_agendamento;
+	    		vector_hora_agendamento[total_unidades_agendadas] = hora_agendamento;
+	    		total_unidades_agendadas++;
+    		}
     	}
     }
 
     total_unidades_agendadas = vector_unidades_agendamento.length;
-    if(total_unidades_agendadas == 0){
+    if(total_unidades_agendadas == 0 && reagendar == "false"){
     	alert("Favor selecionar ao menos uma UNIDADE.");
 		return 0;
     }
@@ -4850,15 +4854,13 @@ function operacional_agendamento_function(workId){
 		adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
 	}
 	dia = new Date();
-	adress_aux = adress_aux + "&DATAAGEND=" + data_agendamento;
-	adress_aux = adress_aux + "&HORAAGEND=" + hora_agendamento;
 	var adress = url_adress + 'services/agendamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario + '&CODPEDIDO=' + cod_pedido 
 							+ '&WORK_ID=' + workId + '&DATA_INGRESSO=' + dia.yyyymmdd() + '&REAGENDAR=' + reagendar;
     adress = adress + adress_aux;
 	document.location.href = adress;
 }
 
-var obs_frustrada = '<textarea placeholder="Observações" cols="30" rows="1" id="obs_frustrada" maxlength="796"></textarea>';
+var obs_frustrada = '<textarea placeholder="Observações" cols="70" rows="4" id="obs_frustrada" maxlength="796"></textarea>';
 
 function desbloqueia_unidades_function(){
     var frustrada = $('#frustrada').val();
@@ -4873,35 +4875,133 @@ function desbloqueia_unidades_function(){
     }	
 }
 
-function operacional_processar_agendamento_function(workId,pkObj){
-	var frustrada = $('#frustrada').val();
-	var adress_aux = "&FRUSTRADA=" + frustrada;
-	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
-	if(frustrada == "sim"){
-		var observacoes = document.getElementById("observacoes");
-		var obsLength = observacoes.textLength;
-		if(Number(obsLength) == 0){
-			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=Não há observações!';
-		}else if(Number(obsLength)< 200){
-			adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
-		}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
-			adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
-			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
-		}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
-			adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
-			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
-			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
-		}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
-			adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
-			adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
-			adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
-			adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
-		}
-	}else{
-		
-	}
+function operacional_processar_agendamento_function(workId,pkObj,codUnidadeAgendada,codOS){
 	if (confirm("Confirma a instalação?")){
-		var adress = url_adress + "services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=" + cod_usuario + "&WORK_ID=" + workId + "&PK_COLUMN=" + pkObj;
+		var frustrada = $('#frustrada').val();
+		var adress_aux = "&FRUSTRADA=" + frustrada;
+		var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
+		var val_datalist_nome = $('#item_nome_tecnico').val();
+		if(val_datalist_nome == ""){
+	    	alert("Favor informar o Técnico.");
+	    	document.getElementById("item_nome_tecnico").focus();
+			return 0;
+		}
+		var cod_tecnico = $('#nome_list option').filter(function() {
+	        return this.value == val_datalist_nome;
+	    }).data('label');
+		var horaChegadaTecnico = document.getElementById("chegada_tecnico").value.trim();
+		var horaSaidaTecnico = document.getElementById("saida_tecnico").value.trim();
+		if(horaChegadaTecnico == ""){
+	    	alert("Favor informar o horário de chegada do Técnico.");
+	    	document.getElementById("chegada_tecnico").focus();
+			return 0;
+		}
+		if(horaSaidaTecnico == ""){
+	    	alert("Favor informar o horário de saída do Técnico.");
+	    	document.getElementById("saida_tecnico").focus();
+			return 0;
+		}
+		adress_aux = adress_aux + "&COD_OS=" + codOS;
+		adress_aux = adress_aux + "&COD_TECNICO=" + cod_tecnico;
+		adress_aux = adress_aux + "&CHEGADA_TECNICO=" + horaChegadaTecnico;
+		adress_aux = adress_aux + "&SAIDA_TECNICO=" + horaChegadaTecnico;
+		if(frustrada == "sim"){
+			var observacoes = document.getElementById("obs_frustrada");
+			var obsLength = observacoes.textLength;
+			if(Number(obsLength) == 0){
+		    	alert("Favor informar o motivo da visita ter sido Frustrada.");
+		    	document.getElementById("obs_frustrada").focus();
+				return 0;
+			}else if(Number(obsLength)< 200){
+				adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
+			}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
+				adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
+				adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+				adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+			}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
+				adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+				adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+				adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
+			}
+		}else{
+			var observacoes = document.getElementById("observacoes");
+			var obsLength = observacoes.textLength;
+			if(Number(obsLength) == 0){
+		    	alert("Favor informar local de instalação do módulo.");
+		    	document.getElementById("observacoes").focus();
+				return 0;
+			}else if(Number(obsLength)< 200){
+				adress_aux = adress_aux + '&QOBS=1&OBSERVACAO_0=' + observacoes.value.trim();
+			}else if(Number(obsLength) >= 200 && Number(obsLength) <= 398){
+				adress_aux = adress_aux + '&QOBS=2&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+			}else if(Number(obsLength) >= 399 && Number(obsLength) <= 597){
+				adress_aux = adress_aux + '&QOBS=3&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+				adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+			}else if(Number(obsLength) >= 598 && Number(obsLength) <= 796){
+				adress_aux = adress_aux + '&QOBS=4&OBSERVACAO_0=' + observacoes.value.trim().slice(Number(0),Number(199));
+				adress_aux = adress_aux + '&OBSERVACAO_1=' + observacoes.value.trim().slice(Number(199),Number(398));
+				adress_aux = adress_aux + '&OBSERVACAO_2=' + observacoes.value.trim().slice(Number(398),Number(597));
+				adress_aux = adress_aux + '&OBSERVACAO_3=' + observacoes.value.trim().slice(Number(597),Number(796));
+			}
+			var val_id_equipamento = $('#item_id_modulo').val();
+			if(val_id_equipamento == ""){
+		    	alert("Favor informar o ID do Módulo a ser inserido.");
+		    	document.getElementById("item_id_modulo").focus();
+				return 0;
+			}
+			var idModulo = $('#id_list option').filter(function() {
+		        return this.value == val_datalist_nome;
+		    }).data('label');
+			adress_aux = adress_aux + '&ID_MODULO=' + idModulo;
+		    var resposta_unidade = $('#resposta_unidade_').val();
+			adress_aux = adress_aux + '&RESPOSTA_UNIDADE=' + resposta_unidade;
+			if(resposta_unidade == "instalado"){
+				if(document.getElementById("ignicao_").checked){
+					adress_aux = adress_aux + '&IGNICAO=1';
+	    		}else{
+					adress_aux = adress_aux + '&IGNICAO=0';
+	    		}
+				if(document.getElementById("bloqueio_").checked){
+					adress_aux = adress_aux + '&BLOQUEIO=1';
+	    		}else{
+					adress_aux = adress_aux + '&BLOQUEIO=0';
+	    		}
+				if(document.getElementById("gps_").checked){
+					adress_aux = adress_aux + '&GPS=1';
+	    		}else{
+					adress_aux = adress_aux + '&GPS=0';
+	    		}
+				if(document.getElementById("gprs_").checked){
+					adress_aux = adress_aux + '&GPRS=1';
+	    		}else{
+					adress_aux = adress_aux + '&GPRS=0';
+	    		}
+				if(document.getElementById("sirene_").checked){
+					adress_aux = adress_aux + '&SIRENE=1';
+	    		}else{
+					adress_aux = adress_aux + '&SIRENE=0';
+	    		}
+				if(document.getElementById("panico_").checked){
+					adress_aux = adress_aux + '&PANICO=1';
+	    		}else{
+					adress_aux = adress_aux + '&PANICO=0';
+	    		}
+				if(document.getElementById("rpm_").checked){
+					adress_aux = adress_aux + '&RPM=1';
+	    		}else{
+					adress_aux = adress_aux + '&RPM=0';
+	    		}
+			}
+			adress_aux = adress_aux + '&COD_UNIDADES_AGENDADAS=' + codUnidadeAgendada;
+		}
+		var adress = url_adress + "services/processaragendamento?OP_CODE=UPDATE&COD_USUARIO=" + cod_usuario + "&WORK_ID=" + workId + "&PK_COLUMN=" + pkObj;
+		adress = adress + adress_aux;
 		document.location.href = adress;
 	}
 }

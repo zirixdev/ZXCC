@@ -16,7 +16,7 @@ public class TecnicoDAOService {
 
 	public static Vector<TecnicoDAO> loadAll() throws SQLException {
 
-		String query = "SELECT * FROM " + ClienteDAO.TABLENAME;
+		String query = "SELECT * FROM " + TecnicoDAO.TABLENAME + " WHERE DELETED = 0 ORDER BY NOME_FANTASIA";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
@@ -25,47 +25,45 @@ public class TecnicoDAOService {
 		try {
 			con = DAOManager.getInstance().getConnection();
 			stmt = con.prepareStatement(query);
-			res = stmt.executeQuery();		
+			res = stmt.executeQuery();
 
 			while (res.next()) {
 
-				int COD_TECNICO = res.getInt("COD_TECNICO");							
+				int COD_TECNICO = res.getInt("COD_TECNICO");
 
-				PkList pkList = new PkList();				
+				PkList pkList = new PkList();
 				pkList.put("COD_TECNICO",COD_TECNICO);
 				TecnicoDAO dao = new TecnicoDAO(pkList);
 
 				dao.read();
 				dao.loadAttsFromResultSet(res);
 				daoList.add(dao);
-			}	
+			}
 			return daoList;
-		}catch(SQLException e){ 
+		}catch(SQLException e){
 			throw e;
 		}finally{
         	if (res != null) res.close();
         	if (stmt != null) stmt.close();
         	DAOManager.getInstance().closeConnection(con);
-        }		
+        }
 	}
-	
-	public static int count() throws SQLException {
 
+	public static int count() throws SQLException {
         String query = "SELECT COUNT(*) AS count FROM "+ TecnicoDAO.TABLENAME;
         PreparedStatement counter = null;
         ResultSet res = null;
-        Connection con = DAOManager.getInstance().getConnection(); 
+        Connection con = DAOManager.getInstance().getConnection();
 
-        try{            	
+        try{
 	        counter = con.prepareStatement(query);
 	        res = counter.executeQuery();
 	        res.next();
 	        return res.getInt("count");
         }
 
-        catch(SQLException e){
-        	throw e;
-        }finally{
+        catch(SQLException e){ throw e; }
+        finally {
         	if (res != null) res.close();
         	if (counter != null) counter.close();
         	DAOManager.getInstance().closeConnection(con);

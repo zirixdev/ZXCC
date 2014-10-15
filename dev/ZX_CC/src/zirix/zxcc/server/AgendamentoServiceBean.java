@@ -1,7 +1,7 @@
-/*ZIRIX CONTROL CENTER - CHIP SERVICE BEAN
-DESENVOLVIDO POR ZIRIX SOLU��ES EM RASTREAMENTO LTDA.
+/*ZIRIX CONTROL CENTER - AGENDAMENTO SERVICE BEAN
+DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-DESENVOLVEDOR: RAPHAEL B. MARQUES
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 
 package zirix.zxcc.server;
@@ -15,7 +15,9 @@ import zirix.zxcc.server.dao.*;
 public class AgendamentoServiceBean {
 
 	private AgendamentoDAO daoAgendamento_ = null;
+	private UnidadesAgendadasDAO daoUnidadesAgendadas_ = null;
 	private Integer COD_AGENDAMENTO_ = null;
+	private Integer COD_UNIDADES_AGENDADAS_ = null;
 
 	public AgendamentoServiceBean(String[] pkVal) {
 		setPk(pkVal);
@@ -23,9 +25,21 @@ public class AgendamentoServiceBean {
 
 	public void setPk(Object[] pkVal) {
 
-		COD_AGENDAMENTO_ = new Integer((String)pkVal[0]);
+		COD_UNIDADES_AGENDADAS_ = new Integer((String)pkVal[0]);
 
 		PkList pkList = new PkList();
+	    pkList.put("COD_UNIDADES_AGENDADAS",COD_UNIDADES_AGENDADAS_);
+	    daoUnidadesAgendadas_ = new UnidadesAgendadasDAO(pkList);
+
+	    try {
+	    	daoUnidadesAgendadas_.read();
+	    } catch (SQLException ex) {
+	    	ex.printStackTrace();
+	    } finally {}
+
+		COD_AGENDAMENTO_ = Integer.parseInt(daoUnidadesAgendadas_.getAttValueFor("COD_AGENDAMENTO").toString());
+
+		pkList = new PkList();
 	    pkList.put("COD_AGENDAMENTO",COD_AGENDAMENTO_);
 	    daoAgendamento_ = new AgendamentoDAO(pkList);
 
@@ -36,14 +50,15 @@ public class AgendamentoServiceBean {
 	    } finally {}
 	}
 
-	public String getDataAgendamento() {
-    	String dataAgendamento = daoAgendamento_.getAttValueFor("DATA_AGENDAMENTO").toString();
-    	return dataAgendamento;
+	public String getDataAgendamento(){
+		String dataAgendamento = daoUnidadesAgendadas_.getAttValueFor("DATA_AGENDAMENTO").toString();
+		String dataFinal = dataAgendamento.substring(8, 10) + "/" + dataAgendamento.substring(5, 7) + "/" + dataAgendamento.substring(0, 4);
+		return dataFinal;
 	}
 
-	public String getHoraAgendamento() {
-		String horaAgendamento = daoAgendamento_.getAttValueFor("HORA_AGENDAMENTO").toString();
-    	return horaAgendamento;
+	public String getHoraAgendamento(){
+		String horaAgendamento = daoUnidadesAgendadas_.getAttValueFor("HORA_AGENDAMENTO").toString();
+		return horaAgendamento;
 	}
 
 	@SuppressWarnings("finally")
@@ -198,6 +213,7 @@ public class AgendamentoServiceBean {
 					+ 														   "     , VEICULO.MODELO "																//03
 					+ 														   "     , TIPO_UNIDADE.NOME "															//04
 					+ 														   "     , CONCAT(NUMERO_OS.ANO_OS,NUMERO_OS.MES_OS,'/',LPAD(NUMERO_OS.NUM_OS,6,0)) "	//05
+					+ 														   "     , OS.COD_OS "																	//06
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO_MARCA "
@@ -210,15 +226,16 @@ public class AgendamentoServiceBean {
 					+ 														   "   AND UNIDADES_AGENDADAS.ESTADO = 0 "
 					+ 														   "   AND UNIDADES_AGENDADAS.COD_OS = OS.COD_OS "
 					+ 														   "   AND OS.COD_NUM_OS = NUMERO_OS.COD_NUM_OS "
-					+ 														   "   AND COD_AGENDAMENTO = " + COD_AGENDAMENTO_);
+					+ 														   "   AND COD_UNIDADES_AGENDADAS = " + COD_UNIDADES_AGENDADAS_);
 			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[6];
+				String[] attList = new String[7];
 				attList[0] = values.get(i)[0].toString();
 				attList[1] = values.get(i)[1].toString();
 				attList[2] = values.get(i)[2].toString();
 				attList[3] = values.get(i)[3].toString();
 				attList[4] = values.get(i)[4].toString();
 				attList[5] = values.get(i)[5].toString();
+				attList[6] = values.get(i)[6].toString();
 				unidadesAgendadas.add(attList);;
 			}
 		}catch (SQLException ex) {

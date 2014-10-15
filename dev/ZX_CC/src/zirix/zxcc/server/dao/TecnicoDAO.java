@@ -12,7 +12,7 @@ import java.util.Set;
 
 import zirix.zxcc.server.*;
 
-public class TecnicoDAO extends GenericDAO<VendedorDAO> {
+public class TecnicoDAO extends GenericDAO<TecnicoDAO> {
 
     public TecnicoDAO(PkList pkList) {
         super(TABLENAME,pkList);
@@ -43,7 +43,7 @@ public class TecnicoDAO extends GenericDAO<VendedorDAO> {
     }
 
     public Set<String> getPkNamesSet() {
-    	return VendedorDAO.createKey("COD_TECNICO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
+    	return TecnicoDAO.createKey("COD_TECNICO", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
 	public final static String TABLENAME = ZXMain.DB_NAME_ + "TECNICO";   

@@ -62,7 +62,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								<%}catch (Exception e) {
 									out.println("Error... " + e.getMessage());
 								}%>
-							</select><input type="text" id="modelo_equip" class="size_1" disabled="disabled" style="visibility: hidden;">
+							</select>
 	                    </div>
 	                    <%try{
 							Vector<String[]> iccidList = bean.getIccID();

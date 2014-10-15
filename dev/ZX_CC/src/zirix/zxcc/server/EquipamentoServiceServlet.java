@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - EQUIPAMENTO SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -52,7 +52,6 @@ public class EquipamentoServiceServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		// Set response content type
 		   response.setContentType("text/html");
 
 		   PrintWriter out = response.getWriter();
@@ -74,13 +73,12 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   if(INSTALADO != 1){
 					   String COD_CLIENTE = request.getParameter("COD_CLIENTE").trim();
 					   daoModulo.setAttValueFor("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-					   //TODO switch de acordo com a unidade. Hoje somente veículo
+					   //TODO switch de acordo com a unidade. Hoje somente veÃ­culo
 					   /*Aux = request.getParameter("COD_VEICULO").trim();
 					   int COD_VEICULO = Integer.parseInt(Aux);*/
 				   }else{
-					   daoModulo.setAttValueFor("COD_CLIENTE", 290); //Atualmente, o cod_cliente da ZIRIX é 290, futuramente será 1.
-					   												 //Deve acontecer para caso o modulo esteja em estoque.
-					   												 //Futuramente pode-se controlar mais de um estoque, como por exemplo WGP (Canela)!
+					   daoModulo.setAttValueFor("COD_CLIENTE", 1); //Deve acontecer para caso o modulo esteja em estoque.
+					   											   //Futuramente pode-se controlar mais de um estoque, como por exemplo WGP!
 				   }
 
 				   String COD_MODELO = request.getParameter("COD_MODELO").trim();
@@ -100,36 +98,37 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   int pkInstalacao = 0;
 				   int count = 0;
 
-				   Vector<String[]> CodInstalacao_ = new Vector<String[]>();
+				   Vector<String[]> CountInstalacao_ = new Vector<String[]>();
 				   try {
 					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(*) "
 							   + " 											                 FROM " + ZXMain.DB_NAME_ + "INSTALACAO "
-							   + "                                                          WHERE COD_MODULO = 0 "
+							   + "                                                          WHERE COD_MODULO = 1 "
 							   + "                                                            AND COD_UNIDADE = " + INSTALADO
 							   + "                                                            AND DELETED = 0 ");
 					   for (int i=0;i < values.size();i++) {
 						   String[] attList = new String[1];
 						   attList[0] = values.get(i)[0].toString();
-						   CodInstalacao_.add(attList);
+						   CountInstalacao_.add(attList);
 					   }
 				   }catch (SQLException ex) {
 					   ex.printStackTrace();
 				   }  finally {
-					   count = Integer.parseInt(CodInstalacao_.elementAt(0)[0].trim());
+					   count = Integer.parseInt(CountInstalacao_.elementAt(0)[0].trim());
 				   }
 
 				   if(count == 0){
 					   InstalacaoDAO daoInstalacao = new InstalacaoDAO();
-					   daoInstalacao.setAttValueFor("COD_MODULO", 0);
+					   daoInstalacao.setAttValueFor("COD_MODULO", 1);
 					   daoInstalacao.setAttValueFor("COD_UNIDADE", INSTALADO);
 					   daoInstalacao.setAttValueFor("DELETED", 0);
 					   daoInstalacao.Create();
 				   }
 
+				   Vector<String[]> CodInstalacao_ = new Vector<String[]>();
 				   try {
 					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_INSTALACAO "
 							   + " 											                 FROM " + ZXMain.DB_NAME_ + "INSTALACAO "
-							   + "                                                          WHERE COD_MODULO = 0 "
+							   + "                                                          WHERE COD_MODULO = 1 "
 							   + "                                                            AND COD_UNIDADE = " + INSTALADO
 							   + "                                                            AND DELETED = 0 ");
 					   for (int i=0;i < values.size();i++) {
@@ -143,7 +142,6 @@ public class EquipamentoServiceServlet extends HttpServlet {
 					   pkInstalacao = Integer.parseInt(CodInstalacao_.elementAt(0)[0].trim());
 				   }
 				   //FIM DA INSTALACAO TEMP
-
 				   daoModulo.setAttValueFor("COD_INSTALACAO", pkInstalacao);
 
 				   String SN = request.getParameter("SN").trim();
@@ -189,13 +187,14 @@ public class EquipamentoServiceServlet extends HttpServlet {
 						   switch(INSTALADO){
 						   case 1: //Estoque
 							   EstoqueDAO daoEstoque = new EstoqueDAO();
+							   System.err.println("\n pkInstalacao pro DAO ESTOQUE = " + pkInstalacao);
 							   daoEstoque.setAttValueFor("COD_INSTALACAO", pkInstalacao);
 							   daoEstoque.setAttValueFor("DELETED", 0);
 							   daoEstoque.Create();
 							   break;
-						   case 2: //Veículo
-							   //Cadastrar Módulo diretamente no cliente indica que deve ser feito o cadastro do mesmo no estoque
-							   //e aí sim realizar a alteração para o cliente
+						   case 2: //VeÃ­culo
+							   //Cadastrar MÃ³dulo diretamente no cliente indica que deve ser feito o cadastro do mesmo no estoque
+							   //e aÃ­ sim realizar a alteraÃ§Ã£o para o cliente
 							   //TODO 'UPDATE VEICULO SET COD_MODULO = ' + pkModulo + ' WHERE COD_VEICULO = ' + COD_VEICULO;
 							   break;
 						   }
@@ -207,7 +206,6 @@ public class EquipamentoServiceServlet extends HttpServlet {
 						   }finally{}
 					   }
 				   }
-				   // TODO CRIAR PÁGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 				   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }

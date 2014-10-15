@@ -17,7 +17,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <li><a href="#aba_unidade" data-toggle="tab">Unidades</a></li>
             <li><a href="#aba_servicos" data-toggle="tab">Serviços</a></li>
             <li><a href="#aba_observacoes" data-toggle="tab">Observações</a></li>
-            <li><a href="#aba_anexos" data-toggle="tab" hidden="hidden">Anexos</a></li>
+            <li><a href="#aba_anexos" data-toggle="tab">Anexos</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="aba_cliente">

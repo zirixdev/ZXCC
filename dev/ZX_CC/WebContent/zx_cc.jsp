@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
 ZIRIX CONTROL CENTER - MAIN PAGE
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-DESENVOLVEDOR: RAPHAEL B. MARQUES
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 
@@ -302,6 +302,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <section class="conteudo">
                 <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
                 <br>
+                <br>
+                <br>
                	<div class="checkboxConfirm1">
 			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">
 				  	<label for="checkboxConfirmInput"></label>
@@ -313,9 +315,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                 <br>
                 LOCAL = <%=ZXMain.getLocal()%>
                 <br>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('visualiza')">Pedido</button>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('agend')">Agendar</button>
-                <button type="button" id="TESTE_SCHED_WORK" onclick="SCHED_WORK_FUNCTION('scheded')">Agendado</button>
                 <%} %>
                 </section>
             </div>

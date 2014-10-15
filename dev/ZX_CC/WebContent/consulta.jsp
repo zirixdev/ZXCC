@@ -66,7 +66,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 			out.println("Error... " + e.getMessage());
 		  }%>
         </datalist>
-		</select>
     </fieldset>
 </div>
 

@@ -22,4 +22,4 @@ Modelo:<select id="modelo_equip" class="size_84">
 	<%}catch (Exception e) {
 		out.println("Error... " + e.getMessage());
 	}%>
-</select><input type="text" id="modelo_equip" class="size_1" disabled="disabled" style="visibility: hidden;">
+</select>

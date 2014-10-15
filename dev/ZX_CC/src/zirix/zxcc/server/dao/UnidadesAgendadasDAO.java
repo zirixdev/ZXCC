@@ -38,8 +38,8 @@ public class UnidadesAgendadasDAO extends GenericDAO<ObsPedidoDAO> {
     	setAttValueFor("ESTADO",res.getInt("ESTADO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
     	setAttValueFor("COD_OS",res.getInt("COD_OS"));
-    	setAttValueFor("DATA_AGENDAMENTO",res.getInt("DATA_AGENDAMENTO"));
-    	setAttValueFor("HORA_AGENDAMENTO",res.getInt("HORA_AGENDAMENTO"));
+    	setAttValueFor("DATA_AGENDAMENTO",res.getDate("DATA_AGENDAMENTO"));
+    	setAttValueFor("HORA_AGENDAMENTO",res.getTime("HORA_AGENDAMENTO"));
     }
     
     public Set<String> getPkNamesSet() {    	

@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - AGENDAMENTO SERVICE SERVLET
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLU��ES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server;
 import java.io.IOException;
@@ -69,7 +69,6 @@ public class AgendamentoServiceServlet extends HttpServlet {
 					   ex.printStackTrace();
 				   }  finally {
 					   pkListValue = Integer.parseInt(CodAgendamento_.elementAt(0)[0].trim());
-					   PK_COLUMN = pkListValue;
 				   }
 				   if(pkListValue != 0){
 					   int arraysize = Integer.parseInt(request.getParameter("QOBS").trim());
@@ -174,6 +173,22 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   }
 						   daoUnidadesAgendadas.setAttValueFor("COD_OS",pkCodOS);
 						   daoUnidadesAgendadas.Create();
+						   Vector<String[]> CodUnidadeAgendada_ = new Vector<String[]>();
+						   try {
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_UNIDADES_AGENDADAS "
+									   + " 											                 FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
+									   + "                                                          WHERE COD_OS = " + pkCodOS);
+							   for (int i=0;i < values.size();i++) {
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();;
+								   CodUnidadeAgendada_.add(attList);
+							   }
+						   }catch (SQLException ex) {
+							   ex.printStackTrace();
+						   }  finally {
+							   pkListValue = Integer.parseInt(CodUnidadeAgendada_.elementAt(0)[0].trim());
+						   }
+						   PK_COLUMN = pkListValue;
 						   eval.startDepedencyWorkAgendamento(PK_COLUMN, DATA_AGENDAMENTO, HORA_AGENDAMENTO);
 					   }
 					   if(END_AGEND.compareTo("nao") == 0){
@@ -211,7 +226,8 @@ public class AgendamentoServiceServlet extends HttpServlet {
 			   if(WORK_ID.compareTo("0") != 0){
 				   if(eval.endWorkAgendamento()){
 					   String REAGENDAR = request.getParameter("REAGENDAR").toString().trim();
-					   if(Boolean.getBoolean(REAGENDAR)){
+					   if(REAGENDAR.compareTo("true") == 0){
+						   System.err.println("\n Dentro do IF");
 						   MockSchedule.createSameWork(Integer.parseInt(WORK_ID));
 					   }
 				   }
