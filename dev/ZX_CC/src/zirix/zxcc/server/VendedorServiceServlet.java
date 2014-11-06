@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - VENDEDOR SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLU«’ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLU√á√ïES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -217,10 +217,10 @@ import zirix.zxcc.server.dao.PkList;
 							   daoEmailCliVen.Create();
 						   }
 					   }else{
-						   out.println("Error on VendedorServiceServlet... " + "\nCOD_VENDEDOR n„o encontrado! ");
+						   out.println("Error on VendedorServiceServlet... " + "\nCOD_VENDEDOR n√£o encontrado! ");
 					   }
 				   }
-				   // TODO CRIAR P¡GINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
+				   // TODO CRIAR P√ÅGINA DE REDIRECIONAMENTO OU ALERT DE INGRESSO REALIZADO
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 				   response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
 			   }

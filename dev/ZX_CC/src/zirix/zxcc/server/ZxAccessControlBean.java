@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - ZX ACCESS CONTROL BEAN
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -75,7 +75,7 @@ public class ZxAccessControlBean {
 					+ "                                                           FROM " + ZXMain.DB_NAME_ + "TELA ");
 
 		    for (int i=0;i < values.size();i++) {
-			    String[] attList = new String[1]; // pois eu sei que é 1 atributo de fato !
+			    String[] attList = new String[1]; // pois eu sei que Ã© 1 atributo de fato !
 			    attList[0] = values.get(i)[0].toString();
 			    CodTela.add(attList);
 		    }

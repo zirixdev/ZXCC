@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - CLIENTE PROSPECT SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -105,7 +105,7 @@ public class ClienteProspectServiceServlet extends HttpServlet{
 							   daoEmailProspeccao.Create();
 						   }
 					   }else{
-						   out.println("Error on ClienteProspectServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
+						   out.println("Error on ClienteProspectServiceServlet... " + "\nCOD_CLIENTE nÃ£o encontrado! ");
 					   }
 				   }
 			   }else if(OP_CODE.compareTo("DELETE") == 0){

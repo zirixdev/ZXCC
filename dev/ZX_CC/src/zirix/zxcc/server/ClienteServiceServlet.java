@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - CLIENTE SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLUÇÕES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUÃ‡Ã•ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -200,7 +200,7 @@ public class ClienteServiceServlet extends HttpServlet {
 							   daoEmailCliVen.Create();
 						   }
 					   }else{
-						   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE não encontrado! ");
+						   out.println("Error on ClienteServiceServlet... " + "\nCOD_CLIENTE nÃ£o encontrado! ");
 					   }
 				   }
 				   String COD_USUARIO = request.getParameter("COD_USUARIO").trim();

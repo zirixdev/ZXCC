@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - GENERIC DAO
-DESENVOLVIDO POR ZIRIX SOLU��ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
-DESENVOLVEDOR: M�RIO DE S� VERA
+DESENVOLVEDOR: Mï¿½RIO DE Sï¿½ VERA
 TECNOLOGIAS UTILIZADAS: JAVA*/
 
 package zirix.zxcc.server.dao;
@@ -567,7 +567,7 @@ public abstract class GenericDAO<T> {
     private AttList attList_;
     private PkList pkList_;
     private boolean autoIncrement_;
-	public boolean canDelete_ = false;
+    public boolean canDelete_ = false;
     
     // are you up to date with the database
     private boolean db_sync_ = false;

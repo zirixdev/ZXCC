@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - EQUIPAMENTO SERVICE SERVLET
-DESENVOLVIDO POR ZIRIX SOLU��ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -73,7 +73,7 @@ public class EquipamentoServiceServlet extends HttpServlet {
 				   if(INSTALADO != 1){
 					   String COD_CLIENTE = request.getParameter("COD_CLIENTE").trim();
 					   daoModulo.setAttValueFor("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-					   //TODO switch de acordo com a unidade. Hoje somente veículo
+					   //TODO switch de acordo com a unidade. Hoje somente veÃ­culo
 					   /*Aux = request.getParameter("COD_VEICULO").trim();
 					   int COD_VEICULO = Integer.parseInt(Aux);*/
 				   }else{
@@ -192,9 +192,9 @@ public class EquipamentoServiceServlet extends HttpServlet {
 							   daoEstoque.setAttValueFor("DELETED", 0);
 							   daoEstoque.Create();
 							   break;
-						   case 2: //Veículo
-							   //Cadastrar Módulo diretamente no cliente indica que deve ser feito o cadastro do mesmo no estoque
-							   //e aí sim realizar a alteração para o cliente
+						   case 2: //VeÃ­culo
+							   //Cadastrar MÃ³dulo diretamente no cliente indica que deve ser feito o cadastro do mesmo no estoque
+							   //e aÃ­ sim realizar a alteraÃ§Ã£o para o cliente
 							   //TODO 'UPDATE VEICULO SET COD_MODULO = ' + pkModulo + ' WHERE COD_VEICULO = ' + COD_VEICULO;
 							   break;
 						   }
