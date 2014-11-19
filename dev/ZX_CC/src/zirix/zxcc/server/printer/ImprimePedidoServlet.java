@@ -290,6 +290,14 @@ public class ImprimePedidoServlet extends HttpServlet {
 		}
 		
     		//ObservaÃ§Ã£o do pedido
+		Vector<ObsPedidoDAO> obsPedidoList = ObsPedidoDAOService.loadAllForPedido(COD_PEDIDO);
+		for (int i=0;i < obsPedidoList.size();i++) {
+		
+			ObsPedidoDAO obs = (ObsPedidoDAO)obsPedidoList.elementAt(i);
+			docData.add(obs.getAttValueFor("INDICE").toString());
+			docData.add(obs.getAttValueFor("OBSERVACAO").toString());
+		}
+		
 
 	} catch (SQLException sql) {
 
