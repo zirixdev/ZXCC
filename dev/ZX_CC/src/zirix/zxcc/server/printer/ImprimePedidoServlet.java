@@ -237,7 +237,9 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 		pedido.read();
 
-		pkList = NumeroPedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
+		String NUM_PEDIDO = pedido.getAttValueFor("NUM_PEDIDO").toString();
+
+		pkList = NumeroPedidoDAO.createKey("NUM_PEDIDO", Integer.parseInt(NUM_PEDIDO));
 		NumeroPedidoDAO numero = new NumeroPedidoDAO(pkList);
 
 		numero.read();
@@ -269,7 +271,10 @@ public class ImprimePedidoServlet extends HttpServlet {
 		for (int i=0;i < equipAcessorios.size();i++) {
 		
 			EquipAcessorioPedidoDAO equip = (EquipAcessorioPedidoDAO)equipAcessorios.elementAt(i);
-			docData.add(equip.getAttValueFor("COD_EQUIP_ACESSORIO_PEDIDO").toString());
+			
+			equip.read();
+
+			docData.add(equip.getAttValueFor("COD_EQUIP_ACESSORIO").toString());
 
 		}
 
@@ -278,15 +283,35 @@ public class ImprimePedidoServlet extends HttpServlet {
 		for (int i=0;i < dadosInstalacao.size();i++) {
 		
 			DadosInstalacaoDAO dados = (DadosInstalacaoDAO)dadosInstalacao.elementAt(i);
-			docData.add(dados.getAttValueFor("COD_EQUIP_ACESSORIO_PEDIDO").toString());
 
+			dados.read();
+
+			docData.add(dados.getAttValueFor("ENDERECO").toString());
+			docData.add(dados.getAttValueFor("BAIRRO").toString());
+			docData.add(dados.getAttValueFor("CIDADE").toString());
+			docData.add(dados.getAttValueFor("UF").toString());
+			docData.add(dados.getAttValueFor("COD_PAIS").toString());
+			docData.add(dados.getAttValueFor("COMPLEMENTO").toString());
+			docData.add(dados.getAttValueFor("CEP").toString());
+			docData.add(dados.getAttValueFor("REFERENCIA").toString());
+			docData.add(dados.getAttValueFor("DDD").toString());
+			docData.add(dados.getAttValueFor("NUMERO").toString());
+			docData.add(dados.getAttValueFor("NOME").toString());
 		}
 
-		Vector<TipoUnidadeDAO> unidadeList = TipoUnidadeDAOService.loadAllForPedido(COD_PEDIDO);
+		//Unidades 
+		Vector<UnidadesAgendadasDAO> unidadeList = UnidadesAgendadasDAOService.loadAllForPedido(COD_PEDIDO);
 		for (int i=0;i < unidadeList.size();i++) {
 		
-			TipoUnidadeDAO unidade = (TipoUnidadeDAO)unidadeList.elementAt(i);
-			docData.add(unidade.getAttValueFor("NOME").toString());
+			UnidadesAgendadasDAO unidade = (UnidadesAgendadasDAO)unidadeList.elementAt(i);
+
+			unidade.read();
+
+			docData.add(unidade.getAttValueFor("COD_AGENDAMENTO").toString());
+			docData.add(unidade.getAttValueFor("COD_UNIDADE").toString());
+			docData.add(unidade.getAttValueFor("DATA_AGENDAMENTO").toString());
+			docData.add(unidade.getAttValueFor("HORA_AGENDAMENTO").toString());
+
 		}
 		
     		//ObservaÃ§Ã£o do pedido
@@ -294,6 +319,9 @@ public class ImprimePedidoServlet extends HttpServlet {
 		for (int i=0;i < obsPedidoList.size();i++) {
 		
 			ObsPedidoDAO obs = (ObsPedidoDAO)obsPedidoList.elementAt(i);
+
+			obs.read();
+
 			docData.add(obs.getAttValueFor("INDICE").toString());
 			docData.add(obs.getAttValueFor("OBSERVACAO").toString());
 		}

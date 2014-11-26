@@ -31,9 +31,7 @@ public class DAOManager {
         try{
         	
         	Connection con = src.getConnection();
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") != 0){
-				con.setAutoCommit(true);
-			}
+		con.setAutoCommit(true);
 
         	return con;
         }

@@ -32,6 +32,7 @@ public class UnidadesAgendadasDAO extends GenericDAO<ObsPedidoDAO> {
 	} 
             
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
+
     	setAttValueFor("COD_AGENDAMENTO",res.getInt("COD_AGENDAMENTO"));
     	setAttValueFor("COD_UNIDADE",res.getInt("COD_UNIDADE"));
     	setAttValueFor("TIPO_UNIDADE",res.getInt("TIPO_UNIDADE"));

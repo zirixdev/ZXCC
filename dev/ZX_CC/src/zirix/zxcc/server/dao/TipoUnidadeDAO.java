@@ -41,5 +41,5 @@ public class TipoUnidadeDAO extends GenericDAO<TipoUnidadeDAO> {
     	return TipoUnidadeDAO.createKey("COD_UNIDADE", GenericDAO.AUTO_INCREMENT_PK_VALUE).keySet();
     }
 
-	public final static String TABLENAME = ZXMain.DB_NAME_ + "TIPO_UNIDADE";
+    public final static String TABLENAME = ZXMain.DB_NAME_ + "TIPO_UNIDADE";
 }

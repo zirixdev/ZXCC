@@ -28,7 +28,7 @@ public class EquipAcessorioPedidoDAO extends GenericDAO<EquipAcessorioPedidoDAO>
 		key.put(name, new Integer(value));
 
 		return key;				
-	}
+    }
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
 

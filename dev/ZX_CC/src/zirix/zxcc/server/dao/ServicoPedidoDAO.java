@@ -33,8 +33,8 @@ public class ServicoPedidoDAO extends GenericDAO<ServicoPedidoDAO> {
             
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
     	
-    	setAttValueFor("COD_SERVICO",res.getInt("COD_USUARIO"));
-    	setAttValueFor("COD_TELA",res.getInt("COD_TELA"));
+    	setAttValueFor("COD_SERVICO",res.getInt("COD_SERVICO"));
+    	setAttValueFor("COD_PEDIDO",res.getInt("COD_PEDIDO"));
     	setAttValueFor("QUANTIDADE",res.getInt("QUANTIDADE"));
     	setAttValueFor("VALOR_UNITARIO",res.getFloat("VALOR_UNITARIO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));

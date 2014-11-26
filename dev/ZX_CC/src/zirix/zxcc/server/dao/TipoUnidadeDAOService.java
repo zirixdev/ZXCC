@@ -51,7 +51,7 @@ public class TipoUnidadeDAOService {
 
 		String query = "SELECT * FROM " + TipoUnidadeDAO.TABLENAME + " WHERE COD_UNIDADE = (SELECT " +
 				"COD_UNIDADE FROM UNIDADES_AGENDADAS WHERE COD_AGENDAMENTO = (SELECT COD_AGENDAMENTO " +
-				"FROM AGENDAMENTOS WHERE COD_PEDIDO = " + COD_PEDIDO + "))";
+				"FROM AGENDAMENTO WHERE COD_PEDIDO = " + COD_PEDIDO + "))";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
