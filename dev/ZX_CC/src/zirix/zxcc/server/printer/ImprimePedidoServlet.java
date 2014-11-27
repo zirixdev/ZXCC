@@ -25,11 +25,26 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 		Vector<String> txtList = fetchDocumentData(COD_PEDIDO);
 
-        	output = ADPDFCreator.createPDF(null,null,ADFont.HELVETICA,txtList);
+ 		ServletContext cntx= getServletContext();
+      		// Get the absolute path of the image
+      		String filename = cntx.getRealPath("images/header_pdf.png");
+      		// retrieve mimeType dynamically
+      		String mime = cntx.getMimeType(filename);
+      		if (mime == null) {
+        		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        		return;
+      		}
+
+      		File fileFront = new File(filename);
+
+      		FileInputStream f = new FileInputStream(fileFront);
+
+        	output = ADPDFCreator.createPDF(f,ADFont.HELVETICA,txtList);
 
 		response.setContentType("application/pdf");
         	response.setHeader("Content-Disposition", "attachment; filename=yourFile.pdf");
         	response.getOutputStream().write(output.toByteArray());
+    		f.close();
 
     	} catch (Exception ex) {            
 		ex.printStackTrace();
@@ -37,7 +52,6 @@ public class ImprimePedidoServlet extends HttpServlet {
   }
 
   protected Vector<String> fetchDocumentData(String COD_PEDIDO) { 
-
 
 	Vector<String> clienteData = fetchClienteData(COD_PEDIDO);
 	Vector<String> documentoClienteData = fetchDocumentoClienteData(COD_PEDIDO);
