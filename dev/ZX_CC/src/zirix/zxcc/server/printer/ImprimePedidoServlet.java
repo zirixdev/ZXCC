@@ -56,6 +56,7 @@ public class ImprimePedidoServlet extends HttpServlet {
 	Vector<String> clienteData = fetchClienteData(COD_PEDIDO);
 	Vector<String> documentoClienteData = fetchDocumentoClienteData(COD_PEDIDO);
 	Vector<String> enderecoClienteData = fetchEnderecoClienteData(COD_PEDIDO);
+  	Vector<String> contatoClienteData = fetchContatoClienteData(COD_PEDIDO);
 	Vector<String> pedidoData = fetchPedidoData(COD_PEDIDO);
 
 
@@ -64,7 +65,8 @@ public class ImprimePedidoServlet extends HttpServlet {
 	docData.addAll(clienteData);
 	docData.addAll(documentoClienteData);
 	docData.addAll(enderecoClienteData);
-	docData.addAll(clienteData);
+	docData.addAll(contatoClienteData);
+	docData.addAll(pedidoData);
 
 	return docData;
   }
@@ -100,11 +102,11 @@ public class ImprimePedidoServlet extends HttpServlet {
 		String data_nascimento = cliente.getAttValueFor("DATA_NASCIMENTO").toString();
 		String site = cliente.getAttValueFor("SITE").toString();
 
-		docData.add(nome_vendedor);
-		docData.add(nome_cliente);	
-		docData.add(fantasia_cliente);
-		docData.add(data_nascimento);
-		docData.add(site);
+		docData.add("NOME CLIENTE : " + nome_cliente);	
+		docData.add("NOME FANTASIA CLIENTE : " + fantasia_cliente);
+		docData.add("DATA NASCIMENTO CLIENTE : " + data_nascimento);
+		docData.add("SITE DO CLIENTE : " + site);
+		docData.add("NOME DO VENDEDOR : " + nome_vendedor);
 
 	} catch (SQLException sql) {
 
@@ -137,9 +139,9 @@ public class ImprimePedidoServlet extends HttpServlet {
 		
 			DocumentoClienteDAO documento = (DocumentoClienteDAO)docClienteList.elementAt(i);
 
-			docData.add(documento.getAttValueFor("NUMERO").toString());
-			docData.add(documento.getAttValueFor("DATA_EMISSAO").toString());
-			docData.add(documento.getAttValueFor("ORGAO_EMISSOR").toString());
+			docData.add("NUMERO DO DOCUMENTO : " + documento.getAttValueFor("NUMERO").toString());
+			docData.add("DATA DE EMISSÃO DO DOCUMENTO : " + documento.getAttValueFor("DATA_EMISSAO").toString());
+			docData.add("ORGÃO EMISSOR DO DOCUMENTO : " + documento.getAttValueFor("ORGAO_EMISSOR").toString());
 
 		}
 
@@ -172,15 +174,15 @@ public class ImprimePedidoServlet extends HttpServlet {
 		Vector<EnderecoClienteDAO> endClienteList = EnderecoClienteDAOService.loadAllForCliente(COD_CLIENTE);
 		for (int i=0;i < endClienteList.size();i++) {
 		
-			EnderecoClienteDAO documento = (EnderecoClienteDAO)endClienteList.elementAt(i);
+			EnderecoClienteDAO endereco = (EnderecoClienteDAO)endClienteList.elementAt(i);
 
-			docData.add(documento.getAttValueFor("ENDERECO").toString());
-			docData.add(documento.getAttValueFor("BAIRRO").toString());
-			docData.add(documento.getAttValueFor("CIDADE").toString());
-			docData.add(documento.getAttValueFor("UF").toString());
-			docData.add(documento.getAttValueFor("COD_PAIS").toString());
-			docData.add(documento.getAttValueFor("COMPLEMENTO").toString());
-			docData.add(documento.getAttValueFor("CEP").toString());
+			docData.add("ENDEREÇO CLIENTE : " + endereco.getAttValueFor("ENDERECO").toString());
+			docData.add("BAIRRO : " + endereco.getAttValueFor("BAIRRO").toString());
+			docData.add("CIDADE : " + endereco.getAttValueFor("CIDADE").toString());
+			docData.add("UF : " + endereco.getAttValueFor("UF").toString());
+			docData.add("CÓDIGO DO PAÍS : " + endereco.getAttValueFor("COD_PAIS").toString());
+			docData.add("COMPLEMENTO : " + endereco.getAttValueFor("COMPLEMENTO").toString());
+			docData.add("CEP : " + endereco.getAttValueFor("CEP").toString());
 		}
 
 	} catch (SQLException sql) {
@@ -214,12 +216,12 @@ public class ImprimePedidoServlet extends HttpServlet {
 		
 			ContatoClienteDAO contato = (ContatoClienteDAO)conClienteList.elementAt(i);
 
-			docData.add(contato.getAttValueFor("COD_CONTATO").toString());
-			docData.add(contato.getAttValueFor("DDD").toString());
-			docData.add(contato.getAttValueFor("NUMERO").toString());
-			docData.add(contato.getAttValueFor("COD_PAIS").toString());
-			docData.add(contato.getAttValueFor("NOME").toString());
-			docData.add(contato.getAttValueFor("COD_GRAU").toString());
+			docData.add("CÓDIGO DO CONTATO CLIENTE : " + contato.getAttValueFor("COD_CONTATO").toString());
+			docData.add("DDD DO CONTATO CLIENTE : " + contato.getAttValueFor("DDD").toString());
+			docData.add("NÚMERO DO CONTATO CLIENTE : " + contato.getAttValueFor("NUMERO").toString());
+			docData.add("CÓDIGO DO PAÍS : " + contato.getAttValueFor("COD_PAIS").toString());
+			docData.add("NOME DO CONTATO CLIENTE : " + contato.getAttValueFor("NOME").toString());
+			docData.add("GRAU DO CONTATO CLIENTE : " + contato.getAttValueFor("COD_GRAU").toString());
 		}
 
 		Vector<EmailCliVenDAO> emailClienteList = EmailCliVenDAOService.loadAllForCliente(COD_CLIENTE);
@@ -227,7 +229,7 @@ public class ImprimePedidoServlet extends HttpServlet {
 		
 			EmailCliVenDAO contato = (EmailCliVenDAO)emailClienteList.elementAt(i);
 
-			docData.add(contato.getAttValueFor("EMAIL").toString());
+			docData.add("EMAIL DO CONTATO CLIENTE : " + contato.getAttValueFor("EMAIL").toString());
 		}
 
 	} catch (SQLException sql) {
@@ -258,12 +260,12 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 		numero.read();
 
-		docData.add(numero.getAttValueFor("DATA_GERACAO").toString());
-		docData.add(pedido.getAttValueFor("BOLETO_EMAIL").toString());
-		docData.add(pedido.getAttValueFor("COD_TIPO").toString());
-		docData.add(pedido.getAttValueFor("NUM_PEDIDO").toString());
+		docData.add("DATA DE GERAÇÃO DO PEDIDO : " + numero.getAttValueFor("DATA_GERACAO").toString());
+		docData.add("E-MAIL PARA ENVIO DE BOLETO : " + pedido.getAttValueFor("BOLETO_EMAIL").toString());
+		docData.add("CÓDIGO DO TIPO DE PEDIDO : " + pedido.getAttValueFor("COD_TIPO").toString());
+		docData.add("NÚMERO DO PEDIDO : " + pedido.getAttValueFor("NUM_PEDIDO").toString());
 
-		docData.add(pedido.getAttValueFor("DATA_VENCIMENTO").toString());
+		docData.add("DATA DE VENCIMENTO DO PEDIDO : " + pedido.getAttValueFor("DATA_VENCIMENTO").toString());
 
 		Vector<ServicoPedidoDAO> servPedidoList = ServicoPedidoDAOService.loadAllForPedido(COD_PEDIDO);
 		for (int i=0;i < servPedidoList.size();i++) {
@@ -276,7 +278,7 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 			tipo.read();
 
-			docData.add(tipo.getAttValueFor("NOME_SERVICO").toString());
+			docData.add("NOME DO SERVIÇO : " + tipo.getAttValueFor("NOME_SERVICO").toString());
 
 		}
 
@@ -288,7 +290,7 @@ public class ImprimePedidoServlet extends HttpServlet {
 			
 			equip.read();
 
-			docData.add(equip.getAttValueFor("COD_EQUIP_ACESSORIO").toString());
+			docData.add("CÓDIGO DE EQUIPAMENTO ACESSÓRIO : " + equip.getAttValueFor("COD_EQUIP_ACESSORIO").toString());
 
 		}
 
@@ -300,17 +302,17 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 			dados.read();
 
-			docData.add(dados.getAttValueFor("ENDERECO").toString());
-			docData.add(dados.getAttValueFor("BAIRRO").toString());
-			docData.add(dados.getAttValueFor("CIDADE").toString());
-			docData.add(dados.getAttValueFor("UF").toString());
-			docData.add(dados.getAttValueFor("COD_PAIS").toString());
-			docData.add(dados.getAttValueFor("COMPLEMENTO").toString());
-			docData.add(dados.getAttValueFor("CEP").toString());
-			docData.add(dados.getAttValueFor("REFERENCIA").toString());
-			docData.add(dados.getAttValueFor("DDD").toString());
-			docData.add(dados.getAttValueFor("NUMERO").toString());
-			docData.add(dados.getAttValueFor("NOME").toString());
+			docData.add("ENDEREÇO DA INSTALAÇÃO : " + dados.getAttValueFor("ENDERECO").toString());
+			docData.add("BAIROO DA INSTALAÇÃO : " + dados.getAttValueFor("BAIRRO").toString());
+			docData.add("CIDADE DA INSTALAÇÃO : " + dados.getAttValueFor("CIDADE").toString());
+			docData.add("UF DA INSTALAÇÃO : " + dados.getAttValueFor("UF").toString());
+			docData.add("CÓDIGO DO PAÍS : " + dados.getAttValueFor("COD_PAIS").toString());
+			docData.add("COMPLEMENTO DA INSTALAÇÃO : " + dados.getAttValueFor("COMPLEMENTO").toString());
+			docData.add("CEP DA INSTALAÇÃO : " + dados.getAttValueFor("CEP").toString());
+			docData.add("REFERENCIA DA INSTALAÇÃO : " + dados.getAttValueFor("REFERENCIA").toString());
+			docData.add("DDD DA INSTALAÇÃO : " + dados.getAttValueFor("DDD").toString());
+			docData.add("NÚMERO DE CONTATO DA INSTALAÇÃO : " + dados.getAttValueFor("NUMERO").toString());
+			docData.add("NOME DE CONTATO DA INSTALAÇÃO : " + dados.getAttValueFor("NOME").toString());
 		}
 
 		//Unidades 
@@ -321,10 +323,10 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 			unidade.read();
 
-			docData.add(unidade.getAttValueFor("COD_AGENDAMENTO").toString());
-			docData.add(unidade.getAttValueFor("COD_UNIDADE").toString());
-			docData.add(unidade.getAttValueFor("DATA_AGENDAMENTO").toString());
-			docData.add(unidade.getAttValueFor("HORA_AGENDAMENTO").toString());
+			docData.add("CÓDIGO DO AGENDAMENTO : " + unidade.getAttValueFor("COD_AGENDAMENTO").toString());
+			docData.add("CÓDIGO DA UNIDADE DO AGENDAMENTO : " + unidade.getAttValueFor("COD_UNIDADE").toString());
+			docData.add("DATA DO AGENDAMENTO : " + unidade.getAttValueFor("DATA_AGENDAMENTO").toString());
+			docData.add("HORA DO AGENDAMENTO : " + unidade.getAttValueFor("HORA_AGENDAMENTO").toString());
 
 		}
 		
@@ -336,8 +338,8 @@ public class ImprimePedidoServlet extends HttpServlet {
 
 			obs.read();
 
-			docData.add(obs.getAttValueFor("INDICE").toString());
-			docData.add(obs.getAttValueFor("OBSERVACAO").toString());
+			docData.add("INDICE DO PEDIDO : " + obs.getAttValueFor("INDICE").toString());
+			docData.add("OBSERVAÇÃO DO PEDIDO : " + obs.getAttValueFor("OBSERVACAO").toString());
 		}
 		
 
