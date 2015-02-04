@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!--
-ZIRIX CONTROL CENTER - MAIN PAGE
+<!--ZIRIX CONTROL CENTER - MAIN PAGE
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
 CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
@@ -10,7 +9,18 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <%
-	String[] pkVal = {request.getParameter("COD_USUARIO")};
+	String user = null;
+	if(session.getAttribute("user") == null){
+		session.invalidate();
+		response.setContentType("text/html");
+		response.sendRedirect("index.html");
+	}else{
+		user = (String) session.getAttribute("user");
+	}
+	String sessionId = null;
+	sessionId = (String) session.getId();
+
+	String[] pkVal = {user};
 	ZxAccessControlBean bean = new ZxAccessControlBean(pkVal);
 	Vector<String[]> permissaoUsuarioList = bean.getPermissaoUsuario();
 	Vector<String[]> telaList = bean.getCodTela();
@@ -38,7 +48,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <div class="container">        
             <header>
            		&nbsp;Bem-vindo: <%=bean.getNomeUsuario()%>
-           		<div id="cod_usuario" style="visibility: hidden;"><%=pkVal[0]%></div>
+           		<div id="cod_usuario" style="visibility: hidden;"><%=user%></div>
             </header>
             <div class="page-background">
                 <nav id="topNav">
@@ -295,27 +305,28 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     </ul>
                 </nav>
                 <section class="tarefas">
-                	<iframe src="tarefas.jsp?COD_USUARIO=<%=pkVal[0]%>" name="tarefasIFrame" frameborder="0" width="515px" height="100%">
+                	<iframe src="tarefas.jsp?COD_USUARIO=<%=user%>" name="tarefasIFrame" frameborder="0" width="515px" height="100%">
 
                 	</iframe>
                 </section>
                 <section class="conteudo">
-                <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
-                <br>
-                <br>
-                <br>
-               	<div class="checkboxConfirm1">
-			  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">
-				  	<label for="checkboxConfirmInput"></label>
-				</div>
-				<br><br><br>
-               	URL_ADRESS = <%=ZXMain.getAdress()%>
-                <br>
-                DB_NAME = <%=ZXMain.getDbName()%>
-                <br>
-                LOCAL = <%=ZXMain.getLocal()%>
-                <br>
-                <%} %>
+                <%if(ZXMain.LOCAL_.compareTo("BETA") == 0){%>
+	                <br>
+	                <br>
+	                <br>
+	               	<div class="checkboxConfirm1">
+				  		<input type="checkbox" value="1" id="checkboxConfirmInput" name="teste_nome" style="visibility: hidden;">
+					  	<label for="checkboxConfirmInput"></label>
+					</div>
+					<br><br><br>
+	               	URL_ADRESS = <%=ZXMain.getAdress()%>
+	                <br>
+	                DB_NAME = <%=ZXMain.getDbName()%>
+	                <br>
+	                LOCAL = <%=ZXMain.getLocal()%>
+	                <br>
+	                sessionId = <%=sessionId%>
+                <%}%>
                 </section>
             </div>
             <footer>
@@ -328,13 +339,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     </div>
                 </div>
             </div>        
-        </div>    
+        </div>
         <script src="js/jquery.js"></script>
         <script src="js/modernizr.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/menu_functions.js"></script>
         <script src="js/page_functions.js"></script>
-        <script>window.setInterval("reloadIFrame(<%=pkVal[0]%>);", 30000); </script>
+        <script>window.setInterval("reloadIFrame(<%=user%>);", 30000);</script>
   </body>
-
 </html>

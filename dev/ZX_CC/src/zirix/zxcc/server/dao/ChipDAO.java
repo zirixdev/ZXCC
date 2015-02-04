@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - CHIP DAO
-DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLU��ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -40,9 +40,8 @@ public class ChipDAO extends GenericDAO<ChipDAO> {
     	setAttValueFor("COD_STATUS",res.getInt("COD_STATUS"));
     	setAttValueFor("DDD",res.getString("DDD"));
     	setAttValueFor("NUMERO_CHIP",res.getString("NUMERO_CHIP"));
-    	/*setAttValueFor("DATA_VIGENCIA",res.getDate("DATA_VIGENCIA"));
     	setAttValueFor("COD_CONTA",res.getInt("COD_CONTA"));
-    	setAttValueFor("COD_PACOTE",res.getInt("COD_PACOTE"));*/
+    	setAttValueFor("COD_PACOTE",res.getInt("COD_PACOTE"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
     }
     

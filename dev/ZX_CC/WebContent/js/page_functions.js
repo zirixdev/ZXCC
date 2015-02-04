@@ -21,6 +21,10 @@ function reloadIFrame(codUsuario) {
 	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp?COD_USUARIO=" + codUsuario;
 }
 
+function callReload500() {
+	window.open(url_adress, "_self");
+}
+
 function unit_function(){
     var values = $("#tipo_unidade_list").val();
     var fild_content = '';
@@ -60,10 +64,21 @@ function libera_div(input_name){
 	}
 }
 
+function divICCID(input_name){
+	var content_div;
+	if(input_name == "individual"){
+		content_div = 'ICC-ID: <input type="text" size="25px" id="iccid" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20">';
+		$('#iccidSelect').html(content_div);
+	}else if(input_name == "massivo"){
+		content_div = 'ICC-ID Inicial: <input type="text" size="20px" id="iccid_inicial" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20"><br>ICC-ID Final: <input type="text" size="21px" id="iccid_final" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20">';
+		$('#iccidSelect').html(content_div);
+	}
+}
+
 function change_consulta_operacional_function(){
 	var values = $("input[type='radio'][name='busca_op']:checked").val();
     var fild_content = '';
-    switch(values) {
+    switch(values){
         case "cliente":
         	fild_content = "div#operacional-consulta-cliente-content";
             break;
@@ -72,6 +87,9 @@ function change_consulta_operacional_function(){
             break;
         case "chip":
         	fild_content = "div#operacional-consulta-chip-content";
+            break;
+        case "os":
+        	fild_content = "div#operacional-consulta-os-content";
             break;
         default:
         	$('.consulta_operacional').html('');
@@ -95,38 +113,55 @@ var cod_modulo_consulta;
 var cod_chip_consulta;
 var cod_vendedor_consulta;
 var cod_cliente_prospect_consulta;
+var cod_os_consulta;
+var cod_placa_consulta;
 
-function operacional_consulta_function(e){
+function operacional_consulta_function(type){
+	this.cod = type || 0;
     var values = $("input[type='radio'][name='busca_op']:checked").val();
     var adress;
     switch(values) {
         case "cliente":
-            var val_datalist_nome = $('#item_nome_razao').val();
-            var val_doc_selected = $('#item_tipo_doc :selected').val();
-            var val_num_doc = $('#num_doc_cons').val();
-            if (val_datalist_nome !== "" || ((val_num_doc !== "") && (val_doc_selected !== ""))){
-            	cod_cliente_consulta = $('#nome_list option').filter(function() {
-                    return this.value == val_datalist_nome;
-                }).data('label');
-                adress= url_adress + "consulta_cliente.jsp?COD_CLIENTE=";
-                adress= adress + cod_cliente_consulta;
-                $.ajax({
-                    url: adress,
-                    success: function(result) {
-                        $('.modal-content').html(result);
-                        $('.modal').modal({backdrop:'static'});
-                        carregar_dados_consulta_cliente_function();
-                    },
-                    error: function(){
-                        alert('Erro ao buscar dados do CLIENTE selecionado!');
-                    }
-                });
-            }
-            else{
-                alert('Não é possível realizar a busca sem o preenchimento de um dos campos!');
-                document.getElementById("item_nome_razao").focus();
-                return 0;
-            }
+        	var cod_aux = 0;
+        	if(cod == "NOME"){
+        		cod_aux = 1;
+        	}else if(cod == "DOC"){
+        		cod_aux = 2;
+        	}
+        	switch(cod_aux){
+        	case 1:
+                var val_datalist_nome = $('#item_nome_razao').val();
+        		if (val_datalist_nome !== ""){
+	            	cod_cliente_consulta = $('#nome_list option').filter(function() {
+	                    return this.value == val_datalist_nome;
+	                }).data('label');
+	                adress= url_adress + "consulta_cliente.jsp?COD_CLIENTE=";
+	                adress= adress + cod_cliente_consulta;
+	                $.ajax({
+	                    url: adress,
+	                    success: function(result) {
+	                        $('.modal-content').html(result);
+	                        $('.modal').modal({backdrop:'static'});
+	                        carregar_dados_consulta_cliente_function();
+	                    },
+	                    error: function(){
+	                        alert('Erro ao buscar dados do CLIENTE selecionado!');
+	                    }
+	                });
+            	}else{
+                    alert('Não é possível realizar a busca sem o preenchimento de um dos campos!');
+                    document.getElementById("item_nome_razao").focus();
+                    return 0;
+                }
+        		break;
+        	case 2:
+                var val_doc_selected = $('#item_tipo_doc :selected').val();
+                var val_num_doc = $('#num_doc_cons').val();
+                if ((val_num_doc !== "") && (val_doc_selected !== "")){
+                	
+                }
+        		break;
+        	}
             break;
         case "equipamento":
         	var val_datalist_id = $('#item_id_modulo').val();
@@ -158,25 +193,172 @@ function operacional_consulta_function(e){
         	if(val_iccid_selected !== ""){
         		cod_chip_consulta = $('#iccid_list option').filter(function() {
         			return this.value == val_iccid_selected;
-            }).data('label');
-            adress= url_adress + "consulta_chip.jsp?COD_CHIP=";
-            adress= adress + cod_chip_consulta;
-            $.ajax({
-                url: adress,
-                success: function(result) {
-                    $('.modal-content').html(result);
-                    $('.modal').modal({backdrop:'static'});
-                },
-                error: function(){
-                    alert('Erro ao buscar dados do SIM CARD selecionado!');
-                }
-            });
-        		
-        	}
-        	else{
+	            }).data('label');
+	            adress= url_adress + "consulta_chip.jsp?COD_CHIP=";
+	            adress= adress + cod_chip_consulta;
+	            $.ajax({
+	                url: adress,
+	                success: function(result) {
+	                    $('.modal-content').html(result);
+	                    $('.modal').modal({backdrop:'static'});
+	                },
+	                error: function(){
+	                    alert('Erro ao buscar dados do SIM CARD selecionado!');
+	                }
+	            });
+        	}else{
         		alert('Não é possível realizar a busca sem o preenchimento do campo ICC-ID!');
                 document.getElementById("iccid_list").focus();
                 return 0;
+        	}
+        	break;
+        case "os":
+        	var cod_aux = 0;
+        	if(cod == "NUMOS"){
+        		cod_aux = 1;
+        	}else if(cod == "VEIC"){
+        		cod_aux = 2;
+        	}else if(cod == "CLIENTE"){
+        		cod_aux = 3;
+        	}else if(cod == "DATA"){//Join NUMERO_OS
+        		cod_aux = 4;
+        	}else if(cod == "REF"){//Join NUMERO_OS
+        		cod_aux = 5;
+        	}else if(cod == "TIPO"){
+        		cod_aux = 6;
+        	}
+        	switch(cod_aux){
+        	case 1:
+        		var val_os_selected = $('#item_os').val();
+	        	if(val_os_selected !== ""){
+	        		cod_os_consulta = $('#os_list option').filter(function() {
+	        			return this.value == val_os_selected;
+		            }).data('label');
+		            adress= url_adress + "consulta_os.jsp?COD_OS=";
+		            adress= adress + cod_os_consulta;
+		            $.ajax({
+		                url: adress,
+		                success: function(result) {
+		                    $('.modal-content').html(result);
+		                    $('.modal').modal({backdrop:'static'});
+		                },
+		                error: function(){
+		                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+		                }
+		            });
+	        	}else{
+	        		alert('Não é possível realizar a busca sem o preenchimento do Número da OS!');
+	                document.getElementById("os_list").focus();
+	                return 0;
+	        	}
+        		break;
+        	case 2:
+        		var val_placa_selected = $('#item_veic').val();
+	        	if(val_placa_selected !== ""){
+	        		placa_consulta = $('#veic_list option').filter(function() {
+	        			return this.value == val_placa_selected;
+		            }).data('label');
+		            adress= url_adress + "consulta_lista_os.jsp?TIPO_CONSULTA=VEICULO";
+		            adress= adress + "&KEY=" + placa_consulta;
+		            $.ajax({
+		                url: adress,
+		                success: function(result) {
+		                    $('.modal-content').html(result);
+		                    $('.modal').modal({backdrop:'static'});
+		                },
+		                error: function(){
+		                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+		                }
+		            });
+	        	}else{
+	        		alert('Não é possível realizar a busca sem o preenchimento da Placa do Veículo!');
+	                document.getElementById("veic_list").focus();
+	                return 0;
+	        	}
+        		break;
+        	case 3:
+        		var val_cliente_selected = $('#item_nome_razao').val();
+	        	if(val_cliente_selected !== ""){
+	        		cod_cliente_consulta = $('#nome_list option').filter(function() {
+	        			return this.value == val_cliente_selected;
+		            }).data('label');
+		            adress= url_adress + "consulta_lista_os.jsp?TIPO_CONSULTA=CLIENTE";
+		            adress= adress + "&KEY=" + cod_cliente_consulta;
+		            $.ajax({
+		                url: adress,
+		                success: function(result) {
+		                    $('.modal-content').html(result);
+		                    $('.modal').modal({backdrop:'static'});
+		                },
+		                error: function(){
+		                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+		                }
+		            });
+	        	}else{
+	        		alert('Não é possível realizar a busca sem o preenchimento da Nome do Cliente!');
+	                document.getElementById("nome_list").focus();
+	                return 0;
+	        	}
+        		break;
+        	case 4:
+        		var val_data_os_selected = $('#data_busca_os').val();
+        		if(val_data_os_selected !== ""){
+		            adress= url_adress + "consulta_lista_os.jsp?TIPO_CONSULTA=DATA";
+		            adress= adress + "&KEY=" + val_data_os_selected;
+		            $.ajax({
+		                url: adress,
+		                success: function(result) {
+		                    $('.modal-content').html(result);
+		                    $('.modal').modal({backdrop:'static'});
+		                },
+		                error: function(){
+		                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+		                }
+		            });
+	        	}else{
+	        		alert('Não é possível realizar a busca sem o preenchimento da Data!');
+	                document.getElementById("data_busca_os").focus();
+	                return 0;
+	        	}
+        		break;
+        	case 5:
+        		var val_ano_os_selected = $('#ano_os').val();
+        		var val_mes_os_selected = $('#mes_os').val();
+        		if((val_ano_os_selected !== "") && (val_mes_os_selected !== "")){
+		            adress= url_adress + "consulta_lista_os.jsp?TIPO_CONSULTA=REFERENCIA";
+		            adress= adress + "&KEY=" + val_ano_os_selected + "//" + val_mes_os_selected;
+		            $.ajax({
+		                url: adress,
+		                success: function(result) {
+		                    $('.modal-content').html(result);
+		                    $('.modal').modal({backdrop:'static'});
+		                },
+		                error: function(){
+		                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+		                }
+		            });
+	        	}else{
+	        		alert('Não é possível realizar a busca sem o preenchimento da Referência!');
+	                document.getElementById("ano_os").focus();
+	                return 0;
+	        	}
+        		break;
+        	case 6:
+        		var tipo_os_selected = document.getElementById("tipoos_list");
+        		var val_tipo_os_selected = tipo_os_selected.options[tipo_os_selected.selectedIndex].value;
+	            adress= url_adress + "consulta_lista_os.jsp?TIPO_CONSULTA=TIPO";
+	            adress= adress + "&KEY=" + val_tipo_os_selected;
+	            $.ajax({
+	                url: adress,
+	                success: function(result) {
+	                    $('.modal-content').html(result);
+	                    $('.modal').modal({backdrop:'static'});
+	                },
+	                error: function(){
+	                    alert('Erro ao buscar dados da Ordem de Serviço selecionado!');
+	                }
+	            });
+	    		break;
         	}
         	break;
         default:
@@ -247,37 +429,6 @@ function change_consulta_comercial_function(){
         }
     });
 }
-
-function mod_int_function() {
-    var values = $("input[type='radio'][name='modulo_instalado']:checked");
-    var txt ="";
-    if (values.length > 0) {
-        txt = values.val();
-    }
-    switch(txt) {
-    	case "1": //Estoque
-	        $('.instalacao').html('');
-	        break;
-        case "2": //Veículo
-        	$.ajax({
-    	        url: url_adress + "modulo_inst_cad.jsp",
-    	        success: function(result) {
-                    $('.instalacao').html(result);
-                },
-                error: function(e){
-                    alert('Error to find descriptions of installed clients!');
-                }
-            });
-            break;
-        default:
-        	$('.instalacao').html('');
-    }
-}
-
-var myDate = new Date();
-var year = myDate.getFullYear();
-$('#ano_fab').attr("max",year);
-$('#ano_mod').attr("max",year+1);
 
 var h = window.innerHeight;
 $('.page-background').height(h - 235);
@@ -1917,7 +2068,22 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 		var adress_aux;
 		var documentoLength = control_vetor_doc_json.length;
 		adress_aux = '&QDOC=' + documentoLength;
+		var tem_doc = false;
 		for(var i=0;i<documentoLength;i++){
+			if(control_vetor_doc_json[i]===0){
+				break;
+			}else{
+				if((control_vetor_doc_json[i].tipo_doc.trim() == 2)||(control_vetor_doc_json[i].tipo_doc.trim() == 3)){
+					tem_doc = true;
+				}
+			}
+		}
+		if(!tem_doc){
+			alert("Favor inserir pelo menos 1 DOCUMENTO CPF/CNPJ.");
+			document.getElementById("numero_documento").focus();
+			return 0;
+		}
+		for(i=0;i<documentoLength;i++){
 			if(control_vetor_doc_json[i]===0){
 				break;
 			}else{
@@ -1959,6 +2125,26 @@ function operacional_cadastrar_cliente_cadastrar_function(){
 
 		var contatoLength = control_vetor_contato_json.length;
 		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		if(contatoLength < 3){
+			alert("Favor inserir pelo menos 3 CONTATOS do Cliente.");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+		var tem_tel = false;
+		for(i=0;i<contatoLength;i++){
+			if(control_vetor_contato_json[i]===0){
+				break;
+			}else{
+				if(control_vetor_contato_json[i].tipo_contato.trim() == 3){
+					tem_tel = true;
+				}
+			}
+		}
+		if(!tem_tel){
+			alert("Favor inserir pelo menos 1 CONTATO do tipo Celular.");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
 		for(i=0;i<contatoLength;i++){
 			if(control_vetor_contato_json[i]===0){
 				break;
@@ -2144,47 +2330,63 @@ function operacional_cadastrar_chip_function(){
 		var estado_chip = $('#estado_chip :selected').val();
 		var ddd_chip = document.getElementById("ddd_chip");
 		var numero_chip = document.getElementById("numero_chip");
-		var cod_usuario = document.getElementById("cod_usuario");
-
+		var pacote_chip = $('#pacote_chip :selected').val();
+		var conta_chip = $('#conta_chip :selected').val();
 		if(nfe.value.trim() === ""){
 			alert("Favor inserir a NFe do SIM CARD.");
 			document.getElementById("nfe_chip").focus();
 			return 0;
 		}
-
-		if(iccid.value.trim() === ""){
-			alert("Favor inserir o ICC-ID do SIM CARD.");
-			document.getElementById("iccid").focus();
-			return 0;
+		if(massivo === "individual"){
+			if(iccid.value.trim() === ""){
+				alert("Favor inserir o ICC-ID do SIM CARD.");
+				document.getElementById("iccid").focus();
+				return 0;
+			}
 		}
-
 		if(tecnologia_chip.value.trim() === ""){
 			alert("Favor inserir a TECNOLOGIA do SIM CARD.");
 			document.getElementById("tecnologia_chip").focus();
 			return 0;
 		}
-
 		if(apn_chip.value.trim() === ""){
 			alert("Favor inserir a APN do SIM CARD.");
 			document.getElementById("apn_chip").focus();
 			return 0;
 		}
-
-		if(ddd_chip.value.trim() === ""){
-			alert("Favor inserir o DDD do SIM CARD.");
-			document.getElementById("ddd_chip").focus();
-			return 0;
+		if(massivo === "individual"){
+			if(ddd_chip.value.trim() === ""){
+				alert("Favor inserir o DDD do SIM CARD.");
+				document.getElementById("ddd_chip").focus();
+				return 0;
+			}
+			if(numero_chip.value.trim() === ""){
+				alert("Favor inserir o NÚMERO do SIM CARD.");
+				document.getElementById("numero_chip").focus();
+				return 0;
+			}
 		}
-
-		if(numero_chip.value.trim() === ""){
-			alert("Favor inserir o NÚMERO do SIM CARD.");
-			document.getElementById("numero_chip").focus();
-			return 0;
+		var massivo = $('input[name="iccidMassivo"]:checked').val();
+		if(massivo === "individual"){
+			adress = url_adress + 'services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&MASSIVO=INDIVIDUAL';
+		}else if(massivo === "massivo"){
+			adress = url_adress + 'services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&MASSIVO=MASSIVO';
+			var ICCID_INICIAL = document.getElementById("iccid_inicial");
+			var ICCID_FINAL = document.getElementById("iccid_final");
+			if(ICCID_INICIAL.value.trim() === ""){
+				alert("Favor inserir o ICC-ID INICIAL da Caixa de Sim Card.");
+				document.getElementById("iccid_inicial").focus();
+				return 0;
+			}
+			if(ICCID_FINAL.value.trim() === ""){
+				alert("Favor inserir o ICC-ID FINAL da Caixa de Sim Card.");
+				document.getElementById("iccid_final").focus();
+				return 0;
+			}
+			adress = adress + '&MASSIVO=MASSIVO&ICCID_INICIAL=' + ICCID_INICIAL.value.trim() + '&ICCID_FINAL=' + ICCID_FINAL.value.trim();
 		}
-
-		adress = url_adress + 'services/chip?OP_CODE=CREATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
-		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim();
-		adress = adress + '&DDD=' + ddd_chip.value.trim() + '&NUMERO=' + numero_chip.value.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + '&OPERADORA=' + operadora_chip.trim() + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim();
+		adress = adress + '&DDD=' + ddd_chip.value.trim() + '&NUMERO=' + numero_chip.value.trim() + '&COD_PACOTE=' + pacote_chip.trim() + '&COD_CONTA=' + conta_chip.trim();
 		document.location.href = adress;
 	}
 	else
@@ -2194,7 +2396,7 @@ function operacional_cadastrar_chip_function(){
 function operacional_consultar_chip_salvar_function(){
 	alert("Em desenvolvimento!");
 	return 0;
-	if(confirm('Deseja realizar o ingresso do Sim Card?')){
+	if(confirm('Deseja salvar alterações do Sim Card?')){
 		var nfe = document.getElementById("nfe_chip");
 		var iccid = document.getElementById("iccid");
 		var operadora_chip = $('#operadora_chip :selected').val();
@@ -2203,51 +2405,46 @@ function operacional_consultar_chip_salvar_function(){
 		var estado_chip = $('#estado_chip :selected').val();
 		var ddd_chip = document.getElementById("ddd_chip");
 		var numero_chip = document.getElementById("numero_chip");
-		var cod_usuario = document.getElementById("cod_usuario");
-
+		var pacote_chip = $('#pacote_chip :selected').val();
+		var conta_chip = $('#conta_chip :selected').val();
 		if(nfe.value.trim() === ""){
 			alert("Favor inserir a NFe do SIM CARD.");
 			document.getElementById("nfe_chip").focus();
 			return 0;
 		}
-
 		if(iccid.value.trim() === ""){
 			alert("Favor inserir o ICC-ID do SIM CARD.");
 			document.getElementById("iccid").focus();
 			return 0;
 		}
-
 		if(tecnologia_chip.value.trim() === ""){
 			alert("Favor inserir a TECNOLOGIA do SIM CARD.");
 			document.getElementById("tecnologia_chip").focus();
 			return 0;
 		}
-
 		if(apn_chip.value.trim() === ""){
 			alert("Favor inserir a APN do SIM CARD.");
 			document.getElementById("apn_chip").focus();
 			return 0;
 		}
-
 		if(ddd_chip.value.trim() === ""){
 			alert("Favor inserir o DDD do SIM CARD.");
 			document.getElementById("ddd_chip").focus();
 			return 0;
 		}
-
 		if(numero_chip.value.trim() === ""){
 			alert("Favor inserir o NÚMERO do SIM CARD.");
 			document.getElementById("numero_chip").focus();
 			return 0;
 		}
-
 		adress = url_adress + 'services/chip?OP_CODE=UPDATE&NFE=' + nfe.value.trim() + '&ICCID=' + iccid.value.trim() + '&OPERADORA=' + operadora_chip.trim();
 		adress = adress + '&TECNOLOGIA=' + tecnologia_chip.value.trim() + '&APN=' + apn_chip.value.trim() + '&ESTADO=' + estado_chip.trim() + '&DDD=' + ddd_chip.value.trim();
-		adress = adress + '&NUMERO=' + numero_chip.value.trim() + '&COD_CHIP=' + cod_chip_consulta.trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
+		adress = adress + '&NUMERO=' + numero_chip.value.trim() + '&COD_CHIP=' + cod_chip_consulta.trim() + '&COD_PACOTE=' + pacote_chip.trim() + '&COD_CONTA=' + conta_chip.trim();
 		document.location.href = adress;
 	}
-	else
+	else{
 		return 0;
+	}
 }
 
 function administrativo_cadastrar_vendedor_cadastrar_function(){
@@ -2268,7 +2465,6 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 		var dt_nascimento = document.getElementById("data_nasc");
 		var site = document.getElementById("url_site");
 		var cod_usuario = document.getElementById("cod_usuario");
-
 		if(nome.value.trim() === ""){
 			alert("Favor inserir NOME ou RAZÃO SOCIAL do Vendedor.");
 			document.getElementById("nome_razaosocial").focus();
@@ -2297,7 +2493,6 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 			document.getElementById("numero_documento").focus();
 			return 0;
 		}
-
 		var adress_aux;
 		var documentoLength = control_vetor_doc_json.length;
 		adress_aux = '&QDOC=' + documentoLength;
@@ -2311,13 +2506,11 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 				adress_aux = adress_aux + '&ORGDOC_'+ i + '=' + control_vetor_doc_json[i].org_emiss.trim();
 			}
 		}
-
 		if(control_vetor_end_json[0] === 0){
 			alert("Favor inserir ENDEREÇO do Vendedor");
 			document.getElementById("endereco").focus();
 			return 0;
 		}
-
 		var enderecoLength = control_vetor_end_json.length;
 		adress_aux = adress_aux + '&QEND=' + enderecoLength;
 		for(i=0;i<enderecoLength;i++){
@@ -2334,13 +2527,11 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 				adress_aux = adress_aux + '&TIPOEND_'+ i + '=' + control_vetor_end_json[i].tipo_end.trim();
 			}
 		}
-
 		if(control_vetor_contato_json[0] === 0){
 			alert("Favor inserir CONTATO do Vendedor");
 			document.getElementById("ddd").focus();
 			return 0;
 		}
-
 		var contatoLength = control_vetor_contato_json.length;
 		adress_aux = adress_aux + '&QCTO=' + contatoLength;
 		for(i=0;i<contatoLength;i++){
@@ -2355,13 +2546,11 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 				adress_aux = adress_aux + '&PARENCTO_'+ i + '=' + control_vetor_contato_json[i].parentesco.trim();
 			}
 		}
-
 		if(control_vetor_email_json[0] === 0){
 			alert("Favor inserir EMAIL do Vendedor");
 			document.getElementById("email").focus();
 			return 0;
 		}
-
 		var emailLength = control_vetor_email_json.length;
 		adress_aux = adress_aux + '&QMAIL=' + emailLength;
 		for(i=0;i<emailLength;i++){
@@ -2371,7 +2560,6 @@ function administrativo_cadastrar_vendedor_cadastrar_function(){
 				adress_aux = adress_aux + '&MAIL_'+ i + '=' + control_vetor_email_json[i].email.trim();
 			}
 		}
-
 		d = new Date();
 		var adress = url_adress + 'services/vendedor?OP_CODE=CREATE&TIPO=' + tipo_pessoa.trim() + '&NOME=' + nome.value.trim() + '&NOME_FANTASIA=' + apelido.value.trim();
 		adress = adress + '&SITE=' + site.value.trim() + '&DATA_NASCIMENTO=' + dt_nascimento.value.trim() + '&DATA_INGRESSO=' + d.yyyymmdd().trim() + '&COD_USUARIO=' + cod_usuario.innerHTML.trim();
@@ -2537,7 +2725,6 @@ function select_modelo_function(){
 
 function operacional_cadastrar_equipamento_function(){
 	if(confirm('Deseja realizar o ingresso do Equipamento?')){
-		var instalado = $("input[type='radio'][name='modulo_instalado']:checked").val();
 		var id = document.getElementById("numero_modulo");
 		var sn = document.getElementById("sn_modulo");
 		var nfe = document.getElementById("numero_nfe");
@@ -2555,24 +2742,6 @@ function operacional_cadastrar_equipamento_function(){
     			return 0;
     		}
         }
-		
-        var cliente_cad_equip = "";
-        //TODO SWITCH CASE PARA OS TIPO DE INSTALAÇÃO
-        //EVOLUI CONFORME FOREM ACRESCENTANDO ESSES TIPOS
-        if(Number(instalado) === 2){
-			var val_datalist_cliente = $('#item_nome_razao').val();
-	        if (val_datalist_cliente.trim() !== ""){
-	        	cliente_cad_equip = $('#nome_list option').filter(function() {
-	                return this.value == val_datalist_cliente;
-	            }).data('label');
-	        }
-	        if(cliente_cad_equip === ""){
-	        	alert("Necessário selecionar um cliente para o Equipamento!");
-	        	document.getElementById("item_nome_razao").focus();
-	        	return 0;
-	        }
-	        //TODO VEÍCULO - AGUARDAR A CRIAÇÃO DO CADASTRO E CONSULTA DE VEÍCULOS
-		}
 		var cod_usuario = document.getElementById("cod_usuario");
 
 		if(id.value.trim() === ""){
@@ -2606,10 +2775,7 @@ function operacional_cadastrar_equipamento_function(){
 		}
 
 		adress = url_adress + 'services/equipamento?OP_CODE=CREATE&COD_USUARIO=' + cod_usuario.innerHTML.trim() + '&COD_CHIP=' + cod_chip_cad_equip + '&NUM_MODULO=' + id.value.trim();
-		if(Number(instalado) !== 1){
-			adress = adress + '&COD_CLIENTE=' + cliente_cad_equip;
-		}
-		adress = adress + '&SN=' + sn.value.trim() + '&NFE=' + nfe.value.trim() + '&COD_MODELO=' + modelo + '&INSTALADO=' + instalado;
+		adress = adress + '&SN=' + sn.value.trim() + '&NFE=' + nfe.value.trim() + '&COD_MODELO=' + modelo;
 		document.location.href = adress;
 	}else
 		return 0;
@@ -2638,8 +2804,6 @@ function operacional_consultar_equipamento_salvar_function(){
     		}
         }
         var cliente_cad_equip = "";
-        //TODO SWITCH CASE PARA OS TIPO DE INSTALAÇÃO
-        //EVOLUI CONFORME FOREM ACRESCENTANDO ESSES TIPOS
         if(Number(instalado) === 2){
 			var val_datalist_cliente = $('#item_nome_razao').val();
 	        if (val_datalist_cliente.trim() !== ""){
@@ -2652,7 +2816,6 @@ function operacional_consultar_equipamento_salvar_function(){
 	        	document.getElementById("item_nome_razao").focus();
 	        	return 0;
 	        }
-	        //TODO VEÍCULO - AGUARDAR A CRIAÇÃO DO CADASTRO E CONSULTA DE VEÍCULOS
 		}
 		var cod_usuario = document.getElementById("cod_usuario");
 
@@ -4133,7 +4296,6 @@ function comercial_cadastrar_novo_pedido_function(){
 		var site = document.getElementById("url_site");
 		var cod_usuario = document.getElementById("cod_usuario");
 		var cod_vendedor = $('#vendedor_list :selected').val();
-		var i=0;
 		if(nome.value.trim() === ""){
 			alert("Favor inserir NOME ou RAZÃO SOCIAL do Cliente.");
 			document.getElementById("nome_razaosocial").focus();
@@ -4164,6 +4326,21 @@ function comercial_cadastrar_novo_pedido_function(){
 		var adress_aux = '';
 		var documentoLength = control_vetor_doc_json.length;
 		adress_aux = '&QDOC=' + documentoLength;
+		var tem_doc = false;
+		for(var i=0;i<documentoLength;i++){
+			if(control_vetor_doc_json[i]===0){
+				break;
+			}else{
+				if((control_vetor_doc_json[i].tipo_doc.trim() == 2)||(control_vetor_doc_json[i].tipo_doc.trim() == 3)){
+					tem_doc = true;
+				}
+			}
+		}
+		if(!tem_doc){
+			alert("Favor inserir pelo menos 1 DOCUMENTO CPF/CNPJ.");
+			document.getElementById("numero_documento").focus();
+			return 0;
+		}
 		for(i=0;i<documentoLength;i++){
 			if(control_vetor_doc_json[i]===0){
 				break;
@@ -4175,7 +4352,7 @@ function comercial_cadastrar_novo_pedido_function(){
 			}
 		}
 		if(control_vetor_end_json[0] === 0){
-			alert("Favor inserir ENDEREÇO do Cliente");
+			alert("Favor inserir ENDEREÇO do Cliente.");
 			document.getElementById("endereco").focus();
 			return 0;
 		}
@@ -4196,12 +4373,32 @@ function comercial_cadastrar_novo_pedido_function(){
 			}
 		}
 		if(control_vetor_contato_json[0] === 0){
-			alert("Favor inserir CONTATO do Cliente");
+			alert("Favor inserir CONTATO do Cliente.");
 			document.getElementById("ddd").focus();
 			return 0;
 		}
 		var contatoLength = control_vetor_contato_json.length;
 		adress_aux = adress_aux + '&QCTO=' + contatoLength;
+		if(contatoLength < 3){
+			alert("Favor inserir pelo menos 3 CONTATOS do Cliente.");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
+		var tem_tel = false;
+		for(i=0;i<contatoLength;i++){
+			if(control_vetor_contato_json[i]===0){
+				break;
+			}else{
+				if(control_vetor_contato_json[i].tipo_contato.trim() == 3){
+					tem_tel = true;
+				}
+			}
+		}
+		if(!tem_tel){
+			alert("Favor inserir pelo menos 1 CONTATO do tipo Celular.");
+			document.getElementById("ddd").focus();
+			return 0;
+		}
 		for(i=0;i<contatoLength;i++){
 			if(control_vetor_contato_json[i]===0){
 				break;
@@ -4624,6 +4821,7 @@ ctx.stroke();</script><br>';
 }
 
 function form_novo_pedido_function(area,workId,pkObj){
+	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
 	switch (area){
 	case "ADM":
 		if(!document.getElementById("dadosCorretos").checked){
@@ -4662,6 +4860,33 @@ function form_novo_pedido_function(area,workId,pkObj){
 			document.getElementById("dadosCorretos").focus();
 			return 0;
 		}
+		var idModulo = "";
+		var codVeiculo = "";
+		var qtdVeiculo = document.getElementById("QtdUnidadesVeiculo").innerHTML.trim();
+		var adress_aux = '&QTD_UNIDADE=' + qtdVeiculo;
+		for(var j=0; j<Number(qtdVeiculo);j++){
+			var val_id_equipamento = $('#item_id_modulo_' + j).val();
+			if(val_id_equipamento == ""){
+		    	alert("Favor informar o ID do Módulo a ser inserido.");
+		    	document.getElementById("item_id_modulo_" + j).focus();
+				return 0;
+			}
+			var ids = $('#id_list_' + j  + ' option').filter(function() {
+		        return this.value == val_id_equipamento;
+		    }).data('label');
+			for(var i=0; i<ids.length; i++){
+				if(ids.charAt(i+1) == "-" && ids.charAt(i+2) == "-"){
+					idModulo = ids.slice(Number(0), Number(i+1));
+					codVeiculo = ids.slice(Number(i+3),Number(ids.length));
+					adress_aux = adress_aux + '&COD_MODULO_' + j + '=' + idModulo + '&COD_VEICULO_' + j + '=' + codVeiculo + '&TIPO_UNIDADE_' + j + '=2';
+					break;
+				}
+			}
+		}
+		var adress = url_adress + 'services/separacaoequipamentoservlet?COD_USUARIO=' + cod_usuario + '&PK_COLUMN=' + pkObj + '&WORK_ID='+workId;
+		adress = adress + adress_aux;
+		window.location = adress;
+		return 0;
 		break;
 	case "FIN":
 		if(!document.getElementById("scpSerasa").checked){
@@ -4674,8 +4899,7 @@ function form_novo_pedido_function(area,workId,pkObj){
 		}
 		break;
 	}
-	var cod_usuario = document.getElementById("cod_usuario").innerHTML.trim();
-	var adress = url_adress + '/services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=' + cod_usuario + '&PK_COLUMN=' + pkObj + '&WORK_ID='+workId;
+	var adress = url_adress + 'services/startservlet?OP_CODE=ENDWORK&COD_USUARIO=' + cod_usuario + '&PK_COLUMN=' + pkObj + '&WORK_ID='+workId;
 	document.location.href = adress;
 }
 
@@ -4904,7 +5128,7 @@ function operacional_processar_agendamento_function(workId,pkObj,codUnidadeAgend
 		adress_aux = adress_aux + "&COD_OS=" + codOS;
 		adress_aux = adress_aux + "&COD_TECNICO=" + cod_tecnico;
 		adress_aux = adress_aux + "&CHEGADA_TECNICO=" + horaChegadaTecnico;
-		adress_aux = adress_aux + "&SAIDA_TECNICO=" + horaChegadaTecnico;
+		adress_aux = adress_aux + "&SAIDA_TECNICO=" + horaSaidaTecnico;
 		if(frustrada == "sim"){
 			var observacoes = document.getElementById("obs_frustrada");
 			var obsLength = observacoes.textLength;
@@ -4955,8 +5179,9 @@ function operacional_processar_agendamento_function(workId,pkObj,codUnidadeAgend
 		    	document.getElementById("item_id_modulo").focus();
 				return 0;
 			}
+			var val_id_equipamento = $('#item_id_modulo').val();
 			var idModulo = $('#id_list option').filter(function() {
-		        return this.value == val_datalist_nome;
+		        return this.value == val_id_equipamento;
 		    }).data('label');
 			adress_aux = adress_aux + '&ID_MODULO=' + idModulo;
 		    var resposta_unidade = $('#resposta_unidade_').val();

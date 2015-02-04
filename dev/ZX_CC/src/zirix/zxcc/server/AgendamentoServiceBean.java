@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - AGENDAMENTO SERVICE BEAN
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÃÃES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 
 package zirix.zxcc.server;
@@ -59,6 +59,28 @@ public class AgendamentoServiceBean {
 	public String getHoraAgendamento(){
 		String horaAgendamento = daoUnidadesAgendadas_.getAttValueFor("HORA_AGENDAMENTO").toString();
 		return horaAgendamento;
+	}
+
+	@SuppressWarnings("finally")
+	public String getNumeroModulo(String COD_UNIDADE, String TIPO_UNIDADE) {
+    	String numeroModulo = "";
+    	try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MODULO.NUMERO_MODULO "
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "MODULO_UNIDADE_AGENDADA "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "MODULO "
+					+ 														   " WHERE MODULO_UNIDADE_AGENDADA.TIPO_UNIDADE = " + TIPO_UNIDADE
+					+ 														   "   AND MODULO_UNIDADE_AGENDADA.COD_UNIDADE = " + COD_UNIDADE
+					+ 														   "   AND MODULO.COD_MODULO = MODULO_UNIDADE_AGENDADA.COD_MODULO ;");
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
+				numeroModulo = attList[0];
+			}
+		}catch (SQLException ex) {
+			ex.printStackTrace();
+		}finally{
+			return numeroModulo;
+		}
 	}
 
 	@SuppressWarnings("finally")
@@ -214,6 +236,8 @@ public class AgendamentoServiceBean {
 					+ 														   "     , TIPO_UNIDADE.NOME "															//04
 					+ 														   "     , CONCAT(NUMERO_OS.ANO_OS,NUMERO_OS.MES_OS,'/',LPAD(NUMERO_OS.NUM_OS,6,0)) "	//05
 					+ 														   "     , OS.COD_OS "																	//06
+					+														   "     , UNIDADES_AGENDADAS.TIPO_UNIDADE "											//07
+					+														   "     , VEICULO.COD_VEICULO "														//08
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO "
 					+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO_MARCA "
@@ -228,7 +252,7 @@ public class AgendamentoServiceBean {
 					+ 														   "   AND OS.COD_NUM_OS = NUMERO_OS.COD_NUM_OS "
 					+ 														   "   AND COD_UNIDADES_AGENDADAS = " + COD_UNIDADES_AGENDADAS_);
 			for (int i=0;i<values.size();i++) {
-				String[] attList = new String[7];
+				String[] attList = new String[9];
 				attList[0] = values.get(i)[0].toString();
 				attList[1] = values.get(i)[1].toString();
 				attList[2] = values.get(i)[2].toString();
@@ -236,6 +260,8 @@ public class AgendamentoServiceBean {
 				attList[4] = values.get(i)[4].toString();
 				attList[5] = values.get(i)[5].toString();
 				attList[6] = values.get(i)[6].toString();
+				attList[7] = values.get(i)[7].toString();
+				attList[8] = values.get(i)[8].toString();
 				unidadesAgendadas.add(attList);;
 			}
 		}catch (SQLException ex) {

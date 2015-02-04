@@ -1,7 +1,7 @@
 /*ZIRIX CONTROL CENTER - AGENDAMENTO SERVICE SERVLET
 DESENVOLVIDO POR RAPHAEL B. MARQUES
 
-CLIENTE: ZIRIX SOLUÃÃES EM RASTREAMENTO
+CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: JAVA*/
 package zirix.zxcc.server;
 import java.io.IOException;
@@ -9,31 +9,28 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import zirix.zxcc.server.dao.*;
-import zirix.zxcc.server.mock.MockEvaluator;
-import zirix.zxcc.server.mock.MockSchedule;
 @WebServlet( name="AgendamentoServiceServlet", urlPatterns = {"/services/agendamento"}, loadOnStartup=1)
 public class AgendamentoServiceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public AgendamentoServiceServlet() {
+    public AgendamentoServiceServlet(){
         super();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		java.util.Date date = new java.util.Date();
 		PrintWriter out = response.getWriter();
 		String OP_CODE = request.getParameter("OP_CODE");
 		String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 		String WORK_ID = request.getParameter("WORK_ID");
 		String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 		int PK_COLUMN = 0;
-		MockEvaluator eval = new MockEvaluator(Integer.parseInt(WORK_ID));
+		Evaluator eval = new Evaluator(Integer.parseInt(WORK_ID));
 		try {
 			AgendamentoDAO daoAgendamento = new AgendamentoDAO();
 			PkList pkList;
@@ -55,20 +52,26 @@ public class AgendamentoServiceServlet extends HttpServlet {
 			   }else{
 				   daoAgendamento.Create();
 				   int pkListValue = 0;
+				   int pkCodCliente = 0;
 				   Vector<String[]> CodAgendamento_ = new Vector<String[]>();
 				   try {
 					   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT MAX(COD_AGENDAMENTO) "
-							   + " 											                 FROM " + ZXMain.DB_NAME_ + "AGENDAMENTO "
-							   + "                                                          WHERE COD_PEDIDO = " + COD_PEDIDO);
+							   +                                                          "     , COD_CLIENTE "
+							   +                                                          "  FROM " + ZXMain.DB_NAME_ + "AGENDAMENTO "
+							   +                                                          "     , " + ZXMain.DB_NAME_ + "PEDIDO "
+							   +                                                          " WHERE AGENDAMENTO.COD_PEDIDO = " + COD_PEDIDO
+							   +                                                          "   AND PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
 					   for (int i=0;i < values.size();i++) {
-						   String[] attList = new String[1];
+						   String[] attList = new String[2];
 						   attList[0] = values.get(i)[0].toString();;
+						   attList[1] = values.get(i)[1].toString();;
 						   CodAgendamento_.add(attList);
 					   }
 				   }catch (SQLException ex) {
 					   ex.printStackTrace();
 				   }  finally {
 					   pkListValue = Integer.parseInt(CodAgendamento_.elementAt(0)[0].trim());
+					   pkCodCliente = Integer.parseInt(CodAgendamento_.elementAt(0)[1].trim());
 				   }
 				   if(pkListValue != 0){
 					   int arraysize = Integer.parseInt(request.getParameter("QOBS").trim());
@@ -95,22 +98,18 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoUnidadesAgendadas.setAttValueFor("TIPO_UNIDADE",2);
 						   daoUnidadesAgendadas.setAttValueFor("ESTADO",0);
 						   daoUnidadesAgendadas.setAttValueFor("DELETED",0);
-
 						   NumeroOsDAO daoNumeroOs = new NumeroOsDAO();
 						   daoNumeroOs.setAttValueFor("COD_USUARIO", COD_USUARIO);
-						   daoNumeroOs.setAttValueFor("DATA_GERACAO", DATA_INGRESSO);
 						   daoNumeroOs.setAttValueFor("DELETED", 0);
 						   int count = 0;
 						   int num_os = 0;
 						   Vector<String[]> NumOS_ = new Vector<String[]>();
 						   try{
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COUNT(*) "		//00
-									   + 														  "     , NUM_OS "			//01
+									   + 														  "     , MAX(NUM_OS) "		//01
 									   + 														  "  FROM " + ZXMain.DB_NAME_ + "NUMERO_OS "
 									   + 														  " WHERE ANO_OS = YEAR(NOW()) "
-									   +														  "   AND MES_OS = MONTH(NOW()) "
-									   + 														  " ORDER BY COD_NUM_OS DESC "
-									   +														  " LIMIT 1 ");
+									   +														  "   AND MES_OS = MONTH(NOW()) ");
 							   for (int i=0;i < values.size();i++) {
 								   String[] attList = new String[2];
 								   attList[0] = values.get(i)[0].toString();
@@ -127,6 +126,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   num_os++;
 						   daoNumeroOs.setAttValueFor("ANO_OS", DATA_INGRESSO.substring(0, 4));
 						   daoNumeroOs.setAttValueFor("MES_OS", DATA_INGRESSO.substring(5, 7));
+						   daoNumeroOs.setAttValueFor("DATA_GERACAO", date);
 						   daoNumeroOs.setAttValueFor("NUM_OS", num_os);
 						   daoNumeroOs.Create();
 						   int pkNumOS = 0;
@@ -151,9 +151,13 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   OsDAO daoOS = new OsDAO();
 						   daoOS.setAttValueFor("COD_NUM_OS", pkNumOS);
 						   daoOS.setAttValueFor("FRUSTRADA", 0);
-						   daoOS.setAttValueFor("TIPO_OS", 1);
+						   daoOS.setAttValueFor("COD_TIPO_OS", 1);
 						   daoOS.setAttValueFor("HAVE_TEST", 0);
 						   daoOS.setAttValueFor("DELETED", 0);
+						   daoOS.setAttValueFor("COD_CLIENTE", pkCodCliente);
+						   daoOS.setAttValueFor("COD_UNIDADE",COD_UNIDADE);
+						   daoOS.setAttValueFor("TIPO_UNIDADE",2);
+						   daoOS.setAttValueFor("COD_AGENDAMENTO",pkListValue);
 						   daoOS.Create();
 						   int pkCodOS = 0;
 						   Vector<String[]> CodOS_ = new Vector<String[]>();
@@ -173,6 +177,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   }
 						   daoUnidadesAgendadas.setAttValueFor("COD_OS",pkCodOS);
 						   daoUnidadesAgendadas.Create();
+						   int pkCodUnidadeAgendada;
 						   Vector<String[]> CodUnidadeAgendada_ = new Vector<String[]>();
 						   try {
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_UNIDADES_AGENDADAS "
@@ -186,9 +191,9 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   }catch (SQLException ex) {
 							   ex.printStackTrace();
 						   }  finally {
-							   pkListValue = Integer.parseInt(CodUnidadeAgendada_.elementAt(0)[0].trim());
+							   pkCodUnidadeAgendada = Integer.parseInt(CodUnidadeAgendada_.elementAt(0)[0].trim());
 						   }
-						   PK_COLUMN = pkListValue;
+						   PK_COLUMN = pkCodUnidadeAgendada;
 						   eval.startDepedencyWorkAgendamento(PK_COLUMN, DATA_AGENDAMENTO, HORA_AGENDAMENTO);
 					   }
 					   if(END_AGEND.compareTo("nao") == 0){
@@ -227,8 +232,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 				   if(eval.endWorkAgendamento()){
 					   String REAGENDAR = request.getParameter("REAGENDAR").toString().trim();
 					   if(REAGENDAR.compareTo("true") == 0){
-						   System.err.println("\n Dentro do IF");
-						   MockSchedule.createSameWork(Integer.parseInt(WORK_ID));
+						   Schedule.createSameWork(Integer.parseInt(WORK_ID));
 					   }
 				   }
 			   }
@@ -241,7 +245,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		}catch(Exception e){
 			out.println("Error on AgendamentoServiceServlet... " + ' ' + e.getMessage());
 		}
-		response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp?COD_USUARIO=" + COD_USUARIO);
+		response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp");
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}

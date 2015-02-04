@@ -6,17 +6,23 @@ CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 
 <%
+	String user = null;
+	if(session.getAttribute("user") == null){
+		response.setContentType("text/html");
+		response.sendRedirect("index.html");
+	}else{
+		user = (String) session.getAttribute("user");
+	}
 	String[] PK_OBJ = {request.getParameter("PK_OBJ")};
 	String WORK_ID = request.getParameter("WORK_ID");
-	String[] COD_USUARIO = {request.getParameter("COD_USUARIO")};
 	String AREA = request.getParameter("AREA");
 	NovoPedidoServiceBean beanPedido = new NovoPedidoServiceBean(PK_OBJ);
 	String[] pkCodCliente = {beanPedido.getCodCliente()};
 	ClienteServiceBean beanCliente = new ClienteServiceBean(pkCodCliente);
-	MockScheduleBean bean = new MockScheduleBean(COD_USUARIO);
+	ScheduleBean bean = new ScheduleBean(user);
 	bean.setStartTimestamp(WORK_ID);
 %>
 
@@ -55,60 +61,99 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             <div class="tab-pane" id="aba_unidades">
                 <fieldset class="field">
 				<legend><b>Unidades para o Agendamento:</b></legend>
-				<%Vector<String[]> CodtUnidadesVeiculo = beanPedido.getCodUnidadesVeiculo();
+				<%Vector<String[]> CodUnidadesVeiculo = beanPedido.getCodUnidadesVeiculo();
 				Vector<String[]> CountUnidadesVeiculo = beanPedido.getCountUnidadesVeiculo();
-				if(CodtUnidadesVeiculo.size() > Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0])){
-					if(Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0]) != 0){
-						Vector<String[]> CodVeiculoToSched = beanPedido.getCodUnidadesVeiculoToSched();
-						for (int i=0;i < CodVeiculoToSched.size();i++) {
-							try {
-								Vector<String[]> listVeiculo = beanPedido.getDadosVeiculo((Integer.parseInt(CodVeiculoToSched.elementAt(i)[0])));
-								if(i!=0){ %>
-									<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
-										<script>
-											var c = document.getElementById("myCanvasUnidades_<%=i%>");
-											var ctx = c.getContext("2d");
-											ctx.moveTo(0,0);
-											ctx.lineTo(680,0);
-											ctx.stroke();
-										</script>
-								<%} %>
-								<%String COD_VEICULO = CodVeiculoToSched.elementAt(i)[0].trim();%>
-								<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(listVeiculo.elementAt(0)[0].trim()))%>&nbsp;&nbsp;
-								<b>Placa:</b>&nbsp;<%=listVeiculo.elementAt(0)[1].trim()%>
-								<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
-	                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
-	                			<br><input type="checkbox" value="reagendar_<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
-							<%}catch (Exception e){
-								out.println("Error ao preencher unidades agendamento... " + e.getMessage());
+				if(CountUnidadesVeiculo.size() > 0){
+					if(CodUnidadesVeiculo.size() > Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0])){
+						if(Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0]) != 0){
+							String codScheded = null;
+							for(int i=0; i<CountUnidadesVeiculo.size(); i++){
+								if(i==0){
+									codScheded = CountUnidadesVeiculo.elementAt(i)[1];
+								}else{
+									codScheded = codScheded + CountUnidadesVeiculo.elementAt(i)[1];
+								}
+								if(i+1<CountUnidadesVeiculo.size()){
+									codScheded = codScheded + ",";
+								}
 							}
+							Vector<String[]> CodVeiculoToSched = beanPedido.getCodUnidadesVeiculoToSched(codScheded);
+							for (int i=0;i < CodVeiculoToSched.size();i++) {
+								try{
+									Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodVeiculoToSched.elementAt(i)[0]));
+									VeiculoDAO dao = listVeiculo.elementAt(0);
+									if(i!=0){%>
+										<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
+											<script>
+												var c = document.getElementById("myCanvasUnidades_<%=i%>");
+												var ctx = c.getContext("2d");
+												ctx.moveTo(0,0);
+												ctx.lineTo(680,0);
+												ctx.stroke();
+											</script>
+									<%}%>
+									<%String COD_VEICULO = CodUnidadesVeiculo.elementAt(i)[0].trim();%>
+									<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;
+									<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+									<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
+		                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
+		                			<br><input type="checkbox" value="<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
+								<%}catch (Exception e){
+									out.println("Error ao preencher unidades agendamento... " + e.getMessage());
+								}
+							}
+						}else{
+							for (int i=0;i < CodUnidadesVeiculo.size();i++){
+								try{
+									Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]));
+									VeiculoDAO dao = listVeiculo.elementAt(0);
+									if(i!=0){%>
+										<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
+											<script>
+												var c = document.getElementById("myCanvasUnidades_<%=i%>");
+												var ctx = c.getContext("2d");
+												ctx.moveTo(0,0);
+												ctx.lineTo(680,0);
+												ctx.stroke();
+											</script>
+									<%}%>
+									<%String COD_VEICULO = CodUnidadesVeiculo.elementAt(i)[0].trim();%>
+									<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;
+									<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+									<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
+		                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
+		                			<br><input type="checkbox" value="<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
+								<%}catch (Exception e){
+									out.println("Error ao preencher unidades agendamento... " + e.getMessage());
+								}%>
+							<%}
 						}
-					}else{
-						for (int i=0;i < CodtUnidadesVeiculo.size();i++) {
-							try{
-								Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodtUnidadesVeiculo.elementAt(i)[0]));
-								VeiculoDAO dao = listVeiculo.elementAt(0);
-								if(i!=0){%>
-									<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
-										<script>
-											var c = document.getElementById("myCanvasUnidades_<%=i%>");
-											var ctx = c.getContext("2d");
-											ctx.moveTo(0,0);
-											ctx.lineTo(680,0);
-											ctx.stroke();
-										</script>
-								<%}%>
-								<%String COD_VEICULO = CodtUnidadesVeiculo.elementAt(i)[0].trim();%>
-								<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;
-								<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
-								<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
-	                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
-	                			<br><input type="checkbox" value="<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
-							<%}catch (Exception e){
-								out.println("Error ao preencher unidades agendamento... " + e.getMessage());
-							}%>
-						<%}
 					}
+				}else{
+					for (int i=0;i < CodUnidadesVeiculo.size();i++){
+						try{
+							Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]));
+							VeiculoDAO dao = listVeiculo.elementAt(0);
+							if(i!=0){%>
+								<canvas id="myCanvasUnidades_<%=i%>" width="680" height="1" style="border:0px;"></canvas>
+									<script>
+										var c = document.getElementById("myCanvasUnidades_<%=i%>");
+										var ctx = c.getContext("2d");
+										ctx.moveTo(0,0);
+										ctx.lineTo(680,0);
+										ctx.stroke();
+									</script>
+							<%}%>
+							<%String COD_VEICULO = CodUnidadesVeiculo.elementAt(i)[0].trim();%>
+							<b>Veículo</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;
+							<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>
+							<br><b>Data do Agendamento:</b> <input type="date" id="data_agendamento_<%=i%>">
+                			<b>Hora:</b> <input type="time" id="hora_agendamento_<%=i%>">
+                			<br><input type="checkbox" value="<%=COD_VEICULO%>" id="reagendar_<%=i%>" name="reagendar_unidade">&nbsp;<b>Não foi possível realizar o agendamento dessa unidade.</b>
+						<%}catch (Exception e){
+							out.println("Error ao preencher unidades agendamento... " + e.getMessage());
+						}%>
+					<%}
 				}%>
                 </fieldset>
             </div>
@@ -122,7 +167,11 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
             	<button type="button" id="cancel_modal">Cancelar</button>
            	</div>
            	<div class="tab-pane" id="aba_oculta">
-           		<div id="total_unidades"><%=CodtUnidadesVeiculo.size()-Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0])%></div>
+           	<%if(CountUnidadesVeiculo.size() > 0){%>
+           		<div id="total_unidades"><%=CodUnidadesVeiculo.size()-Integer.parseInt(CountUnidadesVeiculo.elementAt(0)[0])%></div>
+           	<%}else{%>
+           		<div id="total_unidades"><%=CodUnidadesVeiculo.size()%></div>
+           	<%}%>
            		<div id="cod_dado_inst"><%=instalacaoList.elementAt(0)[11].trim()%></div>
            		<div id="cod_pedido"><%=beanPedido.getNumeroPedido()%></div>
 		        <div id="form_end" style="visibility: hidden;">

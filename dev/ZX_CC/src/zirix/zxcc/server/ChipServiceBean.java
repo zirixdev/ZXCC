@@ -102,6 +102,28 @@ public class ChipServiceBean {
 	}
 
 	@SuppressWarnings("finally")
+	public Vector<String[]> getNumeroConta(){
+		Vector<String[]> NumeroConta = new Vector<String[]>();
+		
+		try {
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT NUMERO_CONTA "
+					+ " 											 FROM " + ZXMain.DB_NAME_ + "CONTA_CHIP "
+					+ "                                             WHERE COD_CONTA = " + COD_MODULO_);
+
+			for (int i=0;i < values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
+				NumeroConta.add(attList);
+			}
+			
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}  finally {
+			return NumeroConta;
+		}
+	}
+
+	@SuppressWarnings("finally")
 	public Vector<String[]> getNumeroModulo(){
 		Vector<String[]> NumeroModulo = new Vector<String[]>();
 		

@@ -59,7 +59,6 @@ nav.find(".li-submenu-last").each(function(){
 
 function modal_click(id){
 	cod_usuario = document.getElementById("cod_usuario");
-	cod_usuario_ = cod_usuario.innerHTML.trim();
     this.menu_option = id.id;
     switch(menu_option) {
         case "menu_opr_cad_cli":
@@ -164,12 +163,11 @@ function modal_click(id){
             break;
         case "menu_ext":
         	if(confirm('Deseja sair do sitema?')){
-        		//call invalidate session on JAVA and redirect to this url:
-        		document.location.href = url_adress + "index.html";
+        		document.location.href = url_adress + "services/logout";
         	}
         	break;
         case "no_permission":
-        	alert('Usu�rio sem permiss�o para essa fun��o!');
+        	alert('Usuário sem permissão para essa função!');
         	break;
         default:
             $.ajax({
@@ -238,12 +236,6 @@ function SCHED_WORK_FUNCTION(tela){
 	    });
 		break;
 	}
-
-	/*cod_usuario = document.getElementById("cod_usuario");
-	cod_usuario_ = cod_usuario.innerHTML.trim();
-	var adress = "";
-	adress = url_adress + 'services/startservlet?OP_CODE=STARTFLUX&COD_USUARIO=' + cod_usuario_ + '&PROCESS_ID=1';	
-	document.location.href = adress;*/
 }
 
 function SCHED_WORK_START_FUNCTION(work_id,service_name,pk_column){
@@ -422,6 +414,6 @@ function callModalTarefas(event){
 	        break;
 	    } 
 	}else{
-		alert("Servi�o n�o encontrado!");
+		alert("Serviço não encontrado!");
 	} 
 }

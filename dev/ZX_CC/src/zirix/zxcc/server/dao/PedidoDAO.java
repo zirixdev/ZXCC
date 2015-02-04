@@ -38,7 +38,7 @@ public class PedidoDAO extends GenericDAO<PedidoDAO> {
     	setAttValueFor("COD_TIPO",res.getInt("COD_TIPO"));
     	setAttValueFor("DATA_VENCIMENTO",res.getInt("DATA_VENCIMENTO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
-    	//setAttValueFor("INFO_PEDIDO",res.getString("INFO_PEDIDO"));
+    	setAttValueFor("INFO_PEDIDO",res.getString("INFO_PEDIDO"));
     	setAttValueFor("BOLETO_EMAIL",res.getInt("BOLETO_EMAIL"));
     }
     

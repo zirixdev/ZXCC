@@ -21,9 +21,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						<legend>Dados do Sim Card</legend>
 						NFe:<input type="text" size="29px" id="nfe_chip" onkeypress="javascript: return EntradaNumerico(event);" maxlength="50">
 						<br>
-						ICC-ID: <input type="text" size="25px" id="iccid" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20">
-						<br>
-						Operadora:<select id="operadora_chip" class="size_47">
+						<input type="radio" name="iccidMassivo" value="individual" onchange="divICCID('individual')" checked="checked">Individual
+						<input type="radio" name="iccidMassivo" value="massivo" onchange="divICCID('massivo')">Caixa
+						<div id="iccidSelect">
+							ICC-ID: <input type="text" size="25px" id="iccid" onkeypress="javascript: return EntradaNumerico(event);" maxlength="20">
+						</div>
+						Operadora: <select id="operadora_chip" class="size_47">
 						<%
 							try {
 								Vector<OperadoraChipDAO> list = OperadoraChipDAOService.loadAll();
@@ -41,24 +44,49 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						<br>
 						Tecnologia: <input type="text" class="size_46" id="tecnologia_chip" maxlength="3">
 						<br>
-						APN:<input type="text" size="28px" id="apn_chip" maxlength="49">
+						APN: <input type="text" size="28px" id="apn_chip" maxlength="49">
 						<br>
-						Estado:
-						<select id="estado_chip" class="size_52">
-						<%try {
+						Estado: <select id="estado_chip" class="size_52">
+						<%try{
 							Vector<StatusChipDAO> list = StatusChipDAOService.loadAll();
-							for (int i=0;i < list.size();i++) {
+							for(int i=0;i < list.size();i++){
 								StatusChipDAO dao = list.elementAt(i);
 								String str = String.valueOf(dao.getAttValueFor("NOME_STATUS")).trim();%>
 								<option value="<%=dao.getPkValueFor("COD_STATUS")%>" name="option_estado_chip"><%=str%></option>
 							<%}%>
-						<%}catch (Exception e) {
+						<%}catch(Exception e){
 							out.println("Error... " + e.getMessage());
-						  }%>
+						}%>
 						</select>
 						<br>
 						DDD: <input type="text" class="size_11" id="ddd_chip" onkeypress="javascript: return EntradaNumerico(event);" maxlength="2">
 						Número: <input type="text" class="size_26" id="numero_chip" onkeypress="javascript: return EntradaNumerico(event);" maxlength="10">
+						<br>
+						Pacote: <select id="pacote_chip" class="size_52">
+						<%try{
+							Vector<PacoteChipDAO> list = PacoteChipDAOService.loadAll();
+							for(int i=0;i < list.size();i++){
+								PacoteChipDAO dao = list.elementAt(i);
+								String str = String.valueOf(dao.getAttValueFor("NOME_PACOTE")).trim();%>
+								<option value="<%=dao.getPkValueFor("COD_PACOTE")%>" name="option_pacote_chip"><%=str%></option>
+							<%}%>
+						<%}catch(Exception e){
+							out.println("Error... " + e.getMessage());
+						  }%>
+						</select>
+						<br>
+						Conta: <select id="conta_chip" class="size_53">
+						<%try{
+							Vector<ContaChipDAO> list = ContaChipDAOService.loadAll();
+							for (int i=0;i < list.size();i++) {
+								ContaChipDAO dao = list.elementAt(i);
+								String str = String.valueOf(dao.getAttValueFor("NUMERO_CONTA")).trim();%>
+								<option value="<%=dao.getPkValueFor("COD_CONTA")%>" name="option_conta_chip"><%=str%></option>
+							<%}%>
+						<%}catch(Exception e){
+							out.println("Error... " + e.getMessage());
+						  }%>
+						</select>
 					</fieldset>
 		            <div class="div_img_chip">
 		            </div>

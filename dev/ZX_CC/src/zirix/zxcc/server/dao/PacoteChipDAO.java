@@ -32,7 +32,6 @@ public class PacoteChipDAO extends GenericDAO<ChipDAO> {
 	}
 
     public void loadAttsFromResultSet(ResultSet res) throws SQLException {
-    	setAttValueFor("COD_CONTA",res.getInt("COD_CONTA"));
     	setAttValueFor("NOME_PACOTE",res.getString("NOME_PACOTE"));
     	setAttValueFor("INFO_PACOTE",res.getString("INFO_PACOTE"));
     	setAttValueFor("COMPARTILHADO",res.getInt("COMPARTILHADO"));

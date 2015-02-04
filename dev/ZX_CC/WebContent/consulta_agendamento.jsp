@@ -6,21 +6,27 @@ CLIENTE: ZIRIX SOLUÇÕES EM RASTREAMENTO
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <%
+	String user = null;
+	if(session.getAttribute("user") == null){
+		response.setContentType("text/html");
+		response.sendRedirect("index.html");
+	}else{
+		user = (String) session.getAttribute("user");
+	}
 	String[] PK_OBJ = {request.getParameter("PK_OBJ")};
 	String WORK_ID = request.getParameter("WORK_ID");
-	String[] COD_USUARIO = {request.getParameter("COD_USUARIO")};
 	String AREA = request.getParameter("AREA");
 	AgendamentoServiceBean beanAgendamento = new AgendamentoServiceBean(PK_OBJ);
 	String[] pkCodCliente = {beanAgendamento.getCodCliente()};
 	ClienteServiceBean beanCliente = new ClienteServiceBean(pkCodCliente);
-	MockScheduleBean bean = new MockScheduleBean(COD_USUARIO);
+	ScheduleBean bean = new ScheduleBean(user);
 	bean.setStartTimestamp(WORK_ID);
 %>
 
-<!--Operacional -> Agendamento-->
-<div id="operacional-agendamento-content">
+<!--Operacional -> Consulta -> Agendamento-->
+<div id="operacional-consulta-agendamento-content">
     <form class="outer_form">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#aba_agendamento" data-toggle="tab">Agendamento</a></li>
@@ -69,7 +75,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</select>
 					<br><div id="obs_frust"><textarea placeholder="Observações" cols="70" rows="4" id="obs_frustrada" maxlength="796"></textarea></div>
 					<div id="unidades">
-						
+
 					</div>
                 </fieldset>
             </div>
@@ -96,8 +102,9 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</select>
 					<br><b>Placa: </b><%=UnidadesAgendadas.elementAt(0)[1].trim()%>&nbsp;&nbsp;&nbsp;<b>Marca: </b><%=UnidadesAgendadas.elementAt(0)[2].trim()%>&nbsp;&nbsp;&nbsp;<b>Modelo: </b><%=UnidadesAgendadas.elementAt(0)[3].trim()%>
 					<br><b>O.S.: <%=UnidadesAgendadas.elementAt(0)[5].trim()%></b>
-					&nbsp;&nbsp;&nbsp;ID Modulo: <input list="id_list" name="id_modulo_consulta" id="item_id_modulo" class="size_30">
-			        <datalist id="id_list">      	
+					<%String numeroModulo = beanAgendamento.getNumeroModulo(UnidadesAgendadas.elementAt(0)[8].trim(), UnidadesAgendadas.elementAt(0)[7].trim());%>
+					&nbsp;&nbsp;&nbsp;<b>ID Modulo:</b> <input list="id_list" name="id_modulo_consulta" id="item_id_modulo" class="size_30" value="<%=numeroModulo%>">
+			        <datalist id="id_list">
 					<%try{
 						Vector<ModuloDAO> list = ModuloDAOService.loadAllEstoque();
 						for (int j=0;j < list.size();j++) {

@@ -52,30 +52,59 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 						<br>
 						Estado:
 						<select id="estado_chip" class="size_52">
-						<%
-							try {
-								Vector<StatusChipDAO> list = StatusChipDAOService.loadAll();
-								int cod_estado_bean = bean.getCodStatus();
-								for (int i=0;i < list.size();i++) {
-									StatusChipDAO dao = list.elementAt(i);
-									int cod_estado_servlet = dao.getPkValueFor("COD_STATUS");
-									String str = String.valueOf(dao.getAttValueFor("NOME_STATUS")).trim();%>
-					       			   <option value="<%=cod_estado_servlet%>" name="option_estado_chip"
-					       			<%if (cod_estado_servlet == cod_estado_bean){%> selected
-									<%}%>
-					       			><%=str%></option>
-					       		<%}%>
-						<%
-							   } catch (Exception e) {
-								   out.println("Error... " + e.getMessage());
-							   }
-						%>
+						<%try{
+							Vector<StatusChipDAO> list = StatusChipDAOService.loadAll();
+							int cod_estado_bean = bean.getCodStatus();
+							for (int i=0;i < list.size();i++){
+								StatusChipDAO dao = list.elementAt(i);
+								int cod_estado_servlet = dao.getPkValueFor("COD_STATUS");
+								String str = String.valueOf(dao.getAttValueFor("NOME_STATUS")).trim();%>
+								<option value="<%=cod_estado_servlet%>" name="option_estado_chip"
+								<%if(cod_estado_servlet == cod_estado_bean){%> selected<%}%>
+								><%=str%></option>
+							<%}%>
+						<%}catch(Exception e){
+							out.println("Error... " + e.getMessage());
+						}%>
 						</select>
 						<br>
 						DDD: <input type="text" class="size_11" id="ddd_chip" onkeypress="javascript: return EntradaNumerico(event);" maxlength="2" value="<%=bean.getDdd().trim()%>">
 						Número: <input type="text" class="size_26" id="numero_chip" onkeypress="javascript: return EntradaNumerico(event);" maxlength="10" value="<%=bean.getNumeroChip().trim()%>">
-						<%
-							int cod_modulo_bean = bean.getCodModulo();
+						<br>
+						Pacote: <select id="pacote_chip" class="size_52">
+						<%try{
+							Vector<PacoteChipDAO> list = PacoteChipDAOService.loadAll();
+							int cod_pacote_bean = bean.getCodPacote();
+							for (int i=0;i < list.size();i++){
+								PacoteChipDAO dao = list.elementAt(i);
+								int cod_pacote_servlet = dao.getPkValueFor("COD_PACOTE");
+								String str = String.valueOf(dao.getAttValueFor("NOME_PACOTE")).trim();%>
+								<option value="<%=cod_pacote_servlet%>" name="option_pacote_chip"
+								<%if(cod_pacote_servlet == cod_pacote_bean){%> selected<%}%>
+								><%=str%></option>
+							<%}%>
+						<%}catch(Exception e){
+							out.println("Error... " + e.getMessage());
+						}%>
+						</select>
+						<br>
+						Conta: <select id="conta_chip" class="size_53">
+						<%try{
+							Vector<ContaChipDAO> list = ContaChipDAOService.loadAll();
+							int cod_conta_bean = bean.getCodConta();
+							for (int i=0;i < list.size();i++){
+								ContaChipDAO dao = list.elementAt(i);
+								int cod_conta_servlet = dao.getPkValueFor("COD_CONTA");
+								String str = String.valueOf(dao.getAttValueFor("NUMERO_CONTA")).trim();%>
+								<option value="<%=cod_conta_servlet%>" name="option_conta_chip"
+								<%if(cod_conta_servlet == cod_conta_bean){%> selected<%}%>
+								><%=str%></option>
+							<%}%>
+						<%}catch(Exception e){
+							out.println("Error... " + e.getMessage());
+						}%>
+						</select>
+						<%int cod_modulo_bean = bean.getCodModulo();
 							if(cod_modulo_bean > 0){%>
 								<br>
 								Número Módulo: <%=bean.getNumeroModulo().elementAt(0)[0].trim()%><br>

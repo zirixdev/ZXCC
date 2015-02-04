@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - DAO MANAGER
-DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLUCOES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -19,11 +19,11 @@ import javax.sql.DataSource;
 
 import zirix.zxcc.server.*;
 
-public class DAOManager {
+public class DAOManager{
 
 	public static final int CONNECTION_CHECK_TIMEOUT_IN_SECS = 10;
 
-	public static DAOManager getInstance() {
+	public static DAOManager getInstance(){
         return DAOManagerSingleton.INSTANCE.get();
     }  
 
@@ -39,99 +39,97 @@ public class DAOManager {
     }
     
     @SuppressWarnings("finally")
-	public Connection getLocalConnection() throws SQLException {
-    	
-    	if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
-	    	String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
-	    	Connection conn = null;
-	    	try{
-	    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-	    	    conn = DriverManager.getConnection(url);
-	    	}catch (Exception ex){
-	    		ex.printStackTrace();
-	    	}finally{
-	    		return conn;
-	    	}
-    	}else if(ZXMain.LOCAL_.compareTo("DEV") == 0){
-    		String url="jdbc:mysql://192.168.0.50/ZX_CC_DEV";
-        	Connection conn = null;
-        	try{
-        		Class.forName ("com.mysql.jdbc.Driver").newInstance ();
-        		conn = DriverManager.getConnection (url, "root", "pinguim01");
-        	}catch (Exception ex){
-        		ex.printStackTrace();
-        	}finally{
-        		return conn;
-        	}
-    	}else{
-    		String url="jdbc:mysql://192.168.0.32/ZX_CC_PROD";
-        	Connection conn = null;
-        	try{
-        		Class.forName ("com.mysql.jdbc.Driver").newInstance ();
-        		conn = DriverManager.getConnection (url, "root", "");
-        	}catch (Exception ex){
-        		ex.printStackTrace();
-        	}finally{
-        		return conn;
-        	}
+public Connection getLocalConnection() throws SQLException {
+	
+	if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+String url="jdbc:sqlserver://192.168.0.50:1433;integratedSecurity=true";
+Connection conn = null;
+try{
+	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	    conn = DriverManager.getConnection(url);
+	}catch (Exception ex){
+		ex.printStackTrace();
+	}finally{
+		return conn;
+	}
+}else if(ZXMain.LOCAL_.compareTo("DEV") == 0){
+String url="jdbc:mysql://192.168.0.50/ZX_CC_DEV";
+Connection conn = null;
+try{
+	Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+conn = DriverManager.getConnection (url, "root", "pinguim01");
+	}catch (Exception ex){
+		ex.printStackTrace();
+	}finally{
+		return conn;
+	}
+}else{
+	String url="jdbc:mysql://54.149.95.203/ZX_CC_QA";
+Connection conn = null;
+try{
+	Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+conn = DriverManager.getConnection (url, "pinguim", "pinguim01");
+    	}catch (Exception ex){
+    		ex.printStackTrace();
+    	}finally{
+    		return conn;
     	}
-    }
-    
-    public void executeUpdate(String query) throws SQLException {
-		PreparedStatement stmt = null;
-		Connection con = getConnection();
-		try
-		{                       	        	
-		   stmt = con.prepareStatement(query);
-		   stmt.executeUpdate();        			        		        
-		} catch(SQLException e){ 
-		    throw e; 
-		}
-		finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
-				con.commit();
-			}
-			if (stmt != null) stmt.close();
-			closeConnection(con);
-		} 
-    }
-    
-    public ArrayList<Object[]> executeQuery(String query) throws SQLException {
-    	    	
-        PreparedStatement stmt = null;
-        ResultSet res = null;
-        Connection con = getConnection();
-                
-        try
-        {                       	        	
-	       stmt = con.prepareStatement(query);
-	       res = stmt.executeQuery();
-	        
-	        ArrayList<Object[]> values = new ArrayList<Object[]>();	    	       
-	        
-	        int colCount = res.getMetaData().getColumnCount();               	      
-	        
-	        while (res.next()) {
-	        	
-	        	Object[] rowValues = new Object[colCount];
-	        	for (int i=1;i <= colCount;i++)	        	
-	        		rowValues[i-1] = res.getObject(res.getMetaData().getColumnName(i));
-	        		
-	        	
-	        	values.add(rowValues);
-	        	
-	        }
+	}
+}
 
-	        return values;	        			        		        
-	        
-        } catch(SQLException e){ 
-	        
-        	            
-            throw e; 
-        }
+public void executeUpdate(String query) throws SQLException {
+	PreparedStatement stmt = null;
+	Connection con = getConnection();
+	try
+	{                       	        	
+	   stmt = con.prepareStatement(query);
+	   stmt.executeUpdate();        			        		        
+	} catch(SQLException e){ 
+	    throw e; 
+	}
+	finally {
+		if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+			con.commit();
+		}
+		if (stmt != null) stmt.close();
+		closeConnection(con);
+	} 
+}
+
+public ArrayList<Object[]> executeQuery(String query) throws SQLException {
+	    	
+    PreparedStatement stmt = null;
+    ResultSet res = null;
+    Connection con = getConnection();
+            
+    try
+    {                       	        	
+       stmt = con.prepareStatement(query);
+       res = stmt.executeQuery();
         
-        finally {
-			if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
+        ArrayList<Object[]> values = new ArrayList<Object[]>();	    	       
+        
+        int colCount = res.getMetaData().getColumnCount();               	      
+        
+        while (res.next()) {
+        	
+        	Object[] rowValues = new Object[colCount];
+        	for (int i=1;i <= colCount;i++)	        	
+        		rowValues[i-1] = res.getObject(res.getMetaData().getColumnName(i));
+        		
+        	
+        	values.add(rowValues);
+        	
+        }
+
+        return values;	        			        		        
+        
+    }catch(SQLException e){
+        throw e; 
+    }
+
+    finally{
+		if(ZXMain.LOCAL_.compareTo("SQLSERVER") == 0){
         		con.commit();
     		}
         	if (res != null) res.close();
@@ -155,12 +153,9 @@ public class DAOManager {
   
 
     private DAOManager() throws Exception {
-        try
-        {
-        	// Look up the JNDI data source only once at init time
-  	      Context envCtx = (Context) new InitialContext().lookup("java:comp/env");
-  	      src = (DataSource) envCtx.lookup("jdbc/poolConn");
-  	      
+        try{
+			Context envCtx = (Context) new InitialContext().lookup("java:comp/env");
+src = (DataSource) envCtx.lookup("jdbc/poolConn");
         } catch(Exception e) { throw e; }
     }
 

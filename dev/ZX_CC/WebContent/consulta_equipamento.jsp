@@ -28,7 +28,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 	                <fieldset class="field_equip">
 	                    <legend>Dados do Equipamento:</legend>
 	                    ID: <input type="text" class="size_91" id="numero_modulo" onkeypress="javascript: return EntradaNumerico(event);" value="<%=bean.getID().trim()%>">
-	                    <br>SN: <input type="text" class="size_90" id="sn_modulo" value="<%=bean.getSN().trim()%>">
+	                    <br><b>SN:</b> <%=bean.getSN().trim()%>
 	                    <br>NFe:<input type="text" class="size_89" id="numero_nfe" onkeypress="javascript: return EntradaNumerico(event);" value="<%=bean.getNfe().trim()%>">
 	                    <br>Marca:<select id="marca_equip" class="size_86" onchange="select_modelo_function()">
 	                    	<option value="0" name="option_marca_modulo">---SELECIONE UM---</option>
@@ -83,28 +83,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							   out.println("Error... " + e.getMessage());
 						  }%>
 				        </datalist>
-				        <br>
-				        <%try {
-							Vector<TipoUnidadeDAO> list = TipoUnidadeDAOService.loadAll();
-							Vector<Integer[]> tipoUnidade = bean.getCodUnidade();
-							TIPO_UNIDADE_ = tipoUnidade.elementAt(0)[0];
-							for (int i=0;i < list.size();i++) {
-								TipoUnidadeDAO dao = list.elementAt(i);
-								String str = String.valueOf(dao.getAttValueFor("NOME")).trim();%>
-								<input type="radio" onclick="mod_int_function()" name="modulo_instalado" value="<%=dao.getPkValueFor("COD_UNIDADE")%>"
-								<%if(i+1 == tipoUnidade.elementAt(0)[0]){%>
-									checked="checked"
-								<%}%>
-								><%=str%>
-							<%}%>
-						<%}catch (Exception e) {
-							out.println("Error... " + e.getMessage());
-						  }%>
-	                    <div class="instalacao">
-	                    	<script>
-	                    		mod_int_function();
-						    </script>
-	                    </div>
 	                </fieldset>
                 </fieldset>
             </div>

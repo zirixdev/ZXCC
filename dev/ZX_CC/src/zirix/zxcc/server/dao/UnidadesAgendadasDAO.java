@@ -12,7 +12,7 @@ import java.util.Set;
 
 import zirix.zxcc.server.*;
 
-public class UnidadesAgendadasDAO extends GenericDAO<ObsPedidoDAO> {
+public class UnidadesAgendadasDAO extends GenericDAO<UnidadesAgendadasDAO> {
 
 
     public UnidadesAgendadasDAO(PkList pkList) {

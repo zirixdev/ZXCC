@@ -6,26 +6,32 @@ DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 -->
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector,zirix.zxcc.server.mock.*,zirix.zxcc.server.mock.dao.*" %>
-
+<%@ page import="zirix.zxcc.server.*,zirix.zxcc.server.dao.*,java.sql.SQLException,java.util.Vector" %>
 <%
+	String user = null;
+	if(session.getAttribute("user") == null){
+		response.setContentType("text/html");
+		response.sendRedirect("index.html");
+	}else{
+		user = (String) session.getAttribute("user");
+	}
+
 	String[] PK_OBJ = {request.getParameter("PK_OBJ")};
 	String WORK_ID = request.getParameter("WORK_ID");
-	String[] COD_USUARIO = {request.getParameter("COD_USUARIO")};
 	String AREA = request.getParameter("AREA");
 	NovoPedidoServiceBean beanPedido = new NovoPedidoServiceBean(PK_OBJ);
 	String[] pkCodCliente = {beanPedido.getCodCliente()};
 	ClienteServiceBean beanCliente = new ClienteServiceBean(pkCodCliente);
-	MockScheduleBean bean = new MockScheduleBean(COD_USUARIO);
+	ScheduleBean bean = new ScheduleBean(user);
 	bean.setStartTimestamp(WORK_ID);
 %>
 <!--Comercial -> Novo Pedido-->
 <div id="comercial-novo-pedido-content">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#aba_cliente" data-toggle="tab">Cliente</a></li>
-		<li><a href="#aba_unidade" data-toggle="tab">Unidades</a></li>
-		<li><a href="#aba_servicos" data-toggle="tab">Serviços</a></li>
-		<li><a href="#aba_observacoes" data-toggle="tab">Observações</a></li>
+		<li><a href="#aba_unidade" data-toggle="tab"<%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>Unidades</a></li>
+		<li><a href="#aba_servicos" data-toggle="tab"<%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>Serviços</a></li>
+		<li><a href="#aba_observacoes" data-toggle="tab"<%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>Observações</a></li>
 		<li><a href="#aba_anexos" data-toggle="tab" hidden="hidden">Anexos</a></li>
 	</ul>
 	<div class="tab-content">
@@ -83,7 +89,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</div>
 				</div>
 			</fieldset>
-			<fieldset class="field">
+			<fieldset class="field" <%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>
 			<legend><b>Endereço:</b></legend>
 				<div id="endereco">
 					<%Vector<String[]> endList = beanCliente.getEnd();%>
@@ -156,7 +162,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</div>
 				</div>
 			</fieldset>
-			<fieldset class="field">
+			<fieldset class="field"<%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>
 			<legend><b>Contato:</b></legend>
 				<div id="contato">
 					<%Vector<String[]> contatoList = beanCliente.getContato();%>
@@ -196,7 +202,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 					</div>
 				</div>
 			</fieldset>
-			<fieldset class="field">
+			<fieldset class="field"<%if(AREA.compareTo("FIN")==0){%> hidden="hidden"<%}%>>
 			<legend><b>E-mail:</b></legend>
 				<div id="email">
 					<div id="emails_inserido">
@@ -240,7 +246,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 							Vector<VeiculoDAO> listVeiculo = VeiculoDAOService.loadAllPedido(Integer.parseInt(CodUnidadesVeiculo.elementAt(i)[0]));
 							for(int j=0; j<listVeiculo.size(); j++){
 								VeiculoDAO dao = listVeiculo.elementAt(j);%>
-								<b>Placa:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>&nbsp;&nbsp;&nbsp;<b>Chassi:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("CHASSI")).trim()%>&nbsp;&nbsp;&nbsp;<b>Renavam:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("RENAVAN")).trim()%>
+								<b>Placa: </b>&nbsp;<%=String.valueOf(dao.getAttValueFor("PLACA")).trim()%>&nbsp;&nbsp;&nbsp;<b>Chassi:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("CHASSI")).trim()%>&nbsp;&nbsp;&nbsp;<b>Renavam:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("RENAVAN")).trim()%>
 								<br><b>Marca:</b>&nbsp;<%=beanPedido.getNomeMarca(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_MARCA")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Modelo:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("MODELO")).trim()%>
 								<br><b>Ano de Fabricação:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_FAB")).trim()%>&nbsp;&nbsp;&nbsp;<b>Ano do Modelo:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("ANO_MOD")).trim()%>&nbsp;&nbsp;&nbsp;<b>Cor:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("COR")).trim()%>
 								<br><b>Tipo de Combustível:</b>&nbsp;<%=beanPedido.getNomeCombustivel(Integer.parseInt(String.valueOf(dao.getAttValueFor("COD_COMBUSTIVEL")).trim()))%>&nbsp;&nbsp;&nbsp;<b>Voltagem:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("VOLT")).trim()%>&nbsp;&nbsp;&nbsp;<b>KM:</b>&nbsp;<%=String.valueOf(dao.getAttValueFor("KM")).trim()%>
@@ -267,6 +273,22 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 										<br>
 									<%}%>
 								</fieldset>
+								<%if(AREA.compareTo("SEP_EQUIP")==0){
+									String COD_VEICULO = CodUnidadesVeiculo.elementAt(i)[0];%>
+									<b>Equipamento selecionado:</b>&nbsp;<input list="id_list_<%=i%>" name="id_modulo_<%=i%>" id="item_id_modulo_<%=i%>" class="size_30">
+									<datalist id="id_list_<%=i%>">
+										<%try{
+											Vector<ModuloDAO> list = ModuloDAOService.loadAllEstoque();
+											for (int f=0;f < list.size();f++) {
+												ModuloDAO daoModulo = list.elementAt(f);
+												String str = String.valueOf(daoModulo.getAttValueFor("NUMERO_MODULO")).trim();%>				   	
+												<option value="<%=str%>" data-label="<%=daoModulo.getPkValueFor("COD_MODULO")%>--<%=COD_VEICULO%>">
+											<%}%>
+										<%}catch (Exception e) {
+											out.println("Error... " + e.getMessage());
+										  }%>
+							        </datalist>
+						        <%}%>
 							<%}
 						}catch (Exception e){
 							out.println("Error ao preencher abas unidades... " + e.getMessage());
@@ -276,6 +298,7 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 				</div>
 			</fieldset>
 		</div>
+		<div id="QtdUnidadesVeiculo" style="visibility: hidden;"><%=CodUnidadesVeiculo.size()%></div>
 		<div class="tab-pane" id="aba_servicos">
 			<fieldset class="field">
 			<legend><b>Tipo do Pedido:</b></legend>

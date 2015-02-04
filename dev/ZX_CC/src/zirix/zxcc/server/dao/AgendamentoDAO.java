@@ -1,5 +1,5 @@
 /*ZIRIX CONTROL CENTER - AGENDAMENTO DAO
-DESENVOLVIDO POR ZIRIX SOLUï¿½ï¿½ES EM RASTREAMENTO LTDA.
+DESENVOLVIDO POR ZIRIX SOLU��ES EM RASTREAMENTO LTDA.
 
 DESENVOLVEDOR: RAPHAEL B. MARQUES
 TECNOLOGIAS UTILIZADAS: JAVA*/
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Set;
 import zirix.zxcc.server.*;
 
-public class AgendamentoDAO extends GenericDAO<AnexoPedidoDAO> {
+public class AgendamentoDAO extends GenericDAO<AgendamentoDAO> {
 
 
 	public AgendamentoDAO(PkList pkList) {
@@ -34,7 +34,6 @@ public class AgendamentoDAO extends GenericDAO<AnexoPedidoDAO> {
     	setAttValueFor("ESTADO",res.getInt("ESTADO"));
     	setAttValueFor("COD_DADOS_INSTALACAO",res.getInt("COD_DADOS_INSTALACAO"));
     	setAttValueFor("DELETED",res.getInt("DELETED"));
-    	setAttValueFor("COD_OS",res.getInt("COD_OS"));
     }
 
     public Set<String> getPkNamesSet() {
