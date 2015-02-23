@@ -8,58 +8,18 @@ import java.util.*;
 import java.io.*;
 import java.sql.*;
 
+import antena.printer.*;
 import zirix.zxcc.server.dao.*;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
 
 @WebServlet( name="ImprimePedidoServlet", urlPatterns = {"/services/imprimepedido"}, loadOnStartup=1)
 public class ImprimePedidoServlet extends HttpServlet{
-
 	private static final long serialVersionUID = 1L;
-
-
-	private RelatorioPedidoData docData = new RelatorioPedidoData();
-
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
 
-		try{
+		//buildPDFFromScratch(request,response);
 
-			String COD_PEDIDO = request.getParameter("COD_PEDIDO").trim();
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			ServletContext cntx= getServletContext();
 
-			List lista = new ArrayList();
-
-			fetchClienteData(COD_PEDIDO);
-
-			lista.add(docData);
-
-			String jaspername = cntx.getRealPath("/reports/report3.jasper");
-
-			File jasperfile = new File(jaspername);
-
-			JasperReport jasper = (JasperReport)JRLoader.loadObject(jasperfile);
-
-			JasperPrint jasperprint = JasperFillManager.fillReport(jasper, null, new JRBeanCollectionDataSource(lista));
-
-			JasperExportManager.exportReportToPdfStream(jasperprint, output);
-
-			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition", "attachment; filename=Pedido.pdf");
-			response.getOutputStream().write(output.toByteArray());
-
-		}catch(Exception ex){            
-			ex.printStackTrace();
-		}  
 	}
 
 
@@ -68,9 +28,7 @@ public class ImprimePedidoServlet extends HttpServlet{
 		try{
 			String COD_PEDIDO = request.getParameter("COD_PEDIDO").trim();
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
-
 			Vector<String> txtList = fetchDocumentData(COD_PEDIDO);
-
 			ServletContext cntx= getServletContext();
 			// Get the absolute path of the image
 			String filename = cntx.getRealPath("images/header_pdf.png");
@@ -81,11 +39,13 @@ public class ImprimePedidoServlet extends HttpServlet{
 				return;
 			}
 			File fileFront = new File(filename);
-			FileInputStream logo = new FileInputStream(fileFront);
+			FileInputStream f = new FileInputStream(fileFront);
+			FileInputStream o = new FileInputStream(fileFront);
+			output = ADPDFCreator.createPDF(f, o, ADFont.HELVETICA,txtList);
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=yourFile.pdf");
 			response.getOutputStream().write(output.toByteArray());
-			logo.close();
+			f.close();
 
 		}catch(Exception ex){            
 			ex.printStackTrace();
@@ -93,26 +53,22 @@ public class ImprimePedidoServlet extends HttpServlet{
 	}
 
 	protected Vector<String> fetchDocumentData(String COD_PEDIDO){ 
-
-		//Vector<String> clienteData = fetchClienteData(COD_PEDIDO);
-
+		Vector<String> clienteData = fetchClienteData(COD_PEDIDO);
 		Vector<String> documentoClienteData = fetchDocumentoClienteData(COD_PEDIDO);
 		Vector<String> enderecoClienteData = fetchEnderecoClienteData(COD_PEDIDO);
 		Vector<String> contatoClienteData = fetchContatoClienteData(COD_PEDIDO);
-		//Vector<String> pedidoData = fetchPedidoData(COD_PEDIDO);
+		Vector<String> pedidoData = fetchPedidoData(COD_PEDIDO);
 		Vector<String> docData = new Vector<String>();
-
-		//docData.addAll(clienteData);
-
+		docData.addAll(clienteData);
 		docData.addAll(documentoClienteData);
 		docData.addAll(enderecoClienteData);
 		docData.addAll(contatoClienteData);
-		//docData.addAll(pedidoData);
+		docData.addAll(pedidoData);
 		return docData;
 	}
 
-	protected void fetchClienteData(String COD_PEDIDO){ 
-		
+	protected Vector<String> fetchClienteData(String COD_PEDIDO){ 
+		Vector<String> docData = new Vector<String>();
 		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
 		PedidoDAO pedido = new PedidoDAO(pkList);
 		try{
@@ -125,20 +81,20 @@ public class ImprimePedidoServlet extends HttpServlet{
 			pkList = VendedorDAO.createKey("COD_VENDEDOR", Integer.parseInt(COD_VENDEDOR));
 			VendedorDAO vendedor = new VendedorDAO(pkList);
 			vendedor.read();
-
 			String nome_vendedor = vendedor.getAttValueFor("NOME").toString();
 			String nome_cliente = cliente.getAttValueFor("NOME").toString();
 			String fantasia_cliente = cliente.getAttValueFor("NOME_FANTASIA").toString();
 			String data_nascimento = cliente.getAttValueFor("DATA_NASCIMENTO").toString();
 			String site = cliente.getAttValueFor("SITE").toString();
-
-			docData.setNomeVendedor(nome_vendedor);
-			docData.setNomeCliente(nome_cliente);	
-			docData.setFantasiaCliente(fantasia_cliente);
-
+			docData.add("NOME CLIENTE: " + nome_cliente);	
+			docData.add("NOME FANTASIA CLIENTE: " + fantasia_cliente);
+			docData.add("DATA NASCIMENTO CLIENTE: " + data_nascimento);
+			docData.add("SITE DO CLIENTE: " + site);
+			docData.add("NOME DO VENDEDOR: " + nome_vendedor);
 		}catch(SQLException sql){
 			sql.printStackTrace();
 		}
+		return docData;
 	}
 
 	protected Vector<String> fetchDocumentoClienteData(String COD_PEDIDO){
@@ -222,9 +178,7 @@ public class ImprimePedidoServlet extends HttpServlet{
 	}
 
 	protected Vector<String> fetchPedidoData(String COD_PEDIDO){
-
 		Vector<String> docData = new Vector<String>();
-
 		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
 		PedidoDAO pedido = new PedidoDAO(pkList);
 		try{
