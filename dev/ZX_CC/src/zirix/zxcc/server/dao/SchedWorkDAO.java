@@ -13,7 +13,6 @@ import zirix.zxcc.server.*;
 
 public class SchedWorkDAO extends GenericDAO<SchedWorkDAO> {
 
-
 	public SchedWorkDAO(PkList pkList) {
 		super(TABLENAME,pkList);
     }
@@ -46,6 +45,7 @@ public class SchedWorkDAO extends GenericDAO<SchedWorkDAO> {
     	setAttValueFor("PK_COLUMN",res.getInt("PK_COLUMN"));
     	setAttValueFor("WORK_STATE_ID",res.getInt("WORK_STATE_ID"));
     	setAttValueFor("ALERT_STATUS",res.getInt("ALERT_STATUS"));
+    	setAttValueFor("FORK_FROM",res.getInt("FORK_FROM"));
     }
 
     public Set<String> getPkNamesSet() {

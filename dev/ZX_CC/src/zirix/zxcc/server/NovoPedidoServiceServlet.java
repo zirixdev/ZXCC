@@ -27,6 +27,7 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 		String OP_CODE = request.getParameter("OP_CODE");
 		String COD_USUARIO = request.getParameter("COD_USUARIO").trim();
 		int pkCodPedido = 0;
+		Integer servico = null;
 		try {
 			ClienteDAO daoCliente = new ClienteDAO();
 			PkList pkList;
@@ -288,6 +289,10 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 							ServicoPedidoDAO daoServicoPedido = new ServicoPedidoDAO();
 							String COD_SERVICO = request.getParameter("ITEMSERVICO_"+d);
 							daoServicoPedido.setAttValueFor("COD_SERVICO", COD_SERVICO);
+							if(COD_SERVICO.compareTo("2")==0)
+								servico = 2;
+							else if(COD_SERVICO.compareTo("3")==0)
+								servico = 3;
 							String QUANTIDADE = request.getParameter("QTDSERVICO_"+d);
 							daoServicoPedido.setAttValueFor("QUANTIDADE", QUANTIDADE);
 							String VALOR_UNITARIO = request.getParameter("VALORSERVICO_"+d);
@@ -337,7 +342,11 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO n�o encontrado! ");
 					}
 				}
-			}response.sendRedirect(ZXMain.URL_ADRESS_ + "services/startservlet?OP_CODE=STARTFLUX&PROCESS_ID=1&PK_COLUMN=" + pkCodPedido);
+			}
+			if(servico == 2)
+				response.sendRedirect(ZXMain.URL_ADRESS_ + "services/startservlet?OP_CODE=STARTFLUX&PROCESS_ID=1&PK_COLUMN=" + pkCodPedido);
+			else if(servico == 3)
+				response.sendRedirect(ZXMain.URL_ADRESS_ + "services/startservlet?OP_CODE=STARTFLUX&PROCESS_ID=2&PK_COLUMN=" + pkCodPedido);
 		}catch(Exception e){
 			out.println("Error on ClienteServiceServlet... " + ' ' + e.getMessage());
 		}

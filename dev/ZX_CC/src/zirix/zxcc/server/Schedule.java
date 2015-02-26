@@ -109,7 +109,11 @@ public class Schedule {
 					+ 														   "     , DEFINED_PROCESS_ID "						//07
 					+ 														   "     , DEFINED_WORK_ID "						//08
 					+ 														   "     , PK_COLUMN "								//09
-					+														   "     , SCHED_TIMESTAMP + INTERVAL '1' DAY "		//10
+																			   //RBM - INICIO
+																			   //Ajuste na Query para desconsiderar fds na criação do próximo work
+																			   //SCHED_TIMESTAMP + INTERVAL '1' DAY
+																			   //RBM - FIM
+					+														   "     , IF(DAYOFWEEK(NOW())=6,TIMESTAMP(CONCAT(DATE(NOW()),' 08:00:00')) + INTERVAL '3' DAY,TIMESTAMP(CONCAT(DATE(NOW()),' 08:00:00')) + INTERVAL '1' DAY) "		//10
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "SCHED_WORK "
 					+ 														   " WHERE WORK_ID = " + WORK_ID + ";");
 			for(int i=0;i < values.size();i++){
@@ -194,6 +198,97 @@ public class Schedule {
 			   daoSchedWork.Create();
 		   }
 	   }
+	}
+	public static void createOptionalWork(int DEFINED_WORK_ID, int PROCESS_ID, String PK_COLUMN) throws SQLException{
+		SchedWorkDAO daoSchedWork = new SchedWorkDAO();
+		Vector<String[]> workToCreate = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT WORK_NAME "								//00
+					+ 														   "     , PROCESS_ID "								//01
+					+ 														   "     , RESTRICTION_ID "							//02
+					+ 														   "     , PROCESS_STATE_ID "						//03
+					+ 														   "     , WORK_ALERT_ID "							//04
+					+ 														   "     , WORK_GROUP_ID "							//05
+					+ 														   "     , DEPENDENCY_WORK_ID "						//06
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "
+					+ 														   " WHERE WORK_ID = " + DEFINED_WORK_ID + ";");
+			for(int i=0;i < values.size();i++){
+				String[] attList = new String[11];
+				attList[0] = (String) values.get(i)[0];
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
+				attList[6] = values.get(i)[6].toString();
+				workToCreate.add(attList);
+			}
+		}catch(SQLException ex){
+			ex.printStackTrace();
+		}finally{
+			for(int i=0; i<workToCreate.size();i++){
+				daoSchedWork.setAttValueFor("WORK_NAME",(workToCreate.elementAt(i)[0].trim()).toString());
+				daoSchedWork.setAttValueFor("PROCESS_ID",PROCESS_ID);
+				daoSchedWork.setAttValueFor("RESTRICTION_ID",Integer.parseInt(workToCreate.elementAt(i)[2].trim()));
+				daoSchedWork.setAttValueFor("PROCESS_STATE_ID",Integer.parseInt(workToCreate.elementAt(i)[3].trim()));
+				daoSchedWork.setAttValueFor("WORK_ALERT_ID",Integer.parseInt(workToCreate.elementAt(i)[4].trim()));
+				daoSchedWork.setAttValueFor("WORK_GROUP_ID",Integer.parseInt(workToCreate.elementAt(i)[5].trim()));
+				daoSchedWork.setAttValueFor("DEPENDENCY_WORK_ID",Integer.parseInt(workToCreate.elementAt(i)[6].trim()));
+				daoSchedWork.setAttValueFor("DEFINED_PROCESS_ID",Integer.parseInt(workToCreate.elementAt(i)[1].trim()));
+				daoSchedWork.setAttValueFor("DEFINED_WORK_ID",DEFINED_WORK_ID);
+				daoSchedWork.setAttValueFor("PK_COLUMN",PK_COLUMN);
+				daoSchedWork.setAttValueFor("WORK_STATE_ID",0);
+				daoSchedWork.setAttValueFor("ALERT_STATUS",0);
+				daoSchedWork.Create();
+			}
+		}
+	}
+	public static void createOptionalWorkAgendamento(int DEFINED_WORK_ID, int PROCESS_ID, String PK_COLUMN) throws SQLException{
+		SchedWorkDAO daoSchedWork = new SchedWorkDAO();
+		Vector<String[]> workToCreate = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT WORK_NAME "								//00
+					+ 														   "     , PROCESS_ID "								//01
+					+ 														   "     , RESTRICTION_ID "							//02
+					+ 														   "     , PROCESS_STATE_ID "						//03
+					+ 														   "     , WORK_ALERT_ID "							//04
+					+ 														   "     , WORK_GROUP_ID "							//05
+					+ 														   "     , DEPENDENCY_WORK_ID "						//06
+					+														   "     , IF(DAYOFWEEK(NOW())=6,TIMESTAMP(CONCAT(DATE(NOW()),' 08:00:00')) + INTERVAL '3' DAY,TIMESTAMP(CONCAT(DATE(NOW()),' 08:00:00')) + INTERVAL '1' DAY) " //07
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "
+					+ 														   " WHERE WORK_ID = " + DEFINED_WORK_ID + ";");
+			for(int i=0;i < values.size();i++){
+				String[] attList = new String[11];
+				attList[0] = (String) values.get(i)[0];
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
+				attList[6] = values.get(i)[6].toString();
+				attList[7] = values.get(i)[7].toString();
+				workToCreate.add(attList);
+			}
+		}catch(SQLException ex){
+			ex.printStackTrace();
+		}finally{
+			for(int i=0; i<workToCreate.size();i++){
+				daoSchedWork.setAttValueFor("WORK_NAME",(workToCreate.elementAt(i)[0].trim()).toString());
+				daoSchedWork.setAttValueFor("PROCESS_ID",PROCESS_ID);
+				daoSchedWork.setAttValueFor("RESTRICTION_ID",Integer.parseInt(workToCreate.elementAt(i)[2].trim()));
+				daoSchedWork.setAttValueFor("PROCESS_STATE_ID",Integer.parseInt(workToCreate.elementAt(i)[3].trim()));
+				daoSchedWork.setAttValueFor("WORK_ALERT_ID",Integer.parseInt(workToCreate.elementAt(i)[4].trim()));
+				daoSchedWork.setAttValueFor("WORK_GROUP_ID",Integer.parseInt(workToCreate.elementAt(i)[5].trim()));
+				daoSchedWork.setAttValueFor("DEPENDENCY_WORK_ID",Integer.parseInt(workToCreate.elementAt(i)[6].trim()));
+				daoSchedWork.setAttValueFor("DEFINED_PROCESS_ID",Integer.parseInt(workToCreate.elementAt(i)[1].trim()));
+				daoSchedWork.setAttValueFor("SCHED_TIMESTAMP",workToCreate.elementAt(i)[7].trim());
+				daoSchedWork.setAttValueFor("DEFINED_WORK_ID",DEFINED_WORK_ID);
+				daoSchedWork.setAttValueFor("PK_COLUMN",PK_COLUMN);
+				daoSchedWork.setAttValueFor("WORK_STATE_ID",0);
+				daoSchedWork.setAttValueFor("ALERT_STATUS",0);
+				daoSchedWork.Create();
+			}
+		}
 	}
 	private int nextState_;
     public void setNextState(int nextState) {nextState_ = nextState;}

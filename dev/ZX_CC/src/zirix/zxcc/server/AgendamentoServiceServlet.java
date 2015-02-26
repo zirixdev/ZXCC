@@ -9,11 +9,13 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import zirix.zxcc.server.dao.*;
 @WebServlet( name="AgendamentoServiceServlet", urlPatterns = {"/services/agendamento"}, loadOnStartup=1)
 public class AgendamentoServiceServlet extends HttpServlet {
@@ -30,12 +32,19 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		String WORK_ID = request.getParameter("WORK_ID");
 		String DATA_INGRESSO = request.getParameter("DATA_INGRESSO").trim();
 		int PK_COLUMN = 0;
-		Evaluator eval = new Evaluator(Integer.parseInt(WORK_ID));
-		try {
+		Evaluator eval = new Evaluator(Integer.parseInt(WORK_ID));PkList pkList;
+		SchedWorkDAO daoSchedWork = new SchedWorkDAO();
+		pkList = SchedWorkDAO.createKey("WORK_ID", Integer.parseInt(WORK_ID));
+		daoSchedWork.setPkList(pkList);
+		try{
+			daoSchedWork.read();
+	    }catch(SQLException ex){
+	    	ex.printStackTrace();
+	    }finally {}
+		String COD_PEDIDO = request.getParameter("CODPEDIDO").trim();
+		try{
 			AgendamentoDAO daoAgendamento = new AgendamentoDAO();
-			PkList pkList;
 			if ((OP_CODE.compareTo("UPDATE") == 0) || (OP_CODE.compareTo("CREATE") == 0)) {
-			   String COD_PEDIDO = request.getParameter("CODPEDIDO").trim();
 			   daoAgendamento.setAttValueFor("COD_PEDIDO", COD_PEDIDO);
 			   daoAgendamento.setAttValueFor("ESTADO", 0);
 			   daoAgendamento.setAttValueFor("DELETED", 0);
@@ -69,7 +78,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 					   }
 				   }catch (SQLException ex) {
 					   ex.printStackTrace();
-				   }  finally {
+				   }finally {
 					   pkListValue = Integer.parseInt(CodAgendamento_.elementAt(0)[0].trim());
 					   pkCodCliente = Integer.parseInt(CodAgendamento_.elementAt(0)[1].trim());
 				   }
@@ -165,7 +174,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_OS "
 									   + 														   "  FROM " + ZXMain.DB_NAME_ + "OS "
 									   + 														   " WHERE COD_NUM_OS = " + pkNumOS);
-							   for (int i=0;i < values.size();i++) {
+							   for (int i=0;i < values.size();i++){
 								   String[] attList = new String[1];
 								   attList[0] = values.get(i)[0].toString();
 								   CodOS_.add(attList);
@@ -183,7 +192,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_UNIDADES_AGENDADAS "
 									   + " 											                 FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 									   + "                                                          WHERE COD_OS = " + pkCodOS);
-							   for (int i=0;i < values.size();i++) {
+							   for (int i=0;i < values.size();i++){
 								   String[] attList = new String[1];
 								   attList[0] = values.get(i)[0].toString();;
 								   CodUnidadeAgendada_.add(attList);
@@ -232,8 +241,98 @@ public class AgendamentoServiceServlet extends HttpServlet {
 				   if(eval.endWorkAgendamento()){
 					   String REAGENDAR = request.getParameter("REAGENDAR").toString().trim();
 					   if(REAGENDAR.compareTo("true") == 0){
-						   Schedule.createSameWork(Integer.parseInt(WORK_ID));
+						   /* RBM - INICIO - Adição do controle de quantidades de reagendamento e fluxo do processo
+						    * String processID = daoSchedWork.getAttValueFor("PROCESS_ID").toString();
+						    * String definedProcessID = daoSchedWork.getAttValueFor("DEFINED_PROCESS_ID").toString();
+						    * Schedule.createSameWork(Integer.parseInt(WORK_ID));
+						    * */
+						   String processID = daoSchedWork.getAttValueFor("PROCESS_ID").toString();
+						   String definedWorkID = daoSchedWork.getAttValueFor("DEFINED_WORK_ID").toString();
+						   String definedProcessID = daoSchedWork.getAttValueFor("DEFINED_PROCESS_ID").toString();
+						   String pkColumn = daoSchedWork.getAttValueFor("PK_COLUMN").toString();
+						   int CountAgendamento = 0;
+						   int SchedTimes = 0;
+						   Vector<String[]> aux_ = new Vector<String[]>();
+						   try {
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT count(*) "
+									   +                                                          "  FROM " + ZXMain.DB_NAME_ + "REAGENDAR_WORK "
+									   +                                                          " WHERE DEFINED_WORK_ID = " + definedWorkID
+									   +                                                          "   AND COD_PEDIDO = " + COD_PEDIDO);
+							   for (int i=0;i < values.size();i++){
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();;
+								   aux_.add(attList);
+							   }
+						   }catch (SQLException ex) {
+							   ex.printStackTrace();
+						   }  finally {
+							   CountAgendamento = Integer.parseInt(aux_.elementAt(0)[0].trim());
+						   }
+						   try{
+							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIMES_VALUE "
+									   +                                                          "  FROM " + ZXMain.DB_NAME_ + "SCHED_TIMES "
+									   +                                                          " WHERE DEFINED_WORK_ID = " + definedWorkID);
+							   for(int i=0;i < values.size();i++){
+								   String[] attList = new String[1];
+								   attList[0] = values.get(i)[0].toString();
+								   aux_.add(attList);
+							   }
+						   }catch (SQLException ex){
+							   ex.printStackTrace();
+						   }finally{
+							   SchedTimes = Integer.parseInt(aux_.elementAt(0)[0].trim());
+						   }
+						   aux_.clear();
+						   if(CountAgendamento < SchedTimes){
+							   ReagendarWorkDAO daoReagendarWork = new ReagendarWorkDAO();
+							   daoReagendarWork.setAttValueFor("COD_PEDIDO", COD_PEDIDO);
+							   daoReagendarWork.setAttValueFor("DEFINED_WORK_ID", definedWorkID);
+							   daoReagendarWork.Create();
+							   Schedule.createSameWork(Integer.parseInt(WORK_ID));
+						   }else{ //Buscar algum optional work para processo
+							   int nextDefinedWorkID = 0;
+							   if(Integer.parseInt(definedProcessID) == 3){ //Aqui entra algum optional work após Agendamento Supervisor
+								   try{
+									   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DEFINED_WORK_ID "
+											   +                                                          "  FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "
+											   +                                                          " WHERE DEPENDENCY_WORK_ID = " + definedWorkID
+											   +                                                          "   AND PROCESS_ID = 3 ");
+									   for(int i=0;i < values.size();i++){
+										   String[] attList = new String[1];
+										   attList[0] = values.get(i)[0].toString();
+										   aux_.add(attList);
+									   }
+								   }catch (SQLException ex){
+									   ex.printStackTrace();
+								   }finally{
+									   nextDefinedWorkID = Integer.parseInt(aux_.elementAt(0)[0].trim());
+								   }
+								   if(nextDefinedWorkID!=0){
+									   Schedule.createOptionalWork(nextDefinedWorkID,  Integer.parseInt(processID), pkColumn);
+								   }
+							   }else{ //Aqui entra optional work Agendamento Supervisor
+								   try{
+									   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DEFINED_WORK_ID "
+											   +                                                          "  FROM " + ZXMain.DB_NAME_ + "DEFINED_WORK "
+											   +                                                          " WHERE DEPENDENCY_WORK_ID = " + definedWorkID
+											   +                                                          "   AND PROCESS_ID = 3 ");
+									   for(int i=0;i < values.size();i++){
+										   String[] attList = new String[1];
+										   attList[0] = values.get(i)[0].toString();
+										   aux_.add(attList);
+									   }
+								   }catch (SQLException ex){
+									   ex.printStackTrace();
+								   }finally{
+									   nextDefinedWorkID = Integer.parseInt(aux_.elementAt(0)[0].trim());
+								   }
+								   if(nextDefinedWorkID!=0){
+									   Schedule.createOptionalWorkAgendamento(nextDefinedWorkID,  Integer.parseInt(processID), pkColumn);
+								   }
+							   }
+						   }
 					   }
+					   /*RBM - FIM*/
 				   }
 			   }
 			}else if (OP_CODE.compareTo("DELETE") == 0){
@@ -247,7 +346,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 		}
 		response.sendRedirect(ZXMain.URL_ADRESS_ + "zx_cc.jsp");
 	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 	}
 }
 

@@ -387,7 +387,7 @@ function callModalTarefas(event){
 	    case "adm_finaliza_processo":
 	    	//TODO
 	        /*$.ajax({
-	            url: url_adress + "consulta_agendamento.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ADM_FINAL&PK_OBJ="+selectedPK,
+	            url: url_adress + "finaliza_pedido.jsp.jsp?WORK_ID="+work_id+"&COD_USUARIO="+cod_usuario_+"&AREA=ADM_FINAL&PK_OBJ="+selectedPK,
 	            success: function(result) {
 	                $('.modal-content').html(result);
 	                $('.modal').modal({backdrop:'static'});

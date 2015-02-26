@@ -5230,3 +5230,28 @@ function operacional_processar_agendamento_function(workId,pkObj,codUnidadeAgend
 		document.location.href = adress;
 	}
 }
+
+function searchCliente(){        	
+	var val_datalist_nome = $('#item_nome_razao').val();
+	if (val_datalist_nome !== ""){
+		cod_cliente_consulta = $('#nome_list option').filter(function(){
+			return this.value == val_datalist_nome;
+		}).data('label');
+		adress= url_adress + "pedido_cliente_existente.jsp?COD_CLIENTE=";
+		adress= adress + cod_cliente_consulta;
+		$.ajax({
+			url: adress,
+			success: function(result) {
+				$('#dadosCliente').html(result);
+				carregar_dados_consulta_cliente_function();
+			},
+			error: function(){
+				alert('Erro ao buscar dados do CLIENTE selecionado!');
+			}
+		});
+	}else{
+		alert('Não é possível realizar a busca sem o preenchimento de um dos campos!');
+		document.getElementById("item_nome_razao").focus();
+		return 0;
+	}
+}
