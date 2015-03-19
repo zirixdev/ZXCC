@@ -131,23 +131,23 @@ public class ImprimePedidoServlet extends HttpServlet{
 					+                                                          "   AND TIPO_DOCUMENTO.COD_DOCUMENTO = DOCUMENTO_CLIENTE.COD_DOCUMENTO");
 			for (int i=0;i < values.size();i++){
 				String[] attList = new String[4];
-				attList[0] = values.get(i)[0].toString();
-				attList[1] = values.get(i)[1].toString();
-				attList[2] = values.get(i)[2].toString();
-				attList[3] = values.get(i)[3].toString();
+				attList[0] = values.get(i)[0].toString().trim();
+				attList[1] = values.get(i)[1].toString().trim();
+				attList[2] = values.get(i)[2].toString().trim();
+				attList[3] = values.get(i)[3].toString().trim();
 				documentoCliente_.add(attList);
 			}
 		}catch (SQLException ex){
 			ex.printStackTrace();
 		}
 		for(int i=0;i<documentoCliente_.size();i++){
-			String tipoDoc = documentoCliente_.elementAt(i)[0].trim();
-			String numDoc = documentoCliente_.elementAt(i)[1].trim();
-			String dtDoc = documentoCliente_.elementAt(i)[2].trim();
+			String tipoDoc = documentoCliente_.elementAt(i)[0];
+			String numDoc = documentoCliente_.elementAt(i)[1];
+			String dtDoc = documentoCliente_.elementAt(i)[2];
 			if(dtDoc.trim().compareTo("5000-12-31")==0){
 				dtDoc = "";
 			}
-			String ogDoc = documentoCliente_.elementAt(i)[3].trim();
+			String ogDoc = documentoCliente_.elementAt(i)[3];
 			if(ogDoc.trim().compareTo("VAZIO")==0){
 				ogDoc = "";
 			}
@@ -183,28 +183,28 @@ public class ImprimePedidoServlet extends HttpServlet{
 
 		    for (int i=0;i<values.size();i++){
 			    String[] attList = new String[8];
-				attList[0] = values.get(i)[0].toString();
-				attList[1] = values.get(i)[1].toString();
-				attList[2] = values.get(i)[2].toString();
-				attList[3] = values.get(i)[3].toString();
-				attList[4] = values.get(i)[4].toString();
-				attList[5] = values.get(i)[5].toString();
-				attList[6] = values.get(i)[6].toString();
-				attList[7] = values.get(i)[7].toString();
+				attList[0] = values.get(i)[0].toString().trim();
+				attList[1] = values.get(i)[1].toString().trim();
+				attList[2] = values.get(i)[2].toString().trim();
+				attList[3] = values.get(i)[3].toString().trim();
+				attList[4] = values.get(i)[4].toString().trim();
+				attList[5] = values.get(i)[5].toString().trim();
+				attList[6] = values.get(i)[6].toString().trim();
+				attList[7] = values.get(i)[7].toString().trim();
 			    enderecoCliente_.add(attList);
 		    }
 	    }catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<enderecoCliente_.size();i++){
-			String tipoEnd = enderecoCliente_.elementAt(i)[0].trim();
-			String endEnd = enderecoCliente_.elementAt(i)[1].trim();
-			String comEnd = enderecoCliente_.elementAt(i)[2].trim();
-			String baiEnd = enderecoCliente_.elementAt(i)[3].trim();
-			String cidEnd = enderecoCliente_.elementAt(i)[4].trim();
-			String ufEnd = enderecoCliente_.elementAt(i)[5].trim();
-			String paisEnd = enderecoCliente_.elementAt(i)[6].trim();
-			String cepEnd = enderecoCliente_.elementAt(i)[7].trim();
+			String tipoEnd = enderecoCliente_.elementAt(i)[0];
+			String endEnd = enderecoCliente_.elementAt(i)[1];
+			String comEnd = enderecoCliente_.elementAt(i)[2];
+			String baiEnd = enderecoCliente_.elementAt(i)[3];
+			String cidEnd = enderecoCliente_.elementAt(i)[4];
+			String ufEnd = enderecoCliente_.elementAt(i)[5];
+			String paisEnd = enderecoCliente_.elementAt(i)[6];
+			String cepEnd = enderecoCliente_.elementAt(i)[7];
 
 			endereco = endereco +  " " + tipoEnd + ": " + endEnd + " " + comEnd + " - " + baiEnd;
 			endereco = endereco + " " + cidEnd + " - " + ufEnd + " - " + paisEnd + " - CEP.: " + cepEnd.substring(0, 5) + "-" + cepEnd.substring(6, 8);
@@ -235,24 +235,24 @@ public class ImprimePedidoServlet extends HttpServlet{
 		    		+														   "   AND " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE);
 		    for (int i=0;i < values.size();i++) {
 			    String[] attList = new String[6];
-				attList[0] = values.get(i)[0].toString();
-				attList[1] = values.get(i)[1].toString();
-				attList[2] = values.get(i)[2].toString();
-				attList[3] = values.get(i)[3].toString();
-				attList[4] = values.get(i)[4].toString();
-				attList[5] = values.get(i)[5].toString();
+				attList[0] = values.get(i)[0].toString().trim();
+				attList[1] = values.get(i)[1].toString().trim();
+				attList[2] = values.get(i)[2].toString().trim();
+				attList[3] = values.get(i)[3].toString().trim();
+				attList[4] = values.get(i)[4].toString().trim();
+				attList[5] = values.get(i)[5].toString().trim();
 			    contatoCliente_.add(attList);
 		    }
 		}catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<contatoCliente_.size();i++){
-			String tipoCto = contatoCliente_.elementAt(i)[0].trim();
-			String dddCto = contatoCliente_.elementAt(i)[1].trim();
-			String numCto = contatoCliente_.elementAt(i)[2].trim();
-			String paisCto = contatoCliente_.elementAt(i)[3].trim();
-			String nomeCto = contatoCliente_.elementAt(i)[4].trim();
-			String grauCto = contatoCliente_.elementAt(i)[5].trim();
+			String tipoCto = contatoCliente_.elementAt(i)[0];
+			String dddCto = contatoCliente_.elementAt(i)[1];
+			String numCto = contatoCliente_.elementAt(i)[2];
+			String paisCto = contatoCliente_.elementAt(i)[3];
+			String nomeCto = contatoCliente_.elementAt(i)[4];
+			String grauCto = contatoCliente_.elementAt(i)[5];
 
 			contato = contato + " " +  tipoCto + ": +" + paisCto + " (" + dddCto + ")" + numCto + " - " + nomeCto + " - " + grauCto;
 
@@ -268,20 +268,20 @@ public class ImprimePedidoServlet extends HttpServlet{
 		String email = new String();
 		Vector<String[]> emailCliente_ = new Vector<String[]>();
 		try{
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT EMAIL "
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT EMAIL_CLI_VEN.EMAIL "
 		    		+                                                          "  FROM " + ZXMain.DB_NAME_ + "EMAIL_CLI_VEN "
-		    		+                                                          " WHERE TIPO_CLI_VEN = 0 "
-		    		+                                                          "   AND COD_CLI_VEN = " + COD_CLIENTE);
+		    		+                                                          " WHERE EMAIL_CLI_VEN.TIPO_CLI_VEN = 0 "
+		    		+                                                          "   AND EMAIL_CLI_VEN.COD_CLI_VEN = " + COD_CLIENTE);
 		    for(int i=0;i < values.size();i++){
 			    String[] attList = new String[1];
-			    attList[0] = values.get(i)[0].toString();
+			    attList[0] = values.get(i)[0].toString().trim();
 			    emailCliente_.add(attList);
 		    }
 		}catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<emailCliente_.size();i++){
-			String mail = emailCliente_.elementAt(i)[0].trim();
+			String mail = emailCliente_.elementAt(i)[0];
 
 			email = email + " " + mail;
 
@@ -361,22 +361,22 @@ public class ImprimePedidoServlet extends HttpServlet{
 		    		+                                                          "   AND EQUIP_ACESSORIO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
 		    for(int i=0;i < values.size();i++){
 			    String[] attList = new String[5];
-			    attList[0] = values.get(i)[0].toString();
-			    attList[1] = values.get(i)[1].toString();
-			    attList[2] = values.get(i)[2].toString();
-			    attList[3] = values.get(i)[3].toString();
-			    attList[4] = values.get(i)[4].toString();
+			    attList[0] = values.get(i)[0].toString().trim();
+			    attList[1] = values.get(i)[1].toString().trim();
+			    attList[2] = values.get(i)[2].toString().trim();
+			    attList[3] = values.get(i)[3].toString().trim();
+			    attList[4] = values.get(i)[4].toString().trim();
 			    equipAcessoriosPedido_.add(attList);
 		    }
 		}catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<equipAcessoriosPedido_.size();i++){
-			equipAcessorio = equipAcessorio + " " +  equipAcessoriosPedido_.elementAt(i)[0].trim();
-			quantidade = quantidade + " " +  equipAcessoriosPedido_.elementAt(i)[1].trim();
-			valorUnitario = valorUnitario + " " +  equipAcessoriosPedido_.elementAt(i)[2].trim();
-			valorEquipAcessorioTotal = valorEquipAcessorioTotal + " " +  equipAcessoriosPedido_.elementAt(i)[3].trim();
-			valorTotal = " " +  equipAcessoriosPedido_.elementAt(i)[4].trim();
+			equipAcessorio = equipAcessorio + " " +  equipAcessoriosPedido_.elementAt(i)[0];
+			quantidade = quantidade + " " +  equipAcessoriosPedido_.elementAt(i)[1];
+			valorUnitario = valorUnitario + " " +  equipAcessoriosPedido_.elementAt(i)[2];
+			valorEquipAcessorioTotal = valorEquipAcessorioTotal + " " +  equipAcessoriosPedido_.elementAt(i)[3];
+			valorTotal = " " +  equipAcessoriosPedido_.elementAt(i)[4];
 
 			if(i+1<equipAcessoriosPedido_.size()){
 				equipAcessorio = equipAcessorio + "\n";
@@ -414,22 +414,22 @@ public class ImprimePedidoServlet extends HttpServlet{
 		    		+                                                          "   AND SERVICO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
 		    for(int i=0;i < values.size();i++){
 			    String[] attList = new String[5];
-			    attList[0] = values.get(i)[0].toString();
-			    attList[1] = values.get(i)[1].toString();
-			    attList[2] = values.get(i)[2].toString();
-			    attList[3] = values.get(i)[3].toString();
-			    attList[4] = values.get(i)[4].toString();
+			    attList[0] = values.get(i)[0].toString().trim();
+			    attList[1] = values.get(i)[1].toString().trim();
+			    attList[2] = values.get(i)[2].toString().trim();
+			    attList[3] = values.get(i)[3].toString().trim();
+			    attList[4] = values.get(i)[4].toString().trim();
 			    servicoPedido_.add(attList);
 		    }
 		}catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<servicoPedido_.size();i++){
-			solucao = solucao + " " +  servicoPedido_.elementAt(i)[0].trim();
-			quantidade = quantidade + " " +  servicoPedido_.elementAt(i)[1].trim();
-			valorUnitario = valorUnitario + " " +  servicoPedido_.elementAt(i)[2].trim();
-			valorSolucaoTotal = valorSolucaoTotal + " " +  servicoPedido_.elementAt(i)[3].trim();
-			valorTotal = " " +  servicoPedido_.elementAt(i)[4].trim();
+			solucao = solucao + " " +  servicoPedido_.elementAt(i)[0];
+			quantidade = quantidade + " " +  servicoPedido_.elementAt(i)[1];
+			valorUnitario = valorUnitario + " " +  servicoPedido_.elementAt(i)[2];
+			valorSolucaoTotal = valorSolucaoTotal + " " +  servicoPedido_.elementAt(i)[3];
+			valorTotal = " " +  servicoPedido_.elementAt(i)[4];
 
 			if(i+1<servicoPedido_.size()){
 				solucao = solucao + "\n";
@@ -470,34 +470,34 @@ public class ImprimePedidoServlet extends HttpServlet{
 
 		    for (int i=0;i<values.size();i++){
 			    String[] attList = new String[11];
-				attList[0] = values.get(i)[0].toString();
-				attList[1] = values.get(i)[1].toString();
-				attList[2] = values.get(i)[2].toString();
-				attList[3] = values.get(i)[3].toString();
-				attList[4] = values.get(i)[4].toString();
-				attList[5] = values.get(i)[5].toString();
-				attList[6] = values.get(i)[6].toString();
-				attList[7] = values.get(i)[7].toString();
-				attList[8] = values.get(i)[8].toString();
-				attList[9] = values.get(i)[9].toString();
-				attList[10] = values.get(i)[10].toString();
+				attList[0] = values.get(i)[0].toString().trim();
+				attList[1] = values.get(i)[1].toString().trim();
+				attList[2] = values.get(i)[2].toString().trim();
+				attList[3] = values.get(i)[3].toString().trim();
+				attList[4] = values.get(i)[4].toString().trim();
+				attList[5] = values.get(i)[5].toString().trim();
+				attList[6] = values.get(i)[6].toString().trim();
+				attList[7] = values.get(i)[7].toString().trim();
+				attList[8] = values.get(i)[8].toString().trim();
+				attList[9] = values.get(i)[9].toString().trim();
+				attList[10] = values.get(i)[10].toString().trim();
 			    dadosInstalacao_.add(attList);
 		    }
 	    }catch(SQLException ex){
     		ex.printStackTrace();
 		}
 		for(int i=0;i<dadosInstalacao_.size();i++){
-			docData.setEndInstalacao(dadosInstalacao_.elementAt(i)[0].trim());
-			docData.setCompInstalacao(dadosInstalacao_.elementAt(i)[1].trim());
-			docData.setBairroInstalacao(dadosInstalacao_.elementAt(i)[2].trim());
-			docData.setCidadeInstalacao(dadosInstalacao_.elementAt(i)[3].trim());
-			docData.setEstadoInstalacao(dadosInstalacao_.elementAt(i)[4].trim());
-			docData.setPaisInstalacao(dadosInstalacao_.elementAt(i)[5].trim());
-			String cepDadosInstalacao = dadosInstalacao_.elementAt(i)[6].trim();
+			docData.setEndInstalacao(dadosInstalacao_.elementAt(i)[0]);
+			docData.setCompInstalacao(dadosInstalacao_.elementAt(i)[1]);
+			docData.setBairroInstalacao(dadosInstalacao_.elementAt(i)[2]);
+			docData.setCidadeInstalacao(dadosInstalacao_.elementAt(i)[3]);
+			docData.setEstadoInstalacao(dadosInstalacao_.elementAt(i)[4]);
+			docData.setPaisInstalacao(dadosInstalacao_.elementAt(i)[5]);
+			String cepDadosInstalacao = dadosInstalacao_.elementAt(i)[6];
 			docData.setCepInstalacao(cepDadosInstalacao.substring(0, 5) + "-" + cepDadosInstalacao.substring(6, 8));
-			docData.setReferenciaInstalacao(dadosInstalacao_.elementAt(i)[7].trim());
-			docData.setTelefoneInstalacao("("+dadosInstalacao_.elementAt(i)[8].trim() +")"+ dadosInstalacao_.elementAt(i)[9].trim());
-			docData.setContatoInstalacao(dadosInstalacao_.elementAt(i)[10].trim());
+			docData.setReferenciaInstalacao(dadosInstalacao_.elementAt(i)[7]);
+			docData.setTelefoneInstalacao("("+dadosInstalacao_.elementAt(i)[8] +")"+ dadosInstalacao_.elementAt(i)[9]);
+			docData.setContatoInstalacao(dadosInstalacao_.elementAt(i)[10]);
 		}
 	}
 
@@ -508,12 +508,12 @@ public class ImprimePedidoServlet extends HttpServlet{
 		String cod_veiculo = new String();
 		String unidadesPedido = new String();
 		try{
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_VEICULO "
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VEICULO.COD_VEICULO "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
-					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO);
+					+ 														   " WHERE VEICULO.COD_PEDIDO = " + COD_PEDIDO);
 			for (int i=0;i<values.size();i++) {
 				String[] attList = new String[1];
-				attList[0] = values.get(i)[0].toString();
+				attList[0] = values.get(i)[0].toString().trim();
 				codUnidades.add(attList);
 			}
 		}catch (SQLException ex) {
@@ -521,7 +521,7 @@ public class ImprimePedidoServlet extends HttpServlet{
 		}
 		for (int i=0;i<codUnidades.size();i++) {
 			try{
-				cod_veiculo = codUnidades.elementAt(i)[0].toString();
+				cod_veiculo = codUnidades.elementAt(i)[0];
 				ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VEICULO.PLACA "
 						+														   "     , VEICULO.CHASSI "
 						+														   "     , VEICULO.RENAVAN "
@@ -570,20 +570,20 @@ public class ImprimePedidoServlet extends HttpServlet{
 		String obs = new String();
 		Vector<String[]> obsPedido_ = new Vector<String[]>();
 		try{
-			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT OBSERVACAO "
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT OBS_PEDIDO.OBSERVACAO "
 					+ 														   "  FROM " + ZXMain.DB_NAME_ + "OBS_PEDIDO "
-					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO
-					+														   " ORDER BY INDICE ASC ");
+					+ 														   " WHERE OBS_PEDIDO.COD_PEDIDO = " + COD_PEDIDO
+					+														   " ORDER BY OBS_PEDIDO.INDICE ASC ");
 			for (int i=0;i<values.size();i++) {
 				String[] attList = new String[1];
-				attList[0] = (String) values.get(i)[0];
-				obsPedido_.add(attList);;
+				attList[0] = values.get(i)[0].toString().trim();
+				obsPedido_.add(attList);
 			}
 		}catch (SQLException ex) {
     		ex.printStackTrace();
 		}
 		for(int i=0;i<obsPedido_.size();i++){
-			obs = obs + obsPedido_.elementAt(i)[0].trim();
+			obs = obs + obsPedido_.elementAt(i)[0];
 		}
 		docData.setObservacaoPedido(obs);
 	}

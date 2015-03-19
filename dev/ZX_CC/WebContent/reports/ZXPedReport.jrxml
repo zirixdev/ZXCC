@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-03-19T11:05:28 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ZXPedReport" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="07a09b35-34cc-4ef7-a319-3a0b49e9c03d">
+<!-- 2015-03-19T13:21:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ZXPedReport" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" whenResourceMissingType="Empty" uuid="07a09b35-34cc-4ef7-a319-3a0b49e9c03d">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -52,7 +52,7 @@
 				<staticText>
 					<reportElement x="418" y="68" width="133" height="20" forecolor="#000000" uuid="5b2edc09-0b40-43cc-b9a7-47a9271251eb"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Myriad Pro" size="14" isBold="true"/>
+						<font fontName="SansSerif" size="14" isBold="true"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[N°PEDIDO :]]></text>
@@ -60,7 +60,7 @@
 				<textField>
 					<reportElement x="498" y="68" width="49" height="20" forecolor="#000000" uuid="ea974cc9-90ca-4f84-8397-f98c3d8c78be"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Myriad Pro" size="14"/>
+						<font fontName="SansSerif" size="14"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
@@ -77,7 +77,7 @@
 			<staticText>
 				<reportElement x="79" y="3" width="392" height="20" uuid="6fa6315b-42ba-4cd9-b32a-92f6ecf06069"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[INSTRUMENTO DE PEDIDO DE EQUIPAMENTO E CONTRATAÇÃO DE SERVIÇO]]></text>
 			</staticText>
@@ -96,7 +96,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[ Representante Comercial]]></text>
 			</staticText>
@@ -113,7 +113,7 @@
 			<textField>
 				<reportElement x="2" y="21" width="276" height="17" uuid="0eb1ae7c-24e6-4fbe-9120-e00c7abd0fcb"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeVendedor}]]></textFieldExpression>
 			</textField>
@@ -141,7 +141,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipoCliente}]]></textFieldExpression>
 			</textField>
@@ -159,12 +159,12 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeCliente}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="74" width="554" height="11" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="cf73d1d8-48a0-4116-8368-767a3ac4facf">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="74" width="554" height="11" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="cf73d1d8-48a0-4116-8368-767a3ac4facf">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -179,7 +179,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fantasiaCliente}]]></textFieldExpression>
 			</textField>
@@ -197,7 +197,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docCliente}]]></textFieldExpression>
 			</textField>
@@ -217,7 +217,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{endCliente}]]></textFieldExpression>
 			</textField>
@@ -237,7 +237,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{contatoCliente}]]></textFieldExpression>
 			</textField>
@@ -257,7 +257,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{emailCliente}]]></textFieldExpression>
 			</textField>
@@ -275,7 +275,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[EQUIPAMENTO / ACESSÓRIOS]]></text>
 			</staticText>
@@ -293,7 +293,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Equipamento / Acessórios]]></text>
 			</staticText>
@@ -309,7 +309,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Quant.]]></text>
 			</staticText>
@@ -327,7 +327,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Valor Unit.]]></text>
 			</staticText>
@@ -345,7 +345,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Valor Total	]]></text>
 			</staticText>
@@ -363,7 +363,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Solução]]></text>
 			</staticText>
@@ -381,7 +381,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Quant.]]></text>
 			</staticText>
@@ -399,7 +399,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Valor Unit.]]></text>
 			</staticText>
@@ -417,7 +417,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Valor Total]]></text>
 			</staticText>
@@ -435,7 +435,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeEquiAce}]]></textFieldExpression>
 			</textField>
@@ -453,7 +453,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qtdEquiAce}]]></textFieldExpression>
 			</textField>
@@ -471,7 +471,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrUnEquiAce}]]></textFieldExpression>
 			</textField>
@@ -489,7 +489,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrEquiAce}]]></textFieldExpression>
 			</textField>
@@ -507,7 +507,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{solucao}]]></textFieldExpression>
 			</textField>
@@ -525,7 +525,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qtdSolucao}]]></textFieldExpression>
 			</textField>
@@ -543,7 +543,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrAssinat}]]></textFieldExpression>
 			</textField>
@@ -561,7 +561,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrSolucao}]]></textFieldExpression>
 			</textField>
@@ -577,12 +577,12 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Total: " + $F{vlrTotalEquiAce}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="454" y="177" width="100" height="10" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="5794bbd2-7df7-4060-ade0-51e96ce76d64">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="454" y="177" width="100" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="5794bbd2-7df7-4060-ade0-51e96ce76d64">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -593,7 +593,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Total: " + $F{vlrTotalSolucao}]]></textFieldExpression>
 			</textField>
@@ -605,7 +605,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[SERVIÇOS DE MONITORAMENTO]]></text>
 			</staticText>
@@ -621,7 +621,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" DATA DE VENCIMENTO: " + $F{dtVencimento}]]></textFieldExpression>
 			</textField>
@@ -637,7 +637,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" Cliente " + $F{flagYesNo} + "deseja que o boleto seja enviado por e-mail."]]></textFieldExpression>
 			</textField>
@@ -649,7 +649,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[PRAZO DE INSTALAÇÃO DE ATÉ 15 DIAS ÚTEIS]]></text>
 			</staticText>
@@ -661,7 +661,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[DADOS PARA INSTALAÇÃO]]></text>
 			</staticText>
@@ -679,7 +679,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $F{endInstalacao} + ", " + $F{compInstalacao} + "\n"
 + " " + $F{bairroInstalacao} + ", " + $F{cidadeInstalacao} + " - " + $F{estadoInstalacao} + " / " + $F{paisInstalacao} + "\n"
@@ -698,7 +698,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[UNIDADES RASTREADAS]]></text>
 			</staticText>
@@ -716,7 +716,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unidadesRastreadas}]]></textFieldExpression>
 			</textField>
@@ -734,7 +734,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<text><![CDATA[OBSERVAÇÕES]]></text>
 			</staticText>
@@ -752,7 +752,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Myriad Pro" pdfFontName="" pdfEncoding=""/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observacaoPedido}]]></textFieldExpression>
 			</textField>

@@ -339,7 +339,7 @@ public class NovoPedidoServiceServlet extends HttpServlet {
 							daoObsPedido.Create();
 						}
 					}else{
-						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO n�o encontrado! ");
+						out.println("Error on NovoPedidoServiceServlet... " + "\nNUM_PEDIDO não encontrado! ");
 					}
 				}
 			}
