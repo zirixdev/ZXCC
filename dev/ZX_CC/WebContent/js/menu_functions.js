@@ -264,14 +264,7 @@ function callModalTarefas(event){
 	var selectedPK = "";
 	
 	if(stringSize > 0){
-		for(var i=0; i<stringSize; i++){
-			if(data.charAt(i+1) == "/" && data.charAt(i+2) == "/"){
-				work_id = data.slice(Number(0), Number(i+1));
-				restData = data.slice(Number(i+3),Number(stringSize));
-				break;
-			}
-		}
-		stringSize = restData.length;
+		
 		for(var i=0; i<stringSize; i++){
 			if(restData.charAt(i+1) == "/" && restData.charAt(i+2) == "/"){
 				service_name = restData.slice(Number(0),Number(i+1));

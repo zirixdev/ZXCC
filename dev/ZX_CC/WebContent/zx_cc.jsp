@@ -305,12 +305,12 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
                     </ul>
                 </nav>
                 <section class="tarefas">
-                	<iframe src="tarefas.jsp?COD_USUARIO=<%=user%>" name="tarefasIFrame" frameborder="0" width="515px" height="100%">
+                	<iframe src="tarefas.jsp" name="tarefasIFrame" frameborder="0" width="515px" height="100%">
 
                 	</iframe>
                 </section>
                 <section class="conteudo">
-                <%if(ZXMain.LOCAL_.compareTo("BETA") == 0){%>
+                <%if(ZXMain.LOCAL_.compareTo("DEV") == 0){%>
 	                <br>
 	                <br>
 	                <br>
@@ -345,6 +345,6 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
         <script src="js/bootstrap.min.js"></script>
         <script src="js/menu_functions.js"></script>
         <script src="js/page_functions.js"></script>
-        <script>window.setInterval("reloadIFrame(<%=user%>);", 30000);</script>
+        <script>window.setInterval("reloadIFrame();", 30000);</script>
   </body>
 </html>

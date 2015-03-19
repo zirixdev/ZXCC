@@ -17,8 +17,8 @@ Date.prototype.yyyymmdd = function() {
 	return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
 };  
 
-function reloadIFrame(codUsuario) {
-	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp?COD_USUARIO=" + codUsuario;
+function reloadIFrame() {
+	parent.frames['tarefasIFrame'].location.href = "tarefas.jsp";
 }
 
 function callReload500() {
@@ -5231,7 +5231,7 @@ function operacional_processar_agendamento_function(workId,pkObj,codUnidadeAgend
 	}
 }
 
-function searchCliente(){        	
+/*function searchCliente(){        	
 	var val_datalist_nome = $('#item_nome_razao').val();
 	if (val_datalist_nome !== ""){
 		cod_cliente_consulta = $('#nome_list option').filter(function(){
@@ -5254,4 +5254,4 @@ function searchCliente(){
 		document.getElementById("item_nome_razao").focus();
 		return 0;
 	}
-}
+}*/

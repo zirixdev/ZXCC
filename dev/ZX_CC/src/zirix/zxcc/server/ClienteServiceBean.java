@@ -86,9 +86,9 @@ public class ClienteServiceBean {
 			    attList[7] = values.get(i)[7].toString();
 			    endClienteList.add(attList);
 		    }
-	    } catch (SQLException ex) {
+	    }catch (SQLException ex){
     		ex.printStackTrace();
-		}  finally {
+		}finally{
 			return endClienteList;
 	    }
 	}

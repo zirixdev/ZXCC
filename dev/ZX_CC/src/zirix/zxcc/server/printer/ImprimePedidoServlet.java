@@ -1,23 +1,30 @@
 package zirix.zxcc.server.printer;
 
-import javax.servlet.*; 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*; 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import java.util.*; 
-import java.io.*;
-import java.sql.*;
-
-import zirix.zxcc.server.dao.*;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
+import zirix.zxcc.server.ZXMain;
+import zirix.zxcc.server.dao.ClienteDAO;
+import zirix.zxcc.server.dao.DAOManager;
+import zirix.zxcc.server.dao.PedidoDAO;
+import zirix.zxcc.server.dao.PkList;
 
 
 @WebServlet( name="ImprimePedidoServlet", urlPatterns = {"/services/imprimepedido"}, loadOnStartup=1)
@@ -25,273 +32,559 @@ public class ImprimePedidoServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 
-
 	private RelatorioPedidoData docData = new RelatorioPedidoData();
+	private String NumPedido = new String();
 
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
-
 		try{
-
 			String COD_PEDIDO = request.getParameter("COD_PEDIDO").trim();
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			ServletContext cntx= getServletContext();
-
 			List lista = new ArrayList();
 
-			fetchClienteData(COD_PEDIDO);
+			fetchDocumentData(COD_PEDIDO);
 
 			lista.add(docData);
 
-			String jaspername = cntx.getRealPath("/reports/report3.jasper");
+			String jaspername = cntx.getRealPath("/reports/ZXPedReport.jasper");
 
 			File jasperfile = new File(jaspername);
 
 			JasperReport jasper = (JasperReport)JRLoader.loadObject(jasperfile);
-
+			
 			JasperPrint jasperprint = JasperFillManager.fillReport(jasper, null, new JRBeanCollectionDataSource(lista));
 
 			JasperExportManager.exportReportToPdfStream(jasperprint, output);
 
 			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition", "attachment; filename=Pedido.pdf");
+			response.setHeader("Content-Disposition", "attachment; filename=Pedido_" + NumPedido + ".pdf");
 			response.getOutputStream().write(output.toByteArray());
-
-		}catch(Exception ex){            
+		}catch(Exception ex){
 			ex.printStackTrace();
-		}  
+		}
 	}
 
-
-	public void buildPDFFromScratch(HttpServletRequest request, HttpServletResponse response) {
-
+	protected void fetchDocumentData(String COD_PEDIDO){ 
+		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
+		PedidoDAO pedido = new PedidoDAO(pkList);
 		try{
-			String COD_PEDIDO = request.getParameter("COD_PEDIDO").trim();
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-			Vector<String> txtList = fetchDocumentData(COD_PEDIDO);
-
-			ServletContext cntx= getServletContext();
-			// Get the absolute path of the image
-			String filename = cntx.getRealPath("images/header_pdf.png");
-			// retrieve mimeType dynamically
-			String mime = cntx.getMimeType(filename);
-			if(mime == null){
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				return;
-			}
-			File fileFront = new File(filename);
-			FileInputStream logo = new FileInputStream(fileFront);
-			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition", "attachment; filename=yourFile.pdf");
-			response.getOutputStream().write(output.toByteArray());
-			logo.close();
-
-		}catch(Exception ex){            
-			ex.printStackTrace();
-		}  
-	}
-
-	protected Vector<String> fetchDocumentData(String COD_PEDIDO){ 
-
-		//Vector<String> clienteData = fetchClienteData(COD_PEDIDO);
-
-		Vector<String> documentoClienteData = fetchDocumentoClienteData(COD_PEDIDO);
-		Vector<String> enderecoClienteData = fetchEnderecoClienteData(COD_PEDIDO);
-		Vector<String> contatoClienteData = fetchContatoClienteData(COD_PEDIDO);
-		//Vector<String> pedidoData = fetchPedidoData(COD_PEDIDO);
-		Vector<String> docData = new Vector<String>();
-
-		//docData.addAll(clienteData);
-
-		docData.addAll(documentoClienteData);
-		docData.addAll(enderecoClienteData);
-		docData.addAll(contatoClienteData);
-		//docData.addAll(pedidoData);
-		return docData;
-	}
-
-	protected void fetchClienteData(String COD_PEDIDO){ 
+			pedido.read();
+		}catch(SQLException sql){
+			sql.printStackTrace();
+		}
+		String COD_CLIENTE = pedido.getAttValueFor("COD_CLIENTE").toString();
 		
-		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
-		PedidoDAO pedido = new PedidoDAO(pkList);
+		fetchClienteData(COD_CLIENTE);
+		fetchDocumentoClienteData(COD_CLIENTE);
+		fetchEnderecoClienteData(COD_CLIENTE);
+		fetchContatoClienteData(COD_CLIENTE);
+		fetchEmailClienteData(COD_CLIENTE);
+		fetchPedidoData(COD_PEDIDO);
+		fetchEquipAcessorios(COD_PEDIDO);
+		fetchServico(COD_PEDIDO);
+		fetchDadosInstalacao(COD_PEDIDO);
+		fetchUnidadePedido(COD_PEDIDO);
+		fetchObservacaoPedido(COD_PEDIDO);
+
+	}
+
+	protected void fetchClienteData(String COD_CLIENTE){
+
+		PkList pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
+		ClienteDAO cliente = new ClienteDAO(pkList);
 		try{
-			pedido.read();
-			String COD_CLIENTE = pedido.getAttValueFor("COD_CLIENTE").toString();
-			pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-			ClienteDAO cliente = new ClienteDAO(pkList);
 			cliente.read();
-			String COD_VENDEDOR = cliente.getAttValueFor("COD_VENDEDOR").toString();
-			pkList = VendedorDAO.createKey("COD_VENDEDOR", Integer.parseInt(COD_VENDEDOR));
-			VendedorDAO vendedor = new VendedorDAO(pkList);
-			vendedor.read();
 
-			String nome_vendedor = vendedor.getAttValueFor("NOME").toString();
-			String nome_cliente = cliente.getAttValueFor("NOME").toString();
-			String fantasia_cliente = cliente.getAttValueFor("NOME_FANTASIA").toString();
-			String data_nascimento = cliente.getAttValueFor("DATA_NASCIMENTO").toString();
-			String site = cliente.getAttValueFor("SITE").toString();
+			String nome_cliente = cliente.getAttValueFor("NOME").toString().trim();
+			String fantasia_cliente = cliente.getAttValueFor("NOME_FANTASIA").toString().trim();
+			String data_nascimento = cliente.getAttValueFor("DATA_NASCIMENTO").toString().trim();
+			String site = cliente.getAttValueFor("SITE").toString().trim();
+			String tipo = cliente.getAttValueFor("TIPO").toString().trim();
 
-			docData.setNomeVendedor(nome_vendedor);
-			docData.setNomeCliente(nome_cliente);	
-			docData.setFantasiaCliente(fantasia_cliente);
-
+			docData.setNomeCliente(" " + nome_cliente);
+			docData.setNascimentoCliente(" " + data_nascimento);
+			docData.setSiteCliente(" " + site);
+			if (Integer.parseInt(tipo)==1){
+				docData.setFantasiaCliente(" " + fantasia_cliente);
+				docData.setTipoCliente("PESSOA JURÍDICA");
+			}else{
+				docData.setTipoCliente("PESSOA FÍSICA");
+			}
 		}catch(SQLException sql){
 			sql.printStackTrace();
 		}
 	}
 
-	protected Vector<String> fetchDocumentoClienteData(String COD_PEDIDO){
-		Vector<String> docData = new Vector<String>();
-		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
-		PedidoDAO pedido = new PedidoDAO(pkList);
+	protected void fetchDocumentoClienteData(String COD_CLIENTE){
+
+		String documento = new String();
+		Vector<String[]> documentoCliente_ = new Vector<String[]>();
 		try{
-			pedido.read();
-			String COD_CLIENTE = pedido.getAttValueFor("COD_CLIENTE").toString();
-			pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-			ClienteDAO cliente = new ClienteDAO(pkList);
-			cliente.read();
-			Vector<DocumentoClienteDAO> docClienteList = DocumentoClienteDAOService.loadAllForCliente(COD_CLIENTE);
-			for(int i=0;i < docClienteList.size();i++){
-				DocumentoClienteDAO documento = (DocumentoClienteDAO)docClienteList.elementAt(i);
-				docData.add("NUMERO DO DOCUMENTO: " + documento.getAttValueFor("NUMERO").toString());
-				docData.add("DATA DE EMISSÃO DO DOCUMENTO: " + documento.getAttValueFor("DATA_EMISSAO").toString());
-				docData.add("ORGÃO EMISSOR DO DOCUMENTO: " + documento.getAttValueFor("ORGAO_EMISSOR").toString());
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_DOCUMENTO.NOME "
+					+                                                          "     , DOCUMENTO_CLIENTE.NUMERO "
+					+                                                          "     , DOCUMENTO_CLIENTE.DATA_EMISSAO "
+					+                                                          "     , DOCUMENTO_CLIENTE.ORGAO_EMISSOR "
+					+                                                          "  FROM " + ZXMain.DB_NAME_ + "DOCUMENTO_CLIENTE "
+					+                                                          "     , " + ZXMain.DB_NAME_ + "TIPO_DOCUMENTO "
+					+                                                          " WHERE DOCUMENTO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE
+					+                                                          "   AND TIPO_DOCUMENTO.COD_DOCUMENTO = DOCUMENTO_CLIENTE.COD_DOCUMENTO");
+			for (int i=0;i < values.size();i++){
+				String[] attList = new String[4];
+				attList[0] = values.get(i)[0].toString();
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				documentoCliente_.add(attList);
 			}
-		}catch(SQLException sql){
-			sql.printStackTrace();
+		}catch (SQLException ex){
+			ex.printStackTrace();
 		}
-		return docData;
+		for(int i=0;i<documentoCliente_.size();i++){
+			String tipoDoc = documentoCliente_.elementAt(i)[0].trim();
+			String numDoc = documentoCliente_.elementAt(i)[1].trim();
+			String dtDoc = documentoCliente_.elementAt(i)[2].trim();
+			if(dtDoc.trim().compareTo("5000-12-31")==0){
+				dtDoc = "";
+			}
+			String ogDoc = documentoCliente_.elementAt(i)[3].trim();
+			if(ogDoc.trim().compareTo("VAZIO")==0){
+				ogDoc = "";
+			}
+			documento = documento +  " " + tipoDoc + ": " + numDoc + " " + dtDoc + " " + ogDoc;
+			if(i+1<documentoCliente_.size()){
+				documento = documento + "\n";
+			}
+		}
+		docData.setDocCliente(documento);
 	}
 
-	protected Vector<String> fetchEnderecoClienteData(String COD_PEDIDO){
-		Vector<String> docData = new Vector<String>();
-		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
-		PedidoDAO pedido = new PedidoDAO(pkList);
+	protected void fetchEnderecoClienteData(String COD_CLIENTE){
+
+		String endereco = new String();
+		Vector<String[]> enderecoCliente_ = new Vector<String[]>();
 		try{
-			pedido.read();
-			String COD_CLIENTE = pedido.getAttValueFor("COD_CLIENTE").toString();
-			pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-			ClienteDAO cliente = new ClienteDAO(pkList);
-			cliente.read();
-			Vector<EnderecoClienteDAO> endClienteList = EnderecoClienteDAOService.loadAllForCliente(COD_CLIENTE);
-			for(int i=0;i < endClienteList.size();i++){
-				EnderecoClienteDAO endereco = (EnderecoClienteDAO)endClienteList.elementAt(i);
-				docData.add("ENDEREÇO CLIENTE: " + endereco.getAttValueFor("ENDERECO").toString());
-				docData.add("BAIRRO: " + endereco.getAttValueFor("BAIRRO").toString());
-				docData.add("CIDADE: " + endereco.getAttValueFor("CIDADE").toString());
-				docData.add("UF: " + endereco.getAttValueFor("UF").toString());
-				docData.add("CÓDIGO DO PAÍS: " + endereco.getAttValueFor("COD_PAIS").toString());
-				docData.add("COMPLEMENTO: " + endereco.getAttValueFor("COMPLEMENTO").toString());
-				docData.add("CEP: " + endereco.getAttValueFor("CEP").toString());
-			}
-		}catch(SQLException sql){
-			sql.printStackTrace();
+		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_ENDERECO.NOME "
+		    		+														   "     , ENDERECO_CLIENTE.ENDERECO "
+		    		+														   "     , ENDERECO_CLIENTE.COMPLEMENTO "
+		    		+														   "     , ENDERECO_CLIENTE.BAIRRO "
+		    		+														   "     , ENDERECO_CLIENTE.CIDADE "
+		    		+														   "     , UF.SIGLA "
+		    		+														   "     , PAIS.NOME_PAIS "
+		    		+														   "     , ENDERECO_CLIENTE.CEP "
+		    		+														   "  FROM " + ZXMain.DB_NAME_ + "ENDERECO_CLIENTE "
+		    		+														   "     , " + ZXMain.DB_NAME_ + "PAIS "
+		    		+														   "     , " + ZXMain.DB_NAME_ + "TIPO_ENDERECO "
+		    		+														   "     , " + ZXMain.DB_NAME_ + "UF "
+		    		+														   " WHERE ENDERECO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE
+		    		+														   "   AND PAIS.COD_PAIS = ENDERECO_CLIENTE.COD_PAIS "
+		    		+														   "   AND UF.COD_UF = ENDERECO_CLIENTE.UF "
+		    		+														   "   AND TIPO_ENDERECO.COD_ENDERECO = ENDERECO_CLIENTE.COD_ENDERECO ");
+
+		    for (int i=0;i<values.size();i++){
+			    String[] attList = new String[8];
+				attList[0] = values.get(i)[0].toString();
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
+				attList[6] = values.get(i)[6].toString();
+				attList[7] = values.get(i)[7].toString();
+			    enderecoCliente_.add(attList);
+		    }
+	    }catch(SQLException ex){
+    		ex.printStackTrace();
 		}
-		return docData;
+		for(int i=0;i<enderecoCliente_.size();i++){
+			String tipoEnd = enderecoCliente_.elementAt(i)[0].trim();
+			String endEnd = enderecoCliente_.elementAt(i)[1].trim();
+			String comEnd = enderecoCliente_.elementAt(i)[2].trim();
+			String baiEnd = enderecoCliente_.elementAt(i)[3].trim();
+			String cidEnd = enderecoCliente_.elementAt(i)[4].trim();
+			String ufEnd = enderecoCliente_.elementAt(i)[5].trim();
+			String paisEnd = enderecoCliente_.elementAt(i)[6].trim();
+			String cepEnd = enderecoCliente_.elementAt(i)[7].trim();
+
+			endereco = endereco +  " " + tipoEnd + ": " + endEnd + " " + comEnd + " - " + baiEnd;
+			endereco = endereco + " " + cidEnd + " - " + ufEnd + " - " + paisEnd + " - CEP.: " + cepEnd.substring(0, 5) + "-" + cepEnd.substring(6, 8);
+
+			if(i+1<enderecoCliente_.size()){
+				endereco = endereco + "\n";
+			}
+		}
+		docData.setEndCliente(endereco);
 	}
-	protected Vector<String> fetchContatoClienteData(String COD_PEDIDO){
-		Vector<String> docData = new Vector<String>();
-		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
-		PedidoDAO pedido = new PedidoDAO(pkList);
+
+	protected void fetchContatoClienteData(String COD_CLIENTE){
+
+		String contato = new String();
+		Vector<String[]> contatoCliente_ = new Vector<String[]>();
+		try {
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_CONTATO.NOME_TIPO "
+					+														   "     , CONTATO_CLIENTE.DDD "
+					+														   "     , CONTATO_CLIENTE.NUMERO "
+					+														   "     , CONTATO_CLIENTE.COD_PAIS "
+					+														   "     , CONTATO_CLIENTE.NOME "
+					+														   "     , INFO_CONTATO.NOME_GRAU "
+		    		+														   "  FROM " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE "
+					+														   "     , " + ZXMain.DB_NAME_ + "INFO_CONTATO "
+					+														   "     , " + ZXMain.DB_NAME_ + "TIPO_CONTATO "
+		    		+														   " WHERE " + ZXMain.DB_NAME_ + "INFO_CONTATO.COD_GRAU = " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_GRAU "
+		    		+														   "   AND " + ZXMain.DB_NAME_ + "TIPO_CONTATO.COD_CONTATO = " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CONTATO "
+		    		+														   "   AND " + ZXMain.DB_NAME_ + "CONTATO_CLIENTE.COD_CLIENTE = " + COD_CLIENTE);
+		    for (int i=0;i < values.size();i++) {
+			    String[] attList = new String[6];
+				attList[0] = values.get(i)[0].toString();
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
+			    contatoCliente_.add(attList);
+		    }
+		}catch(SQLException ex){
+    		ex.printStackTrace();
+		}
+		for(int i=0;i<contatoCliente_.size();i++){
+			String tipoCto = contatoCliente_.elementAt(i)[0].trim();
+			String dddCto = contatoCliente_.elementAt(i)[1].trim();
+			String numCto = contatoCliente_.elementAt(i)[2].trim();
+			String paisCto = contatoCliente_.elementAt(i)[3].trim();
+			String nomeCto = contatoCliente_.elementAt(i)[4].trim();
+			String grauCto = contatoCliente_.elementAt(i)[5].trim();
+
+			contato = contato + " " +  tipoCto + ": +" + paisCto + " (" + dddCto + ")" + numCto + " - " + nomeCto + " - " + grauCto;
+
+			if(i+1<contatoCliente_.size()){
+				contato = contato + "\n";
+			}
+		}
+		docData.setContatoCliente(contato);
+	}
+
+	protected void fetchEmailClienteData(String COD_CLIENTE){
+		
+		String email = new String();
+		Vector<String[]> emailCliente_ = new Vector<String[]>();
 		try{
-			pedido.read();
-			String COD_CLIENTE = pedido.getAttValueFor("COD_CLIENTE").toString();
-			pkList = ClienteDAO.createKey("COD_CLIENTE", Integer.parseInt(COD_CLIENTE));
-			ClienteDAO cliente = new ClienteDAO(pkList);
-			cliente.read();
-			Vector<ContatoClienteDAO> conClienteList = ContatoClienteDAOService.loadAllForCliente(COD_CLIENTE);
-			for(int i=0;i < conClienteList.size();i++){
-				ContatoClienteDAO contato = (ContatoClienteDAO)conClienteList.elementAt(i);
-				docData.add("CÓDIGO DO CONTATO CLIENTE: " + contato.getAttValueFor("COD_CONTATO").toString());
-				docData.add("DDD DO CONTATO CLIENTE: " + contato.getAttValueFor("DDD").toString());
-				docData.add("NÚMERO DO CONTATO CLIENTE: " + contato.getAttValueFor("NUMERO").toString());
-				docData.add("CÓDIGO DO PAÍS: " + contato.getAttValueFor("COD_PAIS").toString());
-				docData.add("NOME DO CONTATO CLIENTE: " + contato.getAttValueFor("NOME").toString());
-				docData.add("GRAU DO CONTATO CLIENTE: " + contato.getAttValueFor("COD_GRAU").toString());
-			}
-			Vector<EmailCliVenDAO> emailClienteList = EmailCliVenDAOService.loadAllForCliente(COD_CLIENTE);
-			for(int i=0;i < emailClienteList.size();i++){
-				EmailCliVenDAO contato = (EmailCliVenDAO)emailClienteList.elementAt(i);
-				docData.add("EMAIL DO CONTATO CLIENTE: " + contato.getAttValueFor("EMAIL").toString());
-			}
-		}catch(SQLException sql){
-			sql.printStackTrace();
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT EMAIL "
+		    		+                                                          "  FROM " + ZXMain.DB_NAME_ + "EMAIL_CLI_VEN "
+		    		+                                                          " WHERE TIPO_CLI_VEN = 0 "
+		    		+                                                          "   AND COD_CLI_VEN = " + COD_CLIENTE);
+		    for(int i=0;i < values.size();i++){
+			    String[] attList = new String[1];
+			    attList[0] = values.get(i)[0].toString();
+			    emailCliente_.add(attList);
+		    }
+		}catch(SQLException ex){
+    		ex.printStackTrace();
 		}
-		return docData;
+		for(int i=0;i<emailCliente_.size();i++){
+			String mail = emailCliente_.elementAt(i)[0].trim();
+
+			email = email + " " + mail;
+
+			if(i+1<emailCliente_.size()){
+				email = email + "\n";
+			}
+		}
+		docData.setEmailCliente(email);
 	}
 
-	protected Vector<String> fetchPedidoData(String COD_PEDIDO){
+	protected void fetchPedidoData(String COD_PEDIDO){
 
-		Vector<String> docData = new Vector<String>();
-
-		PkList pkList = PedidoDAO.createKey("COD_PEDIDO", Integer.parseInt(COD_PEDIDO));
-		PedidoDAO pedido = new PedidoDAO(pkList);
+		Vector<String[]> pedidoCliente_ = new Vector<String[]>();
 		try{
-			pedido.read();
-			String NUM_PEDIDO = pedido.getAttValueFor("NUM_PEDIDO").toString();
-			pkList = NumeroPedidoDAO.createKey("NUM_PEDIDO", Integer.parseInt(NUM_PEDIDO));
-			NumeroPedidoDAO numero = new NumeroPedidoDAO(pkList);
-			numero.read();
-			docData.add("DATA DE GERAÇÃO DO PEDIDO: " + numero.getAttValueFor("DATA_GERACAO").toString());
-			docData.add("E-MAIL PARA ENVIO DE BOLETO: " + pedido.getAttValueFor("BOLETO_EMAIL").toString());
-			docData.add("CÓDIGO DO TIPO DE PEDIDO: " + pedido.getAttValueFor("COD_TIPO").toString());
-			docData.add("NÚMERO DO PEDIDO: " + pedido.getAttValueFor("NUM_PEDIDO").toString());
-			docData.add("DATA DE VENCIMENTO DO PEDIDO: " + pedido.getAttValueFor("DATA_VENCIMENTO").toString());
-			Vector<ServicoPedidoDAO> servPedidoList = ServicoPedidoDAOService.loadAllForPedido(COD_PEDIDO);
-			for(int i=0;i < servPedidoList.size();i++){
-				ServicoPedidoDAO servico = (ServicoPedidoDAO)servPedidoList.elementAt(i);
-				String COD_SERVICO = servico.getAttValueFor("COD_SERVICO").toString();
-				pkList = TipoServicoDAO.createKey("COD_SERVICO",Integer.parseInt(COD_SERVICO));
-				TipoServicoDAO tipo = new TipoServicoDAO(pkList);
-				tipo.read();
-				docData.add("NOME DO SERVIÇO: " + tipo.getAttValueFor("NOME_SERVICO").toString());
-			}
-			//Equipamentos e acessórios -> tabela EQUIP_ACESSORIO_PEDIDO (a descrição do equipamento está na tabela TIPO_EQUIP_ACESSORIO)
-			Vector<EquipAcessorioPedidoDAO> equipAcessorios = EquipAcessorioPedidoDAOService.loadAllForPedido(COD_PEDIDO);
-			for(int i=0;i < equipAcessorios.size();i++){
-				EquipAcessorioPedidoDAO equip = (EquipAcessorioPedidoDAO)equipAcessorios.elementAt(i);
-				equip.read();
-				docData.add("CÓDIGO DE EQUIPAMENTO ACESSÓRIO: " + equip.getAttValueFor("COD_EQUIP_ACESSORIO").toString());
-			}
-			//Dados para instalacao
-			Vector<DadosInstalacaoDAO> dadosInstalacao = DadosInstalacaoDAOService.loadAllForPedido(COD_PEDIDO);
-			for(int i=0;i < dadosInstalacao.size();i++){
-				DadosInstalacaoDAO dados = (DadosInstalacaoDAO)dadosInstalacao.elementAt(i);
-				dados.read();
-				docData.add("ENDEREÇO DA INSTALAÇÃO: " + dados.getAttValueFor("ENDERECO").toString());
-				docData.add("BAIRO DA INSTALAÇÃO: " + dados.getAttValueFor("BAIRRO").toString());
-				docData.add("CIDADE DA INSTALAÇÃO: " + dados.getAttValueFor("CIDADE").toString());
-				docData.add("UF DA INSTALAÇÃO: " + dados.getAttValueFor("UF").toString());
-				docData.add("CÓDIGO DO PAÍS: " + dados.getAttValueFor("COD_PAIS").toString());
-				docData.add("COMPLEMENTO DA INSTALAÇÃO: " + dados.getAttValueFor("COMPLEMENTO").toString());
-				docData.add("CEP DA INSTALAÇÃO: " + dados.getAttValueFor("CEP").toString());
-				docData.add("REFERENCIA DA INSTALAÇÃO: " + dados.getAttValueFor("REFERENCIA").toString());
-				docData.add("DDD DA INSTALAÇÃO: " + dados.getAttValueFor("DDD").toString());
-				docData.add("NÚMERO DE CONTATO DA INSTALAÇÃO: " + dados.getAttValueFor("NUMERO").toString());
-				docData.add("NOME DE CONTATO DA INSTALAÇÃO: " + dados.getAttValueFor("NOME").toString());
-			}
-			//Unidades
-			Vector<UnidadesAgendadasDAO> unidadeList = UnidadesAgendadasDAOService.loadAllForPedido(COD_PEDIDO);
-			for(int i=0;i < unidadeList.size();i++){
-				UnidadesAgendadasDAO unidade = (UnidadesAgendadasDAO)unidadeList.elementAt(i);
-				unidade.read();
-				docData.add("CÓDIGO DO AGENDAMENTO: " + unidade.getAttValueFor("COD_AGENDAMENTO").toString());
-				docData.add("CÓDIGO DA UNIDADE DO AGENDAMENTO: " + unidade.getAttValueFor("COD_UNIDADE").toString());
-				docData.add("DATA DO AGENDAMENTO: " + unidade.getAttValueFor("DATA_AGENDAMENTO").toString());
-				docData.add("HORA DO AGENDAMENTO: " + unidade.getAttValueFor("HORA_AGENDAMENTO").toString());
-			}
-			//Observação do pedido
-			Vector<ObsPedidoDAO> obsPedidoList = ObsPedidoDAOService.loadAllForPedido(COD_PEDIDO);
-			for(int i=0;i < obsPedidoList.size();i++){
-				ObsPedidoDAO obs = (ObsPedidoDAO)obsPedidoList.elementAt(i);
-				obs.read();
-				docData.add("INDICE DO PEDIDO: " + obs.getAttValueFor("INDICE").toString());
-				docData.add("OBSERVAÇÃO DO PEDIDO: " + obs.getAttValueFor("OBSERVACAO").toString());
-			}
-		}catch(SQLException sql){
-			sql.printStackTrace();
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VENDEDOR.NOME "
+					+														   "     , PEDIDO.NUM_PEDIDO "
+					+														   "     , TIPO_PEDIDO.NOME_TIPO "
+					+														   "     , PEDIDO.DATA_VENCIMENTO "
+					+														   "     , IFNULL(PEDIDO.INFO_PEDIDO,'VAZIO') "
+					+														   "     , PEDIDO.BOLETO_EMAIL "
+		    		+                                                          "  FROM " + ZXMain.DB_NAME_ + "PEDIDO "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "TIPO_PEDIDO "
+					+ 														   "     , " + ZXMain.DB_NAME_ + "VENDEDOR "
+		    		+                                                          " WHERE VENDEDOR.COD_VENDEDOR = PEDIDO.COD_VENDEDOR "
+		    		+                                                          "   AND TIPO_PEDIDO.COD_TIPO = PEDIDO.COD_TIPO"
+		    		+                                                          "   AND PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
+		    for(int i=0;i < values.size();i++){
+			    String[] attList = new String[6];
+			    attList[0] = values.get(i)[0].toString().trim();
+			    attList[1] = values.get(i)[1].toString().trim();
+			    attList[2] = values.get(i)[2].toString().trim();
+			    attList[3] = values.get(i)[3].toString().trim();
+			    attList[4] = values.get(i)[4].toString().trim();
+			    attList[5] = values.get(i)[5].toString().trim();
+			    pedidoCliente_.add(attList);
+		    }
+		}catch(SQLException ex){
+    		ex.printStackTrace();
 		}
-		return docData;
+		if(pedidoCliente_.size()>0){
+			NumPedido = pedidoCliente_.elementAt(0)[1];
+			docData.setNumPed(NumPedido);
+			docData.setNomeVendedor(pedidoCliente_.elementAt(0)[0]);
+			if(pedidoCliente_.elementAt(0)[4].compareTo("VAZIO")==0){
+				docData.setTipoPedido(pedidoCliente_.elementAt(0)[2]);
+			}else{
+				docData.setTipoPedido(pedidoCliente_.elementAt(0)[2] + " " + pedidoCliente_.elementAt(0)[4]);
+			}
+			if(pedidoCliente_.elementAt(0)[5].compareTo("0")==0){
+				docData.setFlagYesNo("não ");
+			}else{
+				docData.setFlagYesNo("");
+			}
+			docData.setDtVencimento(pedidoCliente_.elementAt(0)[3]);
+		}
 	}
-} 
+
+	protected void fetchEquipAcessorios(String COD_PEDIDO){
+
+		String equipAcessorio = new String();
+		String quantidade = new String();
+		String valorUnitario = new String();
+		String valorEquipAcessorioTotal = new String();
+		String valorTotal = new String();
+		Vector<String[]> equipAcessoriosPedido_ = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_EQUIP_ACESSORIO.NOME_EQUIP_ACESSORIO "
+					+ 														   "     , EQUIP_ACESSORIO_PEDIDO.QUANTIDADE "
+					+														   "     , EQUIP_ACESSORIO_PEDIDO.VALOR_UNITARIO "
+					+														   "     , EQUIP_ACESSORIO_PEDIDO.QUANTIDADE * EQUIP_ACESSORIO_PEDIDO.VALOR_UNITARIO AS VALOR_TOTAL "
+					+ 														   "     , (SELECT SUM(EQUIP_ACESSORIO_PEDIDO.QUANTIDADE * EQUIP_ACESSORIO_PEDIDO.VALOR_UNITARIO) "
+					+ 														   "          FROM EQUIP_ACESSORIO_PEDIDO "
+					+ 														   "         WHERE EQUIP_ACESSORIO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO + ") "
+		    		+                                                          "  FROM " + ZXMain.DB_NAME_ + "EQUIP_ACESSORIO_PEDIDO "
+					+														   "     , " + ZXMain.DB_NAME_ + "TIPO_EQUIP_ACESSORIO "
+		    		+                                                          " WHERE TIPO_EQUIP_ACESSORIO.COD_EQUIP_ACESSORIO = EQUIP_ACESSORIO_PEDIDO.COD_EQUIP_ACESSORIO "
+		    		+                                                          "   AND EQUIP_ACESSORIO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
+		    for(int i=0;i < values.size();i++){
+			    String[] attList = new String[5];
+			    attList[0] = values.get(i)[0].toString();
+			    attList[1] = values.get(i)[1].toString();
+			    attList[2] = values.get(i)[2].toString();
+			    attList[3] = values.get(i)[3].toString();
+			    attList[4] = values.get(i)[4].toString();
+			    equipAcessoriosPedido_.add(attList);
+		    }
+		}catch(SQLException ex){
+    		ex.printStackTrace();
+		}
+		for(int i=0;i<equipAcessoriosPedido_.size();i++){
+			equipAcessorio = equipAcessorio + " " +  equipAcessoriosPedido_.elementAt(i)[0].trim();
+			quantidade = quantidade + " " +  equipAcessoriosPedido_.elementAt(i)[1].trim();
+			valorUnitario = valorUnitario + " " +  equipAcessoriosPedido_.elementAt(i)[2].trim();
+			valorEquipAcessorioTotal = valorEquipAcessorioTotal + " " +  equipAcessoriosPedido_.elementAt(i)[3].trim();
+			valorTotal = " " +  equipAcessoriosPedido_.elementAt(i)[4].trim();
+
+			if(i+1<equipAcessoriosPedido_.size()){
+				equipAcessorio = equipAcessorio + "\n";
+				quantidade = quantidade + "\n";
+				valorUnitario = valorUnitario + "\n";
+				valorEquipAcessorioTotal = valorEquipAcessorioTotal + "\n";
+			}
+		}
+		docData.setNomeEquiAce(equipAcessorio);
+		docData.setQtdEquiAce(quantidade);
+		docData.setVlrUnEquiAce(valorUnitario);
+		docData.setVlrEquiAce(valorEquipAcessorioTotal);
+		docData.setVlrTotalEquiAce(valorTotal);	
+	}
+
+	protected void fetchServico(String COD_PEDIDO){
+
+		String solucao = new String();
+		String quantidade = new String();
+		String valorUnitario = new String();
+		String valorSolucaoTotal = new String();
+		String valorTotal = new String();
+		Vector<String[]> servicoPedido_ = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT TIPO_SERVICO.NOME_SERVICO "
+					+ 														   "     , SERVICO_PEDIDO.QUANTIDADE "
+					+														   "     , SERVICO_PEDIDO.VALOR_UNITARIO "
+					+														   "     , SERVICO_PEDIDO.QUANTIDADE * SERVICO_PEDIDO.VALOR_UNITARIO AS VALOR_TOTAL "
+					+ 														   "     , (SELECT SUM(SERVICO_PEDIDO.QUANTIDADE * SERVICO_PEDIDO.VALOR_UNITARIO) "
+					+ 														   "          FROM SERVICO_PEDIDO "
+					+ 														   "         WHERE SERVICO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO + ") "
+		    		+                                                          "  FROM " + ZXMain.DB_NAME_ + "SERVICO_PEDIDO "
+					+														   "     , " + ZXMain.DB_NAME_ + "TIPO_SERVICO "
+		    		+                                                          " WHERE TIPO_SERVICO.COD_SERVICO = SERVICO_PEDIDO.COD_SERVICO "
+		    		+                                                          "   AND SERVICO_PEDIDO.COD_PEDIDO = " + COD_PEDIDO);
+		    for(int i=0;i < values.size();i++){
+			    String[] attList = new String[5];
+			    attList[0] = values.get(i)[0].toString();
+			    attList[1] = values.get(i)[1].toString();
+			    attList[2] = values.get(i)[2].toString();
+			    attList[3] = values.get(i)[3].toString();
+			    attList[4] = values.get(i)[4].toString();
+			    servicoPedido_.add(attList);
+		    }
+		}catch(SQLException ex){
+    		ex.printStackTrace();
+		}
+		for(int i=0;i<servicoPedido_.size();i++){
+			solucao = solucao + " " +  servicoPedido_.elementAt(i)[0].trim();
+			quantidade = quantidade + " " +  servicoPedido_.elementAt(i)[1].trim();
+			valorUnitario = valorUnitario + " " +  servicoPedido_.elementAt(i)[2].trim();
+			valorSolucaoTotal = valorSolucaoTotal + " " +  servicoPedido_.elementAt(i)[3].trim();
+			valorTotal = " " +  servicoPedido_.elementAt(i)[4].trim();
+
+			if(i+1<servicoPedido_.size()){
+				solucao = solucao + "\n";
+				quantidade = quantidade + "\n";
+				valorUnitario = valorUnitario + "\n";
+				valorSolucaoTotal = valorSolucaoTotal + "\n";
+			}
+		}
+		docData.setSolucao(solucao);
+		docData.setQtdSolucao(quantidade);
+		docData.setVlrAssinat(valorUnitario);
+		docData.setVlrSolucao(valorSolucaoTotal);
+		docData.setVlrTotalSolucao(valorTotal);	
+
+	}
+
+	protected void fetchDadosInstalacao(String COD_PEDIDO){
+
+		Vector<String[]> dadosInstalacao_ = new Vector<String[]>();
+		try{
+		    ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT DADOS_INSTALACAO.ENDERECO "
+		    		+														   "     , DADOS_INSTALACAO.COMPLEMENTO "
+		    		+														   "     , DADOS_INSTALACAO.BAIRRO "
+		    		+														   "     , DADOS_INSTALACAO.CIDADE "
+		    		+														   "     , UF.SIGLA "
+		    		+														   "     , PAIS.NOME_PAIS "
+		    		+														   "     , DADOS_INSTALACAO.CEP "
+		    		+														   "     , DADOS_INSTALACAO.REFERENCIA "
+		    		+														   "     , DADOS_INSTALACAO.DDD "
+		    		+														   "     , DADOS_INSTALACAO.NUMERO "
+		    		+														   "     , DADOS_INSTALACAO.NOME "
+		    		+														   "  FROM " + ZXMain.DB_NAME_ + "DADOS_INSTALACAO "
+		    		+														   "     , " + ZXMain.DB_NAME_ + "PAIS "
+		    		+														   "     , " + ZXMain.DB_NAME_ + "UF "
+		    		+														   " WHERE DADOS_INSTALACAO.COD_PEDIDO = " + COD_PEDIDO
+		    		+														   "   AND PAIS.COD_PAIS = DADOS_INSTALACAO.COD_PAIS "
+		    		+														   "   AND UF.COD_UF = DADOS_INSTALACAO.UF ");
+
+		    for (int i=0;i<values.size();i++){
+			    String[] attList = new String[11];
+				attList[0] = values.get(i)[0].toString();
+				attList[1] = values.get(i)[1].toString();
+				attList[2] = values.get(i)[2].toString();
+				attList[3] = values.get(i)[3].toString();
+				attList[4] = values.get(i)[4].toString();
+				attList[5] = values.get(i)[5].toString();
+				attList[6] = values.get(i)[6].toString();
+				attList[7] = values.get(i)[7].toString();
+				attList[8] = values.get(i)[8].toString();
+				attList[9] = values.get(i)[9].toString();
+				attList[10] = values.get(i)[10].toString();
+			    dadosInstalacao_.add(attList);
+		    }
+	    }catch(SQLException ex){
+    		ex.printStackTrace();
+		}
+		for(int i=0;i<dadosInstalacao_.size();i++){
+			docData.setEndInstalacao(dadosInstalacao_.elementAt(i)[0].trim());
+			docData.setCompInstalacao(dadosInstalacao_.elementAt(i)[1].trim());
+			docData.setBairroInstalacao(dadosInstalacao_.elementAt(i)[2].trim());
+			docData.setCidadeInstalacao(dadosInstalacao_.elementAt(i)[3].trim());
+			docData.setEstadoInstalacao(dadosInstalacao_.elementAt(i)[4].trim());
+			docData.setPaisInstalacao(dadosInstalacao_.elementAt(i)[5].trim());
+			String cepDadosInstalacao = dadosInstalacao_.elementAt(i)[6].trim();
+			docData.setCepInstalacao(cepDadosInstalacao.substring(0, 5) + "-" + cepDadosInstalacao.substring(6, 8));
+			docData.setReferenciaInstalacao(dadosInstalacao_.elementAt(i)[7].trim());
+			docData.setTelefoneInstalacao("("+dadosInstalacao_.elementAt(i)[8].trim() +")"+ dadosInstalacao_.elementAt(i)[9].trim());
+			docData.setContatoInstalacao(dadosInstalacao_.elementAt(i)[10].trim());
+		}
+	}
+
+
+	protected void fetchUnidadePedido(String COD_PEDIDO){
+
+		Vector<String[]> codUnidades = new Vector<String[]>();
+		String cod_veiculo = new String();
+		String unidadesPedido = new String();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_VEICULO "
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
+					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO);
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = values.get(i)[0].toString();
+				codUnidades.add(attList);
+			}
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}
+		for (int i=0;i<codUnidades.size();i++) {
+			try{
+				cod_veiculo = codUnidades.elementAt(i)[0].toString();
+				ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT VEICULO.PLACA "
+						+														   "     , VEICULO.CHASSI "
+						+														   "     , VEICULO.RENAVAN "
+						+														   "     , VEICULO.ANO_FAB "
+						+														   "     , VEICULO.ANO_MOD "
+						+														   "     , VEICULO.MODELO "
+						+														   "     , VEICULO_MARCA.NOME_MARCA "
+						+														   "     , VEICULO.COR "
+						+														   "     , VEICULO_COMBUSTIVEL.NOME_COMBUSTIVEL "
+						+														   "     , VEICULO.DATA_ULT_VISTORIA "
+						+														   "     , IFNULL(VEICULO.COD_INSTALACAO,'Veículo não instalado') "	
+						+ 														   "  FROM " + ZXMain.DB_NAME_ + "VEICULO "
+						+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO_MARCA "
+						+ 														   "     , " + ZXMain.DB_NAME_ + "VEICULO_COMBUSTIVEL "
+						+ 														   " WHERE VEICULO.COD_VEICULO = " + cod_veiculo
+						+                                                          "   AND VEICULO_MARCA.COD_MARCA = VEICULO.COD_MARCA "
+						+                                                          "   AND VEICULO_COMBUSTIVEL.COD_COMBUSTIVEL = VEICULO.COD_COMBUSTIVEL ");
+				for (int y=0;y<values.size();y++) {
+					String[] attList = new String[10];
+					attList[0] = values.get(i)[0].toString().trim();
+					attList[1] = values.get(i)[1].toString().trim();
+					attList[2] = values.get(i)[2].toString().trim();
+					attList[3] = values.get(i)[3].toString().trim();
+					attList[4] = values.get(i)[4].toString().trim();
+					attList[5] = values.get(i)[5].toString().trim();
+					attList[6] = values.get(i)[6].toString().trim();
+					attList[7] = values.get(i)[7].toString().trim();
+					attList[8] = values.get(i)[8].toString().trim();
+					attList[9] = values.get(i)[9].toString().trim();
+					unidadesPedido = unidadesPedido + "Placa: " + attList[0] + " Chassi: " + attList[1] + " Renavan: " + attList[2];
+					unidadesPedido = unidadesPedido + "\n" + " Ano Fabricação/Modelo: " + attList[3] + "/" + attList[4];
+					unidadesPedido = unidadesPedido + " Modelo: " + attList[5] + " Marca: " + attList[6] + " Cor: " + attList[7];
+					unidadesPedido = unidadesPedido + "\n" + "Combustível: " + attList[8] + " Data da Última Vistoria: " + attList[9];
+					unidadesPedido = unidadesPedido + "\n";
+				}
+			}catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		docData.setUnidadesRastreadas(unidadesPedido);
+	}
+
+	protected void fetchObservacaoPedido(String COD_PEDIDO){
+
+		String obs = new String();
+		Vector<String[]> obsPedido_ = new Vector<String[]>();
+		try{
+			ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT OBSERVACAO "
+					+ 														   "  FROM " + ZXMain.DB_NAME_ + "OBS_PEDIDO "
+					+ 														   " WHERE COD_PEDIDO = " + COD_PEDIDO
+					+														   " ORDER BY INDICE ASC ");
+			for (int i=0;i<values.size();i++) {
+				String[] attList = new String[1];
+				attList[0] = (String) values.get(i)[0];
+				obsPedido_.add(attList);;
+			}
+		}catch (SQLException ex) {
+    		ex.printStackTrace();
+		}
+		for(int i=0;i<obsPedido_.size();i++){
+			obs = obs + obsPedido_.elementAt(i)[0].trim();
+		}
+		docData.setObservacaoPedido(obs);
+	}
+}

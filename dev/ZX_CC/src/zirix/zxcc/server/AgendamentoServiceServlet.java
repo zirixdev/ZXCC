@@ -78,7 +78,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 					   }
 				   }catch (SQLException ex) {
 					   ex.printStackTrace();
-				   }finally {
+				   }finally{
 					   pkListValue = Integer.parseInt(CodAgendamento_.elementAt(0)[0].trim());
 					   pkCodCliente = Integer.parseInt(CodAgendamento_.elementAt(0)[1].trim());
 				   }
@@ -119,7 +119,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 									   + 														  "  FROM " + ZXMain.DB_NAME_ + "NUMERO_OS "
 									   + 														  " WHERE ANO_OS = YEAR(NOW()) "
 									   +														  "   AND MES_OS = MONTH(NOW()) ");
-							   for (int i=0;i < values.size();i++) {
+							   for(int i=0;i < values.size();i++){
 								   String[] attList = new String[2];
 								   attList[0] = values.get(i)[0].toString();
 								   count = Integer.parseInt(attList[0].trim());
@@ -147,7 +147,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 									   + 														   "   AND MES_OS = " + DATA_INGRESSO.substring(5, 7)
 									   + 														   "   AND NUM_OS = " + num_os
 									   + 														   "   AND COD_USUARIO = " + COD_USUARIO);
-							   for (int i=0;i < values.size();i++) {
+							   for(int i=0;i < values.size();i++){
 								   String[] attList = new String[1];
 								   attList[0] = values.get(i)[0].toString();
 								   NumeroOS_.add(attList);
@@ -174,7 +174,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_OS "
 									   + 														   "  FROM " + ZXMain.DB_NAME_ + "OS "
 									   + 														   " WHERE COD_NUM_OS = " + pkNumOS);
-							   for (int i=0;i < values.size();i++){
+							   for(int i=0;i < values.size();i++){
 								   String[] attList = new String[1];
 								   attList[0] = values.get(i)[0].toString();
 								   CodOS_.add(attList);
@@ -188,18 +188,18 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   daoUnidadesAgendadas.Create();
 						   int pkCodUnidadeAgendada;
 						   Vector<String[]> CodUnidadeAgendada_ = new Vector<String[]>();
-						   try {
+						   try{
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT COD_UNIDADES_AGENDADAS "
 									   + " 											                 FROM " + ZXMain.DB_NAME_ + "UNIDADES_AGENDADAS "
 									   + "                                                          WHERE COD_OS = " + pkCodOS);
 							   for (int i=0;i < values.size();i++){
 								   String[] attList = new String[1];
-								   attList[0] = values.get(i)[0].toString();;
+								   attList[0] = values.get(i)[0].toString();
 								   CodUnidadeAgendada_.add(attList);
 							   }
-						   }catch (SQLException ex) {
+						   }catch(SQLException ex){
 							   ex.printStackTrace();
-						   }  finally {
+						   }finally{
 							   pkCodUnidadeAgendada = Integer.parseInt(CodUnidadeAgendada_.elementAt(0)[0].trim());
 						   }
 						   PK_COLUMN = pkCodUnidadeAgendada;
@@ -253,7 +253,7 @@ public class AgendamentoServiceServlet extends HttpServlet {
 						   int CountAgendamento = 0;
 						   int SchedTimes = 0;
 						   Vector<String[]> aux_ = new Vector<String[]>();
-						   try {
+						   try{
 							   ArrayList<Object[]> values = DAOManager.getInstance().executeQuery("SELECT count(*) "
 									   +                                                          "  FROM " + ZXMain.DB_NAME_ + "REAGENDAR_WORK "
 									   +                                                          " WHERE DEFINED_WORK_ID = " + definedWorkID
@@ -263,9 +263,9 @@ public class AgendamentoServiceServlet extends HttpServlet {
 								   attList[0] = values.get(i)[0].toString();;
 								   aux_.add(attList);
 							   }
-						   }catch (SQLException ex) {
+						   }catch(SQLException ex){
 							   ex.printStackTrace();
-						   }  finally {
+						   }finally{
 							   CountAgendamento = Integer.parseInt(aux_.elementAt(0)[0].trim());
 						   }
 						   try{

@@ -42,19 +42,8 @@ TECNOLOGIAS UTILIZADAS: HTML5, JAVASCRIPT E JSP
 								}%>
 	                    	</select>
 	                    </fieldset>
-	                    <br>Razão Social / Nome:<input list="nome_list" name="nome_razaosocial_consulta" id="item_nome_razao" class="size_100" onblur="searchCliente()">
-				        <datalist id="nome_list">      	
-						<%try{
-							Vector<ClienteDAO> list = ClienteDAOService.loadAll();
-							for (int i=0;i < list.size();i++) {
-								ClienteDAO dao = list.elementAt(i);
-								String str = String.valueOf(dao.getAttValueFor("NOME")).trim();%>				   	
-								<option value="<%=str%>" data-label="<%=dao.getPkValueFor("COD_CLIENTE")%>">
-							<%}%>
-						<%}catch(Exception e){
-							out.println("Error... " + e.getMessage());
-						}%>
-				        </datalist>
+	                    <br>Razão Social / Nome:
+                    <input type="text" id="nome_razaosocial" class="size_100">
 	                    <br>Nome Fantasia / Apelido:
 	                    <input type="text" id="nomefantasia"  class="size_100">
 	                    <br>Data de Nascimento: <input type="date" id="data_nasc">Site:<input type="text" id="url_site" class="size_50">

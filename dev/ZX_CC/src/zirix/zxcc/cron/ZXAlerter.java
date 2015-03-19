@@ -98,9 +98,7 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check TOEXPIRE : " + work_id); 
-
-			if (alerter.evalTOEXPIRE(now_time,sched_time,restriction_val)) {
+			if (alerter.evalTOEXPIRE(now_time,sched_time,restriction_val)) { //TODO aqui
 
 				PreparedStatement stmt3 = con.prepareStatement("SELECT EMAIL "
 						+									   "  FROM USER_GROUP_ALERT"
@@ -143,9 +141,7 @@ public class ZXAlerter {
 			res2.next();
 			Time restriction_val = res2.getTime(1);
 
-            		//Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "will check EXPIRED : " + work_id);
-
-			if (alerter.evalEXPIRED(now_time,sched_time,restriction_val)) {
+			if (alerter.evalEXPIRED(now_time,sched_time,restriction_val)) { //TODO aqui
 
 				PreparedStatement stmt3 = con.prepareStatement("SELECT EMAIL "
 						+									   "  FROM USER_GROUP_ALERT"
