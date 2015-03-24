@@ -1,3 +1,0 @@
-cp -r ~mvera/Oficina/ZXCC/dev/ZX_CC/build/zirix/ .
-jar -cmf META-INF/MANIFEST.MF zxccalerter_beta-0-3.jar  zirix/ 
-
